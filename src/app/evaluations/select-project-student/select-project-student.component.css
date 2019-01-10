@@ -30,3 +30,7 @@ mat-progress-bar {
   width: 100%;
   margin-bottom: 20px;
 }
+
+.sticker {
+  max-height: 80%;
+}

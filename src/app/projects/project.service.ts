@@ -92,6 +92,14 @@ export class ProjectService {
 			})
 	}
 
+	setProjectSticker(project: Project, student: User, stickerID: number){
+		if(!project.stickers){
+			project.stickers = {};
+		}
+		project.stickers[student.uid] = stickerID;
+		this.db.collection('projects').doc(project.id).update(project);
+	}
+
 }
 
   

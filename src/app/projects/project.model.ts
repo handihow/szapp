@@ -14,10 +14,12 @@ export interface Project {
 	color?: string;
 	projectTaskUrl?: string;
 	starred?: any;
+	stickers?: any;
 	//helper properties to be able to generate the correct csv file
 	classStr?: string;
 	subjectStr?: string;
 	localDate?: string;
 	progress?: number;
 	countSkills?: number;
+	sticker?: any;
 }

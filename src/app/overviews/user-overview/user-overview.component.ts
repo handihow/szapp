@@ -171,6 +171,15 @@ export class UserOverviewComponent implements OnInit, OnDestroy {
           labels: programProgress.map(o=>o.programName),
           datasets: [
             {
+              label: "Klasgemiddelde",
+              data: programProgress.map(o=>o.classAverage),
+              type: 'line',
+              borderColor: Colors.projectColors[4].color,
+              backgroundColor: Colors.projectColors[4].color,
+              fill: 'false',
+              borderWidth: 2
+            },
+            {
               label: "Groen",
               data: programProgress.map(o=>o.green),
               backgroundColor: Colors.chartColors[0].background,
@@ -201,14 +210,6 @@ export class UserOverviewComponent implements OnInit, OnDestroy {
             {
               label: "Niet beoordeeld",
               data: programProgress.map(o=>o.remaining)
-            },
-            {
-              label: "Klasgem. groen",
-              data: programProgress.map(o=>o.classAverage),
-              type: 'line',
-              borderColor: Colors.chartColors[1].border,
-              fill: 'false',
-              borderWidth: 2
             }
           ]
         };

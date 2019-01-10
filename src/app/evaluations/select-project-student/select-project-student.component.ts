@@ -4,6 +4,7 @@ import { Store } from '@ngrx/store';
 import * as fromRoot from '../../app.reducer';
 import * as fromEvaluation from '../evaluation.reducer';
 import * as EvaluationAction from '../evaluation.actions';
+import { MatDialog } from '@angular/material';
 
 import { Subscription, Observable } from 'rxjs';
 import { take, map, startWith } from 'rxjs/operators';
@@ -16,6 +17,9 @@ import { ProjectService } from '../../projects/project.service';
 
 import { User } from '../../auth/user.model';
 import { Organisation } from '../../auth/organisation.model';
+
+import { Stickers } from '../../shared/stickers';
+import { AddStickerComponent } from './add-sticker.component';
 
 @Component({
   selector: 'app-select-project-student',
@@ -44,6 +48,7 @@ export class SelectProjectStudentComponent implements OnInit, OnDestroy {
   constructor(   private store: Store<fromEvaluation.State>,
                  private evaluationService: EvaluationService,
                  private authService: AuthService,
+                 private dialog: MatDialog,
                  private projectService: ProjectService) { }
 
   @HostListener('window:resize', ['$event'])
@@ -97,7 +102,7 @@ export class SelectProjectStudentComponent implements OnInit, OnDestroy {
                 this.isFiltered = true;
               }
               this.onFilter();
-              this.updateProgressBars(this.selectedStudent);
+              this.updateProgressBarsAndStickers(this.selectedStudent);
             };
           })
         }));
@@ -154,11 +159,17 @@ export class SelectProjectStudentComponent implements OnInit, OnDestroy {
     }
   }
 
-  updateProgressBars(user: User){
+  updateProgressBarsAndStickers(user: User){
     this.projects.forEach(project => {
       project.progress = 0;
       if(user.progress && user.progress[project.id]){
         project.progress = Math.round(user.progress[project.id] / project.countSkills * 100);
+      }
+      if(project.stickers && project.stickers[user.uid]){
+        let index = project.stickers[user.uid];
+        project.sticker = Stickers.projectStickers.find(sticker => sticker.id == index).asset;
+      } else {
+        project.sticker = null;
       }
     })
   }
@@ -205,6 +216,13 @@ export class SelectProjectStudentComponent implements OnInit, OnDestroy {
     } else {
       this.columns = 1;
     }
+  }
+
+  onAddSticker(event, project){
+    event.stopPropagation();
+    const dialogRef = this.dialog.open(AddStickerComponent, {
+      data: {project: project, student: this.selectedStudent}
+    });
   }
 
 

@@ -9,6 +9,7 @@ import { ExistingEvaluationsComponent } from './existing-evaluations/existing-ev
 import { CurrentEvaluationComponent } from './current-evaluation/current-evaluation.component';
 import { evaluationReducer } from './evaluation.reducer';
 import { NewEvaluationComponent } from './new-evaluation/new-evaluation.component';
+import { AddStickerComponent } from './select-project-student/add-sticker.component';
 
 @NgModule({
 	declarations: [
@@ -17,11 +18,13 @@ import { NewEvaluationComponent } from './new-evaluation/new-evaluation.componen
 	    ExistingEvaluationsComponent,
 	    CurrentEvaluationComponent,
 	    NewEvaluationComponent,
+	    AddStickerComponent
 	],
 	imports: [
 		SharedModule,
 		EvaluationRoutingModule,
 		StoreModule.forFeature('evaluation', evaluationReducer)
-	]
+	],
+	entryComponents: [AddStickerComponent]
 })
 export class EvaluationModule {}

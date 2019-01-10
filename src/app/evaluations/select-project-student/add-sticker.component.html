@@ -1,0 +1,15 @@
+<h1 mat-dialog-title>Sticker geven</h1>
+<mat-dialog-content>
+	<mat-list>
+	    <mat-list-item *ngFor="let sticker of stickers">
+	    	<img matListAvatar src="{{sticker.asset}}">
+    		<h3 matLine> {{sticker.id}} - {{sticker.description}} </h3>
+    		<button mat-icon-button (click)="giveSticker(sticker)">
+		        <mat-icon>add</mat-icon>
+		    </button>
+		</mat-list-item>
+	</mat-list>
+</mat-dialog-content>
+<mat-dialog-actions>
+	<button mat-button [mat-dialog-close]="true">Sluiten</button>
+</mat-dialog-actions>
