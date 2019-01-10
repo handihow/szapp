@@ -1,0 +1,26 @@
+<section fxLayout.gt-sm="row" fxLayoutAlign.gt-sm="space-evenly center"
+         fxLayout.lt-md="column" fxLayoutAlign.lt-md="center center" fxLayoutGap.lt-md="10px">
+  <h3>{{project?.code}} {{project?.name}}</h3>
+  <a     
+          mat-raised-button 
+          color="primary" 
+          href="{{project?.projectTaskUrl}}"
+          target="_blank"
+          [disabled]="!hasProjectTask">Projectopdracht</a>
+  <button mat-raised-button color="accent" (click)="onStopProject()">Terug naar projecten</button>
+</section>
+<!-- show spinner while the app is loading -->
+<div fxLayout=column fxLayoutAlign="center center">
+  <mat-spinner *ngIf="isLoading$ | async" ></mat-spinner>
+</div>
+<!-- show the student if the current user is a teacher -->
+<section *ngIf="(currentUser$ | async).role==='Leraar'" fxLayout=column fxLayoutAlign="center center">
+  {{student?.displayName}}
+</section>
+
+<app-skills-expansion-panel 
+    [skills]="skills" 
+    [user]="student"
+    [newEvaluationsAllowed]="newEvaluationsAllowed"
+    [detailViewAllowed]="detailViewAllowed">
+</app-skills-expansion-panel>

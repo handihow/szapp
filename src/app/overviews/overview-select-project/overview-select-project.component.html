@@ -1,0 +1,159 @@
+<section fxLayout="row wrap" fxLayoutAlign="space-around stretch">
+	
+	<!-- per project -->
+	<mat-card>
+		<mat-card-header>
+		    <mat-card-title>Project</mat-card-title>
+		    <mat-card-subtitle>Overzicht per project</mat-card-subtitle>
+		</mat-card-header>
+		
+		<form (ngSubmit)="onSubmitProject()" [formGroup]="selectProjectForm">
+
+			<mat-card-content>
+
+				<mat-form-field class="full-width">
+				  <mat-select placeholder="Project" formControlName="project">
+				  	<mat-optgroup label="Met ster">
+					  	<mat-option *ngFor="let starredProject of starredProjects$ | async" 
+					  				[value]="starredProject"
+					  				matTooltip="{{ starredProject.name }} - {{starredProject.code}}">
+					      {{ starredProject.name }} - {{starredProject.code}}
+					    </mat-option>
+					</mat-optgroup>
+					<mat-optgroup label="Alle projecten">
+					    <mat-option *ngFor="let project of projects$ | async" 
+					    			[value]="project"
+					    			matTooltip="{{ project.name }} - {{project.code}}">
+					      {{ project.name }} - {{project.code}}
+					    </mat-option>
+					</mat-optgroup>
+				  </mat-select>
+				</mat-form-field>
+
+			</mat-card-content>
+
+			<mat-card-actions>
+				<button type="submit" mat-raised-button color="accent" [disabled]="selectProjectForm.invalid">Selecteren</button>
+			</mat-card-actions>		
+
+		</form>
+	</mat-card>
+
+	<!-- per student -->
+	<mat-card>
+		<mat-card-header>
+		    <mat-card-title>Leerling</mat-card-title>
+		    <mat-card-subtitle>Overzicht per leerling</mat-card-subtitle>
+		</mat-card-header>
+		
+		<form (ngSubmit)="onSubmitStudent()" [formGroup]="selectStudentForm">
+	  
+			<mat-card-content>
+				<mat-form-field class="full-width">
+				    <input type="text" placeholder="Leerling" matInput formControlName="student" [matAutocomplete]="auto">
+				    <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
+				      <mat-option 	*ngFor="let student of filteredStudents | async" 
+				      				[value]="student"
+				      				matTooltip="{{student.classes}} - {{ student.displayName }}">
+				        {{student.classes}} - {{ student.displayName }}
+				      </mat-option>
+				    </mat-autocomplete>
+				    <mat-hint>Selecteer een leerling door de naam of klas in te geven</mat-hint>
+				 </mat-form-field>
+			</mat-card-content>
+			<mat-card-actions>
+				<button type="submit" mat-raised-button color="accent" [disabled]="selectStudentForm.invalid">Selecteren</button>
+			</mat-card-actions>	
+
+		</form>
+	</mat-card>
+
+
+	<!-- competencies per teaching program -->
+	<mat-card>
+		<mat-card-header>
+		    <mat-card-title>Leerplan</mat-card-title>
+		    <mat-card-subtitle>Overzicht competenties leerplan</mat-card-subtitle>
+		</mat-card-header>
+		
+		<form (ngSubmit)="onSubmitProgram()" [formGroup]="selectProgramForm">
+	  
+			<mat-card-content>
+
+				<mat-form-field class="full-width">
+				  <mat-select placeholder="Leerplan" formControlName="program">
+				  	<mat-optgroup label="Met ster">
+					  	<mat-option *ngFor="let starredProgram of starredPrograms$ | async" 
+					  				[value]="starredProgram"
+					  				matTooltip="{{ starredProgram.name }} - {{starredProgram.code}}">
+					      {{ starredProgram.name }} - {{starredProgram.code}}
+					    </mat-option>
+					</mat-optgroup>
+					<mat-optgroup label="Alle projecten">
+					    <mat-option *ngFor="let program of programs$ | async" 
+					    			[value]="program"
+					    			matTooltip="{{ program.name }} - {{program.code}}">
+					      {{ program.name }} - {{program.code}}
+					    </mat-option>
+					</mat-optgroup>
+				    
+				  </mat-select>
+				</mat-form-field>
+
+			</mat-card-content>
+
+			<mat-card-actions>
+				<button type="submit" mat-raised-button color="accent" [disabled]="selectProgramForm.invalid">Selecteren</button>
+			</mat-card-actions>		
+
+		</form>
+	</mat-card>
+
+	<mat-card >
+		<mat-card-header>
+		    <mat-card-title>Leerplan en lesgroep</mat-card-title>
+		    <mat-card-subtitle>Voortgang per leerplan en lesgroep</mat-card-subtitle>
+		</mat-card-header>
+		
+		<form (ngSubmit)="onSelectClassroomForm()" [formGroup]="selectClassroomForm">
+	  
+			<mat-card-content>
+				
+				<mat-form-field class="full-width">
+				  <mat-select placeholder="Leerplan" formControlName="program">
+				  	<mat-optgroup label="Met ster">
+					  	<mat-option *ngFor="let starredProgram of starredPrograms$ | async" 
+					  				[value]="starredProgram"
+					  				matTooltip="{{ starredProgram.name }} - {{starredProgram.code}}">
+					      {{ starredProgram.name }} - {{starredProgram.code}}
+					    </mat-option>
+					</mat-optgroup>
+					<mat-optgroup label="Alle projecten">
+					    <mat-option *ngFor="let program of programs$ | async" 
+					    			[value]="program"
+					    			matTooltip="{{ program.name }} - {{program.code}}">
+					      {{ program.name }} - {{program.code}}
+					    </mat-option>
+					</mat-optgroup>
+				    
+				  </mat-select>
+				</mat-form-field>
+				
+				<mat-form-field class="full-width">
+				  <mat-select placeholder="Lesgroep" formControlName="course">
+				    <mat-option *ngFor="let course of courses$ | async" [value]="course">
+				      {{ course.name }} - {{course.code}}
+				    </mat-option>
+				  </mat-select>
+				</mat-form-field>
+			
+			</mat-card-content>
+			<mat-card-actions>
+				<button type="submit" mat-raised-button color="accent" [disabled]="selectClassroomForm.invalid">Selecteren</button>
+			</mat-card-actions>	
+
+		</form>
+	</mat-card>
+
+
+</section>

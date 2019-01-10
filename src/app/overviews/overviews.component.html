@@ -1,0 +1,8 @@
+<app-overview-select-project 
+	*ngIf="!(currentProgram$ | async) && !(currentProject$ | async) && !(currentStudent$ | async) && !(currentCourse$ | async)">	
+</app-overview-select-project>
+<app-project-overview *ngIf="currentProject$ | async"></app-project-overview>
+<app-user-overview *ngIf="(currentStudent$ | async) && !(currentProgram$ | async)"></app-user-overview>
+<app-program-overview *ngIf="!(currentStudent$ | async) && (currentProgram$ | async) && !(currentCourse$ | async)"></app-program-overview>
+<app-program-report *ngIf="(currentStudent$ | async) && (currentProgram$ | async)"></app-program-report>
+<app-course-overview *ngIf="(currentProgram$ | async) && (currentCourse$ | async)"></app-course-overview> 

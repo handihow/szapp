@@ -1,0 +1,18 @@
+<h1 mat-dialog-title>Bijlagen</h1>
+<mat-dialog-content>
+	<mat-tab-group>
+  		<mat-tab label="Lijst">
+			<app-files-list [attachments]="attachments" [userRole]="passedData.userRole" *ngIf="hasAttachments"></app-files-list>
+			<div *ngIf="!hasAttachments">
+				<p>Geen bijlagen gevonden bij deze competentie.</p>
+				<p>Klik op "Toevoegen".</p>
+			</div>
+		</mat-tab>
+		<mat-tab label="Toevoegen">
+			<app-upload [metadata]="passedData"></app-upload>
+		</mat-tab>
+	</mat-tab-group>
+</mat-dialog-content>
+<mat-dialog-actions>
+	<button mat-raised-button [mat-dialog-close]="hasAttachments">Klaar</button>
+</mat-dialog-actions>

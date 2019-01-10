@@ -1,0 +1,20 @@
+<section fxLayout.gt-sm="row" fxLayoutAlign.gt-sm="space-evenly center"
+         fxLayout.lt-md="column" fxLayoutAlign.lt-md="center center" fxLayoutGap.lt-md="10px">
+  <h3>{{program?.code}} {{program?.name}}</h3>
+  <h4>{{student?.displayName}}</h4>
+ 
+  <button mat-button (click)="onStopProgram()">Terug naar overzicht</button>
+  <button mat-raised-button color="accent" (click)="onDownloadPDF()">PDF rapport</button>
+</section>
+<!-- show spinner while the app is loading -->
+<div fxLayout=column fxLayoutAlign="center center">
+  <mat-spinner *ngIf="isLoading" ></mat-spinner>
+</div>
+
+<app-skills-expansion-panel 
+    [skills]="skills" 
+    [user]="student"
+    [newEvaluationsAllowed]="newEvaluationsAllowed"
+    [detailViewAllowed]="detailViewAllowed"
+    >
+</app-skills-expansion-panel>

@@ -1,0 +1,81 @@
+<mat-accordion class="headers-align">
+  <mat-expansion-panel 
+    *ngFor="let skill of skills; let i=index;"
+    [expanded]="step === i"
+    (opened)="setStep(i)">
+    <mat-expansion-panel-header collapsedHeight="auto" expandedHeight="auto">
+      <mat-panel-title>
+        <span>{{skill.order}} - {{skill.competency}}</span>
+      </mat-panel-title>
+      <mat-panel-description>
+        <span fxHide.lt-md>{{skill.topic}}</span>
+        <span fxHide.lt-md id="icon-block">
+          <mat-icon [ngStyle]="{'color': skill.studentColor}" >{{skill.studentIcon}}</mat-icon>
+          <mat-icon [ngStyle]="{'color': skill.teacherColor}" >{{skill.teacherIcon}}</mat-icon> 
+        </span>
+        <mat-icon [ngStyle]="{'color': skill.studentColor}" fxHide.gt-sm >{{skill.studentIcon}}</mat-icon>
+        <mat-icon [ngStyle]="{'color': skill.teacherColor}" fxHide.gt-sm >{{skill.teacherIcon}}</mat-icon> 
+      </mat-panel-description>
+    </mat-expansion-panel-header>
+    <div fxLayout="row" fxLayoutAlign="space-between center">
+      <span fxHide.gt-sm class="grey-topic">{{skill.topic}}</span>
+      <div>
+        <a     
+              mat-button 
+              color="accent" 
+              href="{{skill?.link}}"
+              target="_blank"
+              [disabled]="!skill?.link">Meer informatie</a>
+        <button 
+              mat-button 
+              color="primary" 
+              (click)="showAttachment(skill.id)" 
+              [disabled]="!skill?.hasAttachments">Bijlagen</button>
+      </div>
+
+    </div>
+    <!-- show the actual evaluation belonging to this skill -->
+    <div fxLayout="row" fxLayoutAlign="start center" *ngIf="skill.evaluation">
+      <span fxFlex.gt-sm="10" fxFlex.lt-md="30"> {{skill.evaluation.created.toDate() | date : 'dd-MM-yyyy' }}</span>
+      <span fxFlex.gt-sm="35" fxHide.lt-md> {{skill.evaluation.commentStudent}}</span>
+      <span fxFlex.gt-sm="35" fxHide.lt-md> {{skill.evaluation.commentTeacher}} </span>
+      <span fxFlex.gt-sm="10" fxFlex.lt-md="30">
+        <mat-icon [ngStyle]="{'color': skill.evaluation.colorStudent ? skill.evaluation.colorStudent: 'grey'}" >
+          {{skill.evaluation.iconStudent ? skill.evaluation.iconStudent : "account_circle"}}
+        </mat-icon>  
+        <mat-icon [ngStyle]="{'color': skill.evaluation.colorTeacher ? skill.evaluation.colorTeacher : 'grey'}" >
+          {{skill.evaluation.iconTeacher ? skill.evaluation.iconTeacher : "supervised_user_circle"}}
+        </mat-icon> 
+      </span>
+      <button   mat-button fxFlex.gt-sm="10" fxFlex.lt-md="40" 
+                *ngIf="detailViewAllowed" 
+                (click)="onSelectedEvaluation(skill.evaluation)">Bekijk</button>
+    </div>
+    <!-- related evaluations are shown below -->
+    <button *ngIf="!(relatedEvaluations$ | async) && skill.evaluation" mat-button (click)="onViewHistory(skill)">Geschiedenis</button>
+    <h4 *ngIf="relatedEvaluations$ | async">Geschiedenis van beoordeelde evaluaties</h4>
+    <div *ngFor="let evaluation of relatedEvaluations$ | async" fxLayout="row" fxLayoutAlign="start center">
+      <span fxFlex.gt-sm="10" fxFlex.lt-md="30"> {{evaluation.created.toDate() | date : 'dd-MM-yyyy' }}</span>
+      <span fxFlex.gt-sm="35" fxHide.lt-md> {{evaluation.commentStudent}}</span>
+      <span fxFlex.gt-sm="35" fxHide.lt-md> {{evaluation.commentTeacher}} </span>
+      <span fxFlex.gt-sm="10" fxFlex.lt-md="30">
+        <mat-icon [ngStyle]="{'color': evaluation.colorStudent ? evaluation.colorStudent: 'grey'}" >
+          {{evaluation.iconStudent ? evaluation.iconStudent : "account_circle"}}
+        </mat-icon>  
+        <mat-icon [ngStyle]="{'color': evaluation.colorTeacher ? evaluation.colorTeacher : 'grey'}" >
+          {{evaluation.iconTeacher ? evaluation.iconTeacher : "supervised_user_circle"}}
+        </mat-icon> 
+      </span>
+      <button   mat-button fxFlex.gt-sm="10" fxFlex.lt-md="40" 
+                *ngIf="detailViewAllowed" 
+                (click)="onSelectedEvaluation(evaluation)">Bekijk</button>
+    </div>
+    <mat-action-row>
+      <a mat-button (click)="onSelectedSkill(skill)" *ngIf="newEvaluationsAllowed">Nieuw</a>
+      <button mat-button color="warn" (click)="prevStep()" *ngIf="i!==0">Vorige</button>
+      <button mat-button color="primary" (click)="nextStep()" *ngIf="i<skills.length - 1">Volgende</button>
+      <button mat-button color="primary" (click)="nextStep()" *ngIf="i===skills.length - 1">Einde</button>
+    </mat-action-row>
+  </mat-expansion-panel>
+
+</mat-accordion>

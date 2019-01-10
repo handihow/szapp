@@ -1,0 +1,31 @@
+<h1 mat-dialog-title>Geschiedenis van beoordeelde evaluaties</h1>
+<mat-dialog-content>
+	<mat-list>
+		<div *ngFor="let relatedEvaluation of passedData">
+	    	<mat-list-item>
+		    	<mat-icon matListIcon [ngStyle]="{'color': relatedEvaluation?.colorStudent}" >
+			    		{{relatedEvaluation?.iconStudent}}
+			    </mat-icon>
+			    <h3 matLine> {{relatedEvaluation?.studentName}}</h3>
+			    <p matLine>
+			       {{relatedEvaluation?.created.toDate() | date : 'dd-MM-yyyy' }} -- {{relatedEvaluation?.commentStudent}}
+			    </p>
+			    <p matLine *ngIf="relatedEvaluation?.urlStudent"> 
+			    	<a href="{{relatedEvaluation?.urlStudent}}" target="_blank">Link </a> (opent in nieuw scherm)
+			    </p>
+		  </mat-list-item>
+		  <mat-list-item *ngIf="relatedEvaluation?.status==='Beoordeeld'">
+		    	<mat-icon [ngStyle]="{'color': relatedEvaluation?.colorTeacher}" >
+		    		{{relatedEvaluation?.iconTeacher}}
+		    	</mat-icon>
+			    <h3 matLine> {{relatedEvaluation?.teacherName}}</h3>
+			    <p matLine>
+			      {{relatedEvaluation?.evaluated.toDate() | date : 'dd-MM-yyyy' }} -- {{relatedEvaluation?.commentTeacher}}
+			    </p>
+		  </mat-list-item>
+	    </div>
+	</mat-list>
+</mat-dialog-content>
+<mat-dialog-actions>
+	<button mat-button [mat-dialog-close]="true">Sluiten</button>
+</mat-dialog-actions>

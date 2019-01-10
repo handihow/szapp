@@ -1,0 +1,6 @@
+
+<app-select-project-student *ngIf="!(currentProject$ | async)"></app-select-project-student>
+<app-existing-evaluations 
+	*ngIf="!(currentEvaluation$ | async) && !(currentSkill$ | async) && (currentProject$ | async)"></app-existing-evaluations>
+<app-new-evaluation *ngIf="(currentSkill$ | async) && (currentProject$ | async)"></app-new-evaluation>
+<app-current-evaluation *ngIf="(currentEvaluation$ | async) && (currentProject$ | async)"></app-current-evaluation>

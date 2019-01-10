@@ -1,0 +1,23 @@
+<section fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="20px" class="message-box">
+	<h4>Reset je wachtwoord</h4>
+	Vul je email adres in. Je krijgt dan een email met een wachtwoord reset link.
+	<a routerLink="/">Terug naar login pagina</a>
+</section>
+<section class="forgot-form">
+	<form fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="10px" #f="ngForm" (ngSubmit)="onSubmit(f)">
+		<mat-form-field>
+			<input 
+				type="email" 
+				matInput 
+				placeholder="Email adres" 
+				ngModel 
+				name="email"
+				email
+				required>
+			<mat-error>
+				Geef een geldig email adres in
+			</mat-error>
+		</mat-form-field>	
+		<button type="submit" [disabled]="f.invalid" mat-raised-button color="primary">Verzenden</button>
+	</form>
+</section>

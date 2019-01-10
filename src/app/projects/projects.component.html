@@ -1,0 +1,9 @@
+<mat-tab-group *ngIf="!(currentProject$ | async)">
+  <mat-tab label="Projecten">
+  	<app-existing-projects></app-existing-projects>
+  </mat-tab>
+  <mat-tab label="Nieuw Project">
+  	<app-new-project></app-new-project>
+  </mat-tab>
+</mat-tab-group>
+<app-current-project *ngIf="currentProject$ | async"></app-current-project>

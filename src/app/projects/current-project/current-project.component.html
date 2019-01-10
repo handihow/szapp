@@ -1,0 +1,140 @@
+<section fxLayout="row" fxLayoutAlign="space-evenly"
+			fxLayout.lt-md="column" fxLayoutAlign.lt-md="space-between center" fxLayoutGap="20px">
+	<mat-card fxFlex="30">
+		<mat-card-title fxLayout="row" fxLayoutAlign="space-between start">
+			{{project.name}}
+			<button mat-icon-button (click)="onFavorite()">
+				<mat-icon color="accent" *ngIf="!isFavorite">star_border</mat-icon>
+				<mat-icon color="accent" *ngIf="isFavorite">star</mat-icon> 
+			</button>
+		</mat-card-title>
+		<mat-card-subtitle>
+			{{project.code}} - {{project.status}}
+		</mat-card-subtitle>
+		<mat-card-content fxLayout="column" fxLayoutAlign="center">
+			<p>Klassen: {{project.classes}}</p>
+			<p>Vakken: {{project.subjects}}</p>
+			<p>Kleur: {{project.color}}, 
+				Opdracht: 
+				<span *ngIf="project.projectTaskUrl"><a href="{{project.projectTaskUrl}}" target="_blank">Link </a> (opent in nieuw scherm)</span>
+				<span *ngIf="!project.projectTaskUrl">Geen opdracht</span>
+			</p>
+		</mat-card-content>
+		<mat-card-actions fxLayoutAlign="center">
+				<button type="button" mat-raised-button color="accent" (click)="onEditProject()">
+					Bewerk
+				</button>
+				<button type="button" mat-raised-button color="primary" (click)="onSaveActive()">
+					Bewaar en terug naar lijst
+				</button>
+			</mat-card-actions>	
+	</mat-card>
+	<mat-card fxFlex="60">
+		<form [formGroup]="skillsForm" #formDirective="ngForm" (ngSubmit)="onSubmit(skillsForm, formDirective)">
+			<mat-card-title>
+				Definieer de competenties
+			</mat-card-title>
+			<mat-card-content fxLayout="column" fxLayoutAlign="center center">
+				<mat-form-field class="full-width">  
+				  <mat-select 
+				  		placeholder="Selecteer het leerplan" 
+				  		formControlName="program">
+				    <mat-option *ngFor="let program of programs$ | async" 
+				    			[value]="program"
+				    			matTooltip="{{program.code}} - {{program.name}}">
+				      <strong>{{program.code}}</strong> - {{program.name}}
+				    </mat-option>
+				  </mat-select>
+				</mat-form-field>
+				<mat-form-field class="full-width">  
+				  <mat-select 
+				  		placeholder="Selecteer de competentie(s)" 
+				  		formControlName="competency"
+				  		multiple>
+				  	<mat-optgroup *ngFor="let group of skillGroups" [label]="group.topic">
+					    <mat-option *ngFor="let skill of group.skills" 
+					    			[value]="skill"
+					    			matTooltip="{{skill.order}} - {{skill.competency}}">
+					      <strong>{{skill.order}}</strong> {{skill.competency}}
+					    </mat-option>
+					</mat-optgroup>
+				  </mat-select>
+				</mat-form-field>
+			</mat-card-content>
+			<mat-card-actions fxLayoutAlign="center">
+				<button type="submit" mat-raised-button color="primary" [disabled]="skillsForm.invalid">
+					Toevoegen
+				</button>
+			</mat-card-actions>
+		</form>
+	</mat-card>
+</section>
+
+<div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="20px"
+		fxLayout.lt-md="column" fxLayoutAlign.lt-md="center stretch" fxLayoutGap.lt-md="10px" class="current-project">
+	<mat-form-field fxFlex="40%" *ngIf="!(isLoading$ | async)">
+		<input matInput type="text" (keyup)="doFilter($event.target.value)" placeholder="Filter">
+	</mat-form-field>
+	<div>
+		<button type="button" mat-button color="warn" 
+				(click)="onRemove()" [disabled]="selection.selected.length===0">Verwijder selectie</button>
+		<button mat-button (click)="downloadCsv()">Download csv</button>
+		<button mat-button color="primary" (click)="onCopyToClipboard()" [disabled]="selection.selected.length===0" fxHide.sm>
+			Kopiëren naar klembord
+		</button>
+	    <angular2csv [data]="data" filename="project_competenties.csv" [options]="options" style="display:none;" #csvComponent></angular2csv>
+	</div>
+	<mat-spinner *ngIf="isLoading$ | async"></mat-spinner>		
+</div>
+<div class="table-container mat-elevation-z8">
+	<mat-table [dataSource]="dataSource" matSort matSortActive="order" matSortDirection="asc">
+
+		<ng-container matColumnDef="select">
+		  <mat-header-cell *matHeaderCellDef>
+		    <mat-checkbox (change)="$event ? masterToggle() : null"
+		                  [checked]="selection.hasValue() && isAllSelected()"
+		                  [indeterminate]="selection.hasValue() && !isAllSelected()">
+		    </mat-checkbox>
+		  </mat-header-cell>
+		  <mat-cell *matCellDef="let row">
+		    <mat-checkbox (click)="$event.stopPropagation()"
+		                  (change)="$event ? selection.toggle(row) : null"
+		                  [checked]="selection.isSelected(row)">
+		    </mat-checkbox>
+		  </mat-cell>
+		</ng-container>
+
+		<ng-container matColumnDef="order">
+			<mat-header-cell *matHeaderCellDef mat-sort-header>Volgnummer</mat-header-cell>
+			<mat-cell *matCellDef="let element">{{ element.order }}</mat-cell>
+		</ng-container>
+
+		<ng-container matColumnDef="program">
+			<mat-header-cell *matHeaderCellDef mat-sort-header>Leerplannummer</mat-header-cell>
+			<mat-cell *matCellDef="let element">{{ element.program }}</mat-cell>
+		</ng-container>
+
+		<ng-container matColumnDef="competency">
+			<mat-header-cell *matHeaderCellDef mat-sort-header>Competentie</mat-header-cell>
+			<mat-cell *matCellDef="let element">{{ element.competency }}</mat-cell>
+		</ng-container>
+
+		<ng-container matColumnDef="topic">
+			<mat-header-cell *matHeaderCellDef mat-sort-header>Onderwerp</mat-header-cell>
+			<mat-cell *matCellDef="let element">{{ element.topic }}</mat-cell>
+		</ng-container>
+
+		<ng-container matColumnDef="link">
+			<mat-header-cell *matHeaderCellDef mat-sort-header>Link</mat-header-cell>
+			<mat-cell *matCellDef="let element">
+				<a href="{{element?.link}}" target="_blank">{{ element.link }}</a>
+          	</mat-cell>
+		</ng-container>
+
+		<mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+		<mat-row *matRowDef="let row; columns: displayedColumns"
+							(click)="selection.toggle(row)"></mat-row>
+	</mat-table>
+</div>
+<mat-paginator [length]="100" [pageSize]="5" [pageSizeOptions]="[5, 10, 25, 100]">
+</mat-paginator>

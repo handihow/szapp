@@ -1,0 +1,11 @@
+<!-- show the student if the current user is a teacher -->
+<section  fxLayout="column" fxLayoutAlign="center center">
+  <h3 *ngIf="(currentUser$ | async).role==='Leraar'">{{(student$ | async).displayName}}</h3>
+  <app-evaluation-card 
+			[evaluation]="evaluation" 
+			[relatedEvaluations]="relatedEvaluations"
+			[isAssessment]="false"
+			[user]="currentUser$ | async"></app-evaluation-card>
+</section>
+
+

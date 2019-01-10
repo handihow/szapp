@@ -1,0 +1,12 @@
+<mat-tab-group *ngIf="!(currentCourse$ | async)">
+  <mat-tab label="Lesgroepen">
+  	<app-existing-courses></app-existing-courses>
+  </mat-tab>
+  <mat-tab label="Nieuwe lesgroep">
+  	<app-new-course></app-new-course>
+  </mat-tab>
+  <mat-tab label="Import Google Classroom" *ngIf="hasToken">
+  	<app-new-gc-course></app-new-gc-course>
+  </mat-tab>
+</mat-tab-group>
+<app-current-course *ngIf="currentCourse$ | async"></app-current-course>

@@ -1,0 +1,97 @@
+<section fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="10px" class="message-box">
+	<h3>Account aanmaken</h3>
+	<p>Gebruikt jouw school Google for Education?
+	Log dan in via de knop "Inloggen met Google".
+	</p>
+	<a routerLink="/">Terug naar login pagina</a>
+</section>
+
+<section class="signup-form">
+	<form [formGroup]="signupForm" (ngSubmit)="onSubmit()" 
+				fxLayout="column" 
+				fxLayoutAlign="center center" 
+				fxLayoutGap="10px">
+		<mat-form-field>
+			<input 
+				type="email" 
+				matInput 
+				placeholder="Email adres" 
+				formControlName="email"
+				email
+				required>
+			<mat-error>
+				Geef een geldig email adres in
+			</mat-error>
+		</mat-form-field>
+		<div [formGroup]="passwords" 
+				fxLayout="column" 
+				fxLayoutAlign="center center" 
+				fxLayoutGap="10px">
+			<mat-form-field>
+				<input 
+					type="password" 
+					matInput 
+					placeholder="Wachtwoord" 
+					formControlName="password"
+					required
+					minlength="8">
+				<mat-hint>
+					Minimaal 8 tekens
+				</mat-hint>
+				<mat-error>
+					Geef minimaal 8 tekens in
+				</mat-error>
+			</mat-form-field>
+			<mat-form-field>
+				<input 
+					type="password" 
+					matInput 
+					placeholder="Herhaal wachtwoord" 
+					formControlName="repeat"
+					required>
+				<mat-hint>
+					Herhaal het wachtwoord
+				</mat-hint>
+				<mat-error>
+					Wachtwoord is niet hetzelfde
+				</mat-error>
+			</mat-form-field>
+		</div>
+		<div class="warning" *ngIf="passwords.errors?.doesMatchPassword">
+			Wachtwoorden zijn niet hetzelfde
+		</div>
+		<mat-form-field>
+			<input 
+				type="text" 
+				matInput 
+				placeholder="Volledige naam" 
+				formControlName="name"
+				required>
+			<mat-error>
+				Voor- en achternaam zijn verplicht
+			</mat-error>
+		</mat-form-field>
+		<mat-form-field>
+			<mat-select placeholder="Selecteer organisatie" formControlName="organisation"  required>
+			    <mat-option *ngFor="let organisation of organisations$ | async" [value]="organisation">
+			      {{ organisation.name }}
+			    </mat-option>
+			</mat-select>
+		</mat-form-field>
+		<mat-form-field>
+			<input 
+				type="text" 
+				matInput 
+				placeholder="Registratie code" 
+				formControlName="registrationCode"
+				required>
+			<mat-error>
+				Registratie code is verplicht (vraag deze op bij de beheerder)
+			</mat-error>
+		</mat-form-field>
+		<button *ngIf="!(isLoading$ | async)" type="submit" [disabled]="!signupForm.valid" mat-raised-button color="primary">
+			Aanmelden
+		</button>
+		<mat-spinner *ngIf="isLoading$ | async"></mat-spinner>
+	</form>
+</section>

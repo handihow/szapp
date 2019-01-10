@@ -1,0 +1,3 @@
+<app-existing-assessments *ngIf="!(currentAssessment$ | async) && !(currentCourse$ | async)"></app-existing-assessments>
+<app-current-assessment *ngIf="(currentAssessment$ | async)"></app-current-assessment>
+<app-course-overview *ngIf="(currentCourse$ | async)" [hidden]="currentAssessment$ | async"></app-course-overview>

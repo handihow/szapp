@@ -1,0 +1,39 @@
+@media (min-width:600px) {
+	.new-evaluation {
+		padding-top: 30px;
+	}
+}
+
+.full-width {
+	width: 95%;
+}
+
+.stepper {
+	max-width: 400px;
+	margin: auto;
+}
+
+h5 {
+	color: gray;
+}
+
+.dropzone { 
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column; 
+    height: 100px;
+    border: 2px dashed green;
+    border-radius: 5px;
+    background: white;
+    margin: 10px 0;
+
+    &.hovering {
+        border: 2px solid #f16624;
+        color: #dadada !important;
+    }
+}
+
+progress::-webkit-progress-value {
+    transition: width 0.1s ease;
+}

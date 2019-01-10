@@ -1,0 +1,28 @@
+<h1 mat-dialog-title>Leerplan Bewerken</h1>
+<form [formGroup]="programForm" (ngSubmit)="onSubmit()">
+	<mat-dialog-content>
+		<mat-form-field class="full-width">
+		   <input matInput placeholder="Naam leerplan" formControlName="name" required>
+		   <mat-error>Vul de naam van het leerplan in</mat-error>
+		</mat-form-field>
+		<mat-form-field class="full-width">
+		   <input matInput placeholder="Leerplannnummer" formControlName="code" required>
+		   <mat-error>Vul het leerplannnummer in</mat-error>
+		</mat-form-field>
+		<mat-form-field class="full-width">  
+		  <mat-select 
+		  		placeholder="Selecteer status" 
+		  		formControlName="status"
+		  		required>
+		    <mat-option *ngFor="let status of availableStatus" [value]="status">
+		      {{status}}
+		    </mat-option>
+		  </mat-select>
+		  <mat-error>Selecteer de status</mat-error>
+		</mat-form-field>
+	</mat-dialog-content>
+	<mat-dialog-actions>
+		<button type="submit" mat-raised-button color="primary">Bewaren</button>
+		<button type="button" mat-raised-button color="accent" [mat-dialog-close]="false">Terug</button>
+	</mat-dialog-actions>
+</form>

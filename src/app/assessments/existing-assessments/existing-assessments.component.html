@@ -1,0 +1,87 @@
+
+<div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="20px"
+		fxLayout.lt-sm="column" fxLayoutAlign.lt-sm="center stretch" fxLayoutGap.lt-sm="10px" class="existing-assessments">
+	<mat-form-field>
+		<mat-select
+			[(ngModel)]="selectedCourse"
+	  		placeholder="Selecteer lesgroep"
+	  		(ngModelChange)="displayCourse($event)">
+	  		<mat-option>None</mat-option>
+		    <mat-option *ngFor="let course of courses" [value]="course">
+		      {{course.name}}
+		    </mat-option>
+		</mat-select>
+	</mat-form-field>
+	<mat-form-field fxFlex="40%" *ngIf="!(isLoading$ | async)">
+		<input matInput type="text" [(ngModel)]="filterValue" (keyup)="doFilter($event.target.value)" placeholder="Filter">
+	</mat-form-field>
+	<button mat-button *ngIf="!allEvaluationsDisplayed" (click)="onChange()">Toon reeds beoordeelde items</button>
+	<mat-slide-toggle 
+				color="primary" 
+				[(ngModel)]="slideNotEvaluatedOnly" 
+				*ngIf="allEvaluationsDisplayed" 
+				(ngModelChange)="onFilter()">
+        Toon alleen niet-beoordeelde items
+    </mat-slide-toggle>
+	<mat-spinner *ngIf="isLoading$ | async"></mat-spinner>		
+</div>
+
+<div *ngIf="!evaluations || evaluations.length==0" fxLayout="column" fxLayoutAlign="center center" class="placeholder">
+	Geen niet-beoordeelde items
+</div>
+<div *ngIf="evaluations && evaluations.length>0">
+	<mat-table [dataSource]="dataSource" matSort>
+
+		<ng-container matColumnDef="created">
+			<mat-header-cell *matHeaderCellDef mat-sort-header>Datum</mat-header-cell>
+			<mat-cell *matCellDef="let element">
+				{{ element.created.toDate() | date : 'dd-MM-yy' }}
+				<mat-icon [ngStyle]="{'color': element?.colorStudent}" >
+		    		{{element?.iconStudent}}
+		    	</mat-icon>
+			</mat-cell>
+		</ng-container>
+
+		<ng-container matColumnDef="student">
+			<mat-header-cell *matHeaderCellDef mat-sort-header>Leerling</mat-header-cell>
+			<mat-cell *matCellDef="let element">{{ element.studentName }}</mat-cell>
+		</ng-container>
+
+		<ng-container matColumnDef="class">
+			<mat-header-cell *matHeaderCellDef mat-sort-header>Klas</mat-header-cell>
+			<mat-cell *matCellDef="let element">{{ element.class }}</mat-cell>
+		</ng-container>
+
+		<ng-container matColumnDef="skill">
+			<mat-header-cell *matHeaderCellDef mat-sort-header>Competentie</mat-header-cell>
+			<mat-cell *matCellDef="let element">
+				<span *ngIf="element.skillOrder">{{element.skillOrder}} - </span>
+				{{ element.skillCompetency }}
+			</mat-cell>
+		</ng-container>
+
+		<ng-container matColumnDef="topic">
+			<mat-header-cell *matHeaderCellDef mat-sort-header>Onderwerp</mat-header-cell>
+			<mat-cell *matCellDef="let element">
+				{{ element.skillTopic }}
+			</mat-cell>
+		</ng-container>
+
+		<ng-container matColumnDef="project">
+			<mat-header-cell *matHeaderCellDef mat-sort-header>Project</mat-header-cell>
+			<mat-cell *matCellDef="let element">{{ element.projectName }}</mat-cell>
+		</ng-container>
+
+		<ng-container matColumnDef="status">
+			<mat-header-cell *matHeaderCellDef mat-sort-header>Status</mat-header-cell>
+			<mat-cell *matCellDef="let element">{{ element.status }}</mat-cell>
+		</ng-container>
+
+		<mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+		<mat-row *matRowDef="let row; columns: displayedColumns"
+							(click)="selection.select(row)"></mat-row>
+	</mat-table>
+
+	<mat-paginator [length]="100" [pageSize]="25" [pageSizeOptions]="[5, 10, 25, 100]">
+	</mat-paginator>
+</div>

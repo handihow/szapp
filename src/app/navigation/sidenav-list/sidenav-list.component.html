@@ -1,0 +1,62 @@
+<mat-nav-list>
+	<!-- <a mat-list-item routerLink="/signup" 
+		(click)="onClose()"
+		*ngIf="!(isAuth$ | async)">
+		<mat-icon>face</mat-icon>
+		<span class="nav-caption">Aanmelden</span>
+	</a> -->
+	<a mat-list-item routerLink="/" 
+		(click)="onClose()"
+		*ngIf="!(isAuth$ | async)">
+		<mat-icon>input</mat-icon>
+		<span class="nav-caption">Inloggen</span>
+	</a>
+	<a mat-list-item routerLink="/profile" 
+		(click)="onClose()"
+		*ngIf="isAuth$ | async">
+		<mat-icon>face</mat-icon>
+		<span class="nav-caption">Profiel</span>
+	</a>
+	<a mat-list-item routerLink="/programs" 
+		(click)="onClose()"
+		*ngIf="isTeacher$ | async">
+		<mat-icon>list</mat-icon>
+		<span class="nav-caption">Leerplannen</span>
+	</a>
+	<a mat-list-item routerLink="/projects" 
+		(click)="onClose()"
+		*ngIf="isTeacher$  | async">
+		<mat-icon>work_outline</mat-icon>
+		<span class="nav-caption">Projecten</span>
+	</a>
+	<a mat-list-item routerLink="/courses" 
+		(click)="onClose()"
+		*ngIf="isTeacher$  | async">
+		<mat-icon>school</mat-icon>
+		<span class="nav-caption">Lesgroepen</span>
+	</a>
+	<a mat-list-item routerLink="/overviews" 
+		(click)="onClose()"
+		*ngIf="isAuth$ | async">
+		<mat-icon>dashboard</mat-icon>
+		<span class="nav-caption">Overzicht</span>
+	</a>
+	<a mat-list-item routerLink="/evaluations" 
+		(click)="onClose()"
+		*ngIf="isAuth$ | async">
+		<mat-icon>assignment</mat-icon>
+		<span class="nav-caption">Evaluatie</span>
+	</a>
+	<a mat-list-item routerLink="/assessments" 
+		(click)="onClose()"
+		*ngIf="isTeacher$  | async">
+		<mat-icon>assignment_turned_in</mat-icon>
+		<span class="nav-caption">Beoordeling</span>
+	</a>
+	<a mat-list-item 
+		(click)="onLogout()"
+		*ngIf="isAuth$ | async">
+		<mat-icon>eject</mat-icon>
+		<span class="nav-caption">Log uit</span>
+	</a>
+</mat-nav-list>

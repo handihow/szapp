@@ -1,0 +1,49 @@
+/* You can add global styles to this file, and also import other style files */
+/*@import "~@angular/material/prebuilt-themes/deeppurple-amber.css";*/
+
+
+html, body {
+	font-family: 'Roboto', sans-serif;
+	height: 100%;
+}
+
+body {
+	margin: 0;	
+}
+
+.mat-row:hover {
+  background-color: #F5F5F5;
+  cursor: pointer;
+}
+
+
+.teacherIcon {
+	font-size: 22px;
+}
+
+.studentIcon {
+	font-size: 20px;
+}
+
+.main {
+    -ms-flex: 1;
+    -webkit-flex: 1;
+    flex: 1;
+    min-height: calc(100vh - 50px);
+}
+
+.main::after {
+  content: '';
+  width: 0;
+  overflow: hidden;
+  visibility: hidden;
+  float: left;
+}
+
+/*.mat-select-panel mat-option.mat-option {
+  height: unset;
+}
+
+.mat-option-text.mat-option-text {
+  white-space: normal;
+}*/

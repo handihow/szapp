@@ -1,0 +1,26 @@
+<section class="new-program" fxLayout fxLayoutAlign="center">
+	<form [formGroup]="programForm" (ngSubmit)="onSubmit()">
+		<mat-card fxFlex.xs="100%" fxFlex="400px">
+			<mat-card-title fxLayoutAlign="center">
+				Maak een nieuw leerplan
+			</mat-card-title>
+			<mat-card-content fxLayout="column" fxLayoutAlign="center center" *ngIf="!(isLoading$ | async)">
+				<mat-form-field class="full-width">
+				   <input matInput placeholder="Naam leerplan" formControlName="name" required>
+				   <mat-error>Vul de naam van het leerplan in</mat-error>
+				</mat-form-field>
+				<mat-form-field class="full-width">
+				   <input matInput placeholder="Leerplannummer" formControlName="code" required>
+				   <mat-hint>Zoek het leerplan sneller met een leerplannummer</mat-hint>
+				   <mat-error>Vul het leerplannummer in</mat-error>
+				</mat-form-field>
+			</mat-card-content>
+			<mat-spinner *ngIf="isLoading$ | async"></mat-spinner>	
+			<mat-card-actions fxLayoutAlign="center">
+				<button type="submit" mat-raised-button color="primary" [disabled]="programForm.invalid">
+					Bewaar
+				</button>
+			</mat-card-actions>
+		</mat-card>	
+	</form>
+</section>

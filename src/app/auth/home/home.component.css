@@ -1,0 +1,105 @@
+mat-form-field {
+	width: 300px;
+}
+
+.buttons {
+	width: 180px;
+}
+
+mat-divider {
+	margin-top: 10px;
+	padding: 10px;
+}
+
+.about-szapp {
+	max-width: 500px;
+	padding: 30px;
+	border-radius: 25px;
+}
+
+.about-szapp-ie {
+	text-align: left;
+	padding: 30px;
+	width: 60%;
+}
+
+.transparent-ie {
+	padding: 30px;
+}
+
+.logo-ie {
+	width: 150px;
+	height: 150px;
+}
+
+@media all and (min-width:1000px){
+	.badges {
+		background-color: #03A9F4;
+	}
+
+	.badge {
+		max-width: 75px;
+		max-height: 75px;
+	}
+
+	.about-szapp-ie {
+		display: inline-block;
+	}
+
+	.about-szapp {
+		color: white;
+	}
+
+	.landing-image {
+		height: calc(100vh - 125px);
+		background-image: linear-gradient(#03A9F4, black);
+		background-repeat: no-repeat;
+		background-size: cover;
+	}
+
+	.landing-no-image {
+		text-align: center;
+	}
+
+	.transparent {
+		background-color: rgba(0,0,0,0.5);
+		padding: 30px;
+		border-radius: 25px;
+		width: 350px;
+	}
+
+	.transparent-ie {
+		display: inline-block;
+	}
+
+	.transparent-white {
+		background-color: rgba(255,255,255,0.95);
+		padding: 30px;
+		border-radius: 25px;
+	}
+
+	.logo {
+		max-width: 40%;
+	}
+}
+
+
+@media all and (min-width:600px) {
+    h2 {
+    	font-size: 2em;
+    }
+
+ }
+
+ @media all and (max-width:1000px) {
+ 	.logo {
+		max-width: 30%;
+	}
+
+	.badge {
+		padding-top: 20px;
+		max-width: 60px;
+		max-height: 60px;
+	}
+ }
+

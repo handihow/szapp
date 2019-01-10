@@ -1,0 +1,13 @@
+.list-competencies {
+	max-width: 800px;
+	padding: 30px;
+	margin: auto;
+}
+
+.red-icon {
+	color: red;
+}
+
+.green-icon {
+	color: green;
+}

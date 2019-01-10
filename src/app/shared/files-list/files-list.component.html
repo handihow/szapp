@@ -1,0 +1,20 @@
+<h5>Files</h5>
+<mat-list dense>
+  <mat-list-item *ngFor="let attachment of attachments">
+    <button mat-icon-button (click)="onDownloadAttachment(attachment)">
+      <mat-icon matListIcon>cloud_download</mat-icon>
+    </button>
+    <button mat-icon-button (click)="onDeleteAttachment(attachment)" *ngIf="userRole==='Leraar'">
+      <mat-icon matListIcon>cancel</mat-icon>
+    </button>
+    {{attachment.filename}}
+  </mat-list-item>
+</mat-list>
+
+<div *ngIf="hasImages">
+  <h5>Foto's</h5>
+  <ngx-image-gallery 
+  	[images]="images" 
+  	[conf]="conf"></ngx-image-gallery>
+</div>
+

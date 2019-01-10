@@ -1,0 +1,46 @@
+<div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="20px"
+		fxLayout.lt-md="column" fxLayoutAlign.lt-md="center stretch" fxLayoutGap.lt-md="10px" class="existing-courses">
+	<mat-form-field fxFlex="40%" *ngIf="!(isLoading$ | async)">
+		<input matInput type="text" (keyup)="doFilter($event.target.value)" placeholder="Filter">
+	</mat-form-field>
+	<div>
+		<mat-slide-toggle color="primary" [(ngModel)]="showArchived" (ngModelChange)="onChange()">
+	        Toon gearchiveerde lesgroepen
+	    </mat-slide-toggle>
+    </div>
+	<mat-spinner *ngIf="isLoading$ | async"></mat-spinner>		
+</div>
+<mat-table [dataSource]="dataSource" matSort>
+
+	<ng-container matColumnDef="created">
+		<mat-header-cell *matHeaderCellDef mat-sort-header>Datum</mat-header-cell>
+		<mat-cell *matCellDef="let element">
+			{{ element.created.toDate() | date : 'dd-MM-yyyy' }} 
+			<span> <fa name="google" *ngIf="element.isGoogleClassroom"></fa></span> 
+		</mat-cell>
+	</ng-container>
+
+	<ng-container matColumnDef="name">
+		<mat-header-cell *matHeaderCellDef mat-sort-header>Lesgroep</mat-header-cell>
+		<mat-cell *matCellDef="let element">{{ element.name }}</mat-cell>
+	</ng-container>
+
+	<ng-container matColumnDef="code">
+		<mat-header-cell *matHeaderCellDef mat-sort-header>Lesgroep code</mat-header-cell>
+		<mat-cell *matCellDef="let element">
+			{{ element.code }}
+		</mat-cell>
+	</ng-container>
+
+	<ng-container matColumnDef="status">
+		<mat-header-cell *matHeaderCellDef mat-sort-header>Status</mat-header-cell>
+		<mat-cell *matCellDef="let element">{{ element.status }}</mat-cell>
+	</ng-container>
+
+	<mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+	<mat-row *matRowDef="let row; columns: displayedColumns"
+						(click)="selection.select(row)"></mat-row>
+</mat-table>
+
+<mat-paginator [length]="100" [pageSize]="25" [pageSizeOptions]="[5, 10, 25, 100]">
+</mat-paginator>

@@ -1,0 +1,50 @@
+
+
+<section fxLayout="column" fxLayoutAlign="center center" *ngIf="isTeacher && !(hasSelectedStudent$ | async)">
+	<h3>Selecteer een leerling</h3>
+	<form class="student-form" (ngSubmit)="onSubmit()" [formGroup]="selectStudentForm">
+	  <mat-form-field class="student-full-width">
+	    <input type="text" placeholder="Leerling" matInput formControlName="student" [matAutocomplete]="auto">
+	    <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
+	      <mat-option *ngFor="let student of filteredStudents | async" [value]="student">
+	        {{student.classes}} - {{ student.displayName }}
+	      </mat-option>
+	    </mat-autocomplete>
+	    <mat-hint>Selecteer een leerling door de naam of klas in te geven</mat-hint>
+	  </mat-form-field>
+	  <button type="submit" mat-raised-button color="accent" [disabled]="selectStudentForm.invalid">Selecteren</button>
+	</form>
+</section>
+
+<section fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="20px" *ngIf="isTeacher && (hasSelectedStudent$ | async)">
+	<span>{{ selectedStudent.displayName }}</span>
+	<button type="button" mat-raised-button color="accent" (click)="onChange()">Leerling selecteren</button>
+</section>
+
+<!-- <section fxLayout="row" fxLayoutAlign="center center" *ngIf="hasSelectedStudent$ | async">
+	<mat-slide-toggle 
+		color="primary" 
+		 matTooltip="Filter is beschikbaar als op het profiel klas(sen) en vak(ken) zijn geselecteerd"
+		[(ngModel)]="isFiltered" 
+		(ngModelChange)="onFilter()" 
+		[disabled]="!isFilterEnabled">
+	    Toon alleen relevante projecten
+	</mat-slide-toggle>
+</section> -->
+
+<section *ngIf="hasSelectedStudent$ | async">
+	<mat-grid-list cols="{{columns}}" rowHeight="200px" gutterSize="25">
+	  <mat-grid-tile 
+	  		*ngFor="let project of filteredProjects"
+	  		[style.background]="project?.color"
+	  		(click)="onSelect(project)">
+	  	<mat-grid-tile-header>
+	  		{{project?.code}} 
+	  	</mat-grid-tile-header>
+  			{{project?.name}}
+	    <mat-grid-tile-footer>
+	    	<mat-progress-bar color="primary" mode="determinate" value="{{project?.progress}}"></mat-progress-bar>
+	    </mat-grid-tile-footer>
+	  </mat-grid-tile>
+	</mat-grid-list>
+</section>

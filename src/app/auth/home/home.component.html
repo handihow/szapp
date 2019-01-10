@@ -1,0 +1,94 @@
+<div fxLayout="row" fxLayoutAlign="space-evenly center" class="badges" *ngIf="!isIEOrEdge">
+	<img src="/assets/groen.png" class="badge animated jackInTheBox" fxHide.xs>
+	<img src="/assets/lichtgroen.png" class="badge animated jackInTheBox delay-1s" fxHide.xs>
+	<img src="/assets/geel.png" class="badge animated jackInTheBox delay-2s" fxHide.xs>
+	<img src="/assets/rood.png" class="badge animated jackInTheBox delay-3s" fxHide.xs>
+</div>
+
+<div [className]="isIEOrEdge ? 'landing-no-image' : 'landing-image'" 
+		fxLayout="row" 
+		fxLayoutAlign="space-evenly center" 
+		fxLayout.lt-md="column" 
+		fxLayoutAlign.lt-md="space-between center">
+
+	<div [className]="isIEOrEdge ? 'about-szapp-ie' : 'about-szapp'">
+		<h2>Sterkte Zwakte Analyse App</h2>
+		<mat-divider></mat-divider>
+		<p>Deze app brengt competentieniveaus van leerlingen in kaart. Deze competenties zijn onderdeel van de leerplannen op hun school.</p>
+		<p fxHide.lt-md>Het niveau wordt beoordeeld met een van de 4 kleuren en hun bijbehorend symbool.</p>
+		<p fxHide.lt-md>De leerling kan eerst zijn niveau beoordelen en een foto, opmerking of link naar bestand toevoegen. Dan volgt
+		de beoordeling van de leraar.</p>
+		<p fxHide.lt-md>De evaluatiecyclus kan worden herhaald tot het competentieniveau minimaal toereikend is.</p>
+
+	</div>
+
+	<div [className]="isIEOrEdge ? 'transparent-ie' : 'transparent'" fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="20px" *ngIf="!loginWithEmail">
+		<img src="/assets/SZAPP.png" [className]="isIEOrEdge ? 'logo-ie' : 'logo'">
+		
+		<div *ngIf="!(isLoading$ | async) && !(isAuth$ | async)" fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="20px">
+			<button class="buttons" type="button" mat-raised-button (click)="onGoogleLogin()"
+					matTooltip="Log in met je Google for Education schoolaccount">
+				<fa name="google"></fa> Login schoolaccount
+			</button>
+			<button class="buttons" type="button" mat-raised-button color="accent" (click)="toggleLoginWithEmail()"
+					matTooltip="Log in met email/wachtwoord combinatie">
+				<fa name="envelope"></fa> Inloggen met email
+			</button>
+			<button class="buttons" mat-raised-button color="primary" routerLink="/signup"
+					matTooltip="Registreer jezelf als nieuwe gebruiker. Niet nodig als je een Google schoolaccount hebt!">
+				<fa name="user-plus"></fa>  Registreren
+			</button>
+		</div>
+		<div *ngIf="isAuth$ | async">
+			<button class="buttons" type="button" mat-raised-button color="accent" routerLink="/evaluations">
+				Beginnen!
+			</button>
+		</div>
+		<mat-spinner *ngIf="(isLoading$ | async)"></mat-spinner>
+	</div>
+
+	<div class="transparent-white" *ngIf="loginWithEmail">
+		
+		<form fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="10px" #f="ngForm" (ngSubmit)="onSubmit(f)">
+			<h4>Inloggen</h4>
+			<mat-form-field>
+				<input 
+					type="email" 
+					matInput 
+					placeholder="Email adres" 
+					ngModel 
+					name="email"
+					email
+					required>
+				<mat-error>
+					Geef een geldig email adres in
+				</mat-error>
+			</mat-form-field>
+			<mat-form-field>
+				<input 
+					type="password" 
+					matInput 
+					placeholder="Wachtwoord" 
+					ngModel 
+					name="password"
+					required
+					minlength="8">
+				<mat-error>
+					Geef minimaal 8 tekens in
+				</mat-error>
+			</mat-form-field>
+			<div>
+				<button type="button" mat-raised-button color="warn" (click)="toggleLoginWithEmail()">
+					Annuleren
+				</button>
+				<button *ngIf="!(isLoading$ | async)" type="submit" [disabled]="f.invalid" mat-raised-button color="primary">Verzenden</button>
+			</div>
+			<a  class="buttons" mat-button routerLink="/forgot">
+					<fa name="unlock"></fa> Wachtwoord vergeten?
+			</a>
+			<mat-spinner *ngIf="(isLoading$ | async)"></mat-spinner>
+		</form>
+		
+	</div>
+
+</div>

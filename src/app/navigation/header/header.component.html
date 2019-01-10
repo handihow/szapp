@@ -1,0 +1,46 @@
+<mat-toolbar color="primary">
+	<div fxHide.gt-xs>
+		<button mat-icon-button (click)="onToggleSidenav()">
+			<mat-icon>
+				menu
+			</mat-icon>
+		</button>
+	</div>
+	<div fxFlex fxLayout="row" fxLayoutAlign="flex-start center">
+		<a routerLink="/" *ngIf="isAuth$ | async">SZAPP</a>
+	</div>
+	<div fxFlex fxLayout fxLayoutAlign="flex-end" fxLayoutGap="10px">
+		<!-- Student links -->
+		<ul fxLayout fxLayoutGap="10px" class="navigation-items" fxHide fxShow.gt-xs>
+			<li *ngIf="isTeacher$ | async">
+				<a routerLink="/assessments">Beoordeling</a>
+			</li>
+			<li *ngIf="isAuth$ | async">
+				<a routerLink="/evaluations">Evaluatie</a>
+			</li>
+			<li *ngIf="isAuth$ | async">
+				<a routerLink="/overviews">Overzicht</a>
+			</li>
+		</ul>
+		<!-- Administration part -->
+		<a [matMenuTriggerFor]="administration" *ngIf="isTeacher$ | async" fxHide fxShow.gt-xs>
+			Beheer
+		</a>
+		<mat-menu #administration="matMenu" fxHide.xs>
+		  <button mat-menu-item routerLink="/programs">Leerplannen</button>
+		  <button mat-menu-item routerLink="/projects">Projecten</button>
+		  <button mat-menu-item routerLink="/courses">Lesgroepen</button>
+		</mat-menu>
+		<!-- Profile button -->
+		<button mat-mini-fab [matMenuTriggerFor]="profile" *ngIf="isAuth$ | async">
+			{{(user$ | async)?.displayName.charAt(0)}}
+		</button>
+		<mat-menu #profile="matMenu">
+		  <button mat-menu-item disabled="true" id="displayName">{{(user$ | async)?.displayName}}</button>
+		  <button mat-menu-item disabled="true" id="roleAndOrganisation">{{(user$ | async)?.role}} - {{(user$ | async)?.organisation}}</button>
+		  <button routerLink="/profile" mat-menu-item>Profiel</button>
+		  <button style="cursor: pointer" (click)="onLogout()" mat-menu-item>Log uit</button>
+		</mat-menu>
+	</div>
+	
+</mat-toolbar>

@@ -1,0 +1,34 @@
+<section fxLayout.gt-sm="row" fxLayoutAlign.gt-sm="space-evenly center"
+         fxLayout.lt-md="column" fxLayoutAlign.lt-md="center center" fxLayoutGap.lt-md="10px">
+	<h3>{{program?.code}} {{program?.name}}</h3>
+	<button mat-button (click)="onStopProgram()">Terug naar overzicht</button>
+  	<button mat-raised-button color="accent" (click)="onDownloadPDF()">PDF rapport</button>
+</section>
+<section class="list-competencies">
+	<mat-list>
+		 <div *ngFor="let skill of skills">
+			 <mat-list-item> 
+			 		<mat-icon matListIcon 
+			 				  *ngIf="skill.listedUnderProjects.length==0"
+			 				  class="red-icon">clear</mat-icon>
+			 		<mat-icon matListIcon 
+			 				  *ngIf="skill.listedUnderProjects.length>0"
+			 				  class="green-icon">done</mat-icon>
+			 		<h3 matLine 
+			 			[style.color]="skill.listedUnderProjects.length==0 ? 'grey' : 'null'"> 
+			 			{{skill.order}} - {{skill.competency}} </h3>
+			 		<p matLine
+			 		   [style.color]="skill.listedUnderProjects.length==0 ? 'grey' : 'null'">
+				      <span>{{skill.topic}} </span>
+				    </p>
+				    <p matLine *ngFor="let project of skill.listedUnderProjects"  
+				    		fxLayout="row" 
+				    		fxLayoutAlign="space-between center">
+				    		<mat-icon matListIcon>chevron_right</mat-icon>
+				    		{{project?.code}} -
+				    		{{project?.name}}
+				    </p>
+			 </mat-list-item>
+	     </div>
+	</mat-list>
+</section>

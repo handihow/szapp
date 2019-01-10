@@ -1,0 +1,33 @@
+[debug] [2019-01-08T15:53:14.775Z] ----------------------------------------------------------------------
+[debug] [2019-01-08T15:53:14.777Z] Command:       /usr/local/bin/node /usr/local/bin/firebase serve --only functions
+[debug] [2019-01-08T15:53:14.777Z] CLI Version:   6.2.2
+[debug] [2019-01-08T15:53:14.777Z] Platform:      darwin
+[debug] [2019-01-08T15:53:14.777Z] Node Version:  v10.15.0
+[debug] [2019-01-08T15:53:14.778Z] Time:          Tue Jan 08 2019 16:53:14 GMT+0100 (GMT+01:00)
+[debug] [2019-01-08T15:53:14.778Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2019-01-08T15:53:14.788Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2019-01-08T15:53:14.788Z] > authorizing via signed-in user
+[debug] [2019-01-08T15:53:14.788Z] [iam] checking project sterkte-zwakte-analyse-app for permissions ["firebase.projects.get"]
+[debug] [2019-01-08T15:53:14.791Z] >>> HTTP REQUEST POST https://cloudresourcemanager.googleapis.com/v1/projects/sterkte-zwakte-analyse-app:testIamPermissions  
+
+[debug] [2019-01-08T15:53:15.740Z] <<< HTTP RESPONSE 200
+[debug] [2019-01-08T15:53:15.742Z] >>> HTTP REQUEST GET https://cloudresourcemanager.googleapis.com/v1/projects/sterkte-zwakte-analyse-app  
+ 
+[debug] [2019-01-08T15:53:16.528Z] <<< HTTP RESPONSE 200
+[info] 
+[info] === Serving from '/Users/roelandverbakel/Documents/SZAPP'...
+[info] 
+[debug] [2019-01-08T15:53:17.118Z] Error: EACCES: permission denied, mkdir '/usr/local/lib/node_modules/firebase-tools/node_modules/@google-cloud/functions-emulator/logs'
+    at Object.mkdirSync (fs.js:753:3)
+    at Object.assertLogsPath (/usr/local/lib/node_modules/firebase-tools/node_modules/@google-cloud/functions-emulator/src/emulator/logs.js:65:10)
+    at new Controller (/usr/local/lib/node_modules/firebase-tools/node_modules/@google-cloud/functions-emulator/src/cli/controller.js:77:32)
+    at FunctionsEmulator.start (/usr/local/lib/node_modules/firebase-tools/lib/functionsEmulator.js:102:23)
+    at Object.start (/usr/local/lib/node_modules/firebase-tools/lib/serve/functions.js:7:33)
+    at /usr/local/lib/node_modules/firebase-tools/lib/serve/index.js:15:23
+    at arrayMap (/usr/local/lib/node_modules/firebase-tools/node_modules/lodash/lodash.js:639:23)
+    at Function.map (/usr/local/lib/node_modules/firebase-tools/node_modules/lodash/lodash.js:9556:14)
+    at _serve (/usr/local/lib/node_modules/firebase-tools/lib/serve/index.js:13:26)
+    at Command.module.exports.Command.description.option.option.option.option.before.action [as _action] (/usr/local/lib/node_modules/firebase-tools/lib/commands/serve.js:55:12)
+[error] 
+[error] Error: An unexpected error has occurred.

@@ -1,0 +1,27 @@
+
+<section class="new-course" fxLayout fxLayoutAlign="center">
+	<form [formGroup]="courseForm" (ngSubmit)="onSubmit()">
+		<mat-card fxFlex.xs="100%" fxFlex="400px">
+			<mat-card-title fxLayoutAlign="center">
+				Maak een nieuwe lesgroep
+			</mat-card-title>
+			<mat-card-content fxLayout="column" fxLayoutAlign="center center" *ngIf="!(isLoading$ | async)">
+				<mat-form-field class="full-width">
+				   <input matInput placeholder="Naam lesgroep" formControlName="name" required>
+				   <mat-error>Vul de naam van de lesgroep in</mat-error>
+				</mat-form-field>
+				<mat-form-field class="full-width">
+				   <input matInput placeholder="Lesgroep code" formControlName="code" required>
+				   <mat-hint>Geef de lesgroep een code</mat-hint>
+				   <mat-error>Vul de lesgroep code in</mat-error>
+				</mat-form-field>
+			</mat-card-content>
+			<mat-spinner *ngIf="isLoading$ | async"></mat-spinner>	
+			<mat-card-actions fxLayoutAlign="center">
+				<button type="submit" mat-raised-button color="primary" [disabled]="courseForm.invalid">
+					Bewaar
+				</button>
+			</mat-card-actions>
+		</mat-card>	
+	</form>
+</section>

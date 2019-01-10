@@ -1,0 +1,32 @@
+section {
+	padding: 20px;
+}
+
+.mat-grid-tile:hover {
+  font-size: 1.5em;
+  transition: 300ms;
+}
+
+.mat-grid-tile {
+  color: #ffffff; 
+  font-size: 22px; 
+  font-weight: 800; 
+  text-align: center; 
+  text-transform: uppercase;
+}
+
+mat-progress-bar {
+	margin-right: 10px;
+	margin-left: 10px;
+}
+
+.student-form {
+  min-width: 150px;
+  max-width: 500px;
+  width: 100%;
+}
+
+.student-full-width {
+  width: 100%;
+  margin-bottom: 20px;
+}

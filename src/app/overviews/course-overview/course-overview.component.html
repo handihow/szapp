@@ -1,0 +1,9 @@
+<section fxLayout.gt-sm="row" fxLayoutAlign.gt-sm="space-evenly center"
+         fxLayout.lt-md="column" fxLayoutAlign.lt-md="center center" fxLayoutGap.lt-md="10px">
+	<h3>{{program?.name}} -- {{course?.name}}</h3>
+	<button type="button" mat-raised-button color="accent" (click)="onReturnToOverview()">Terug</button>
+</section>
+
+<div *ngIf="chart" class="chart">
+  <canvas id="canvas">{{ chart }}</canvas>
+</div>

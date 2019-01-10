@@ -1,0 +1,84 @@
+
+<section>
+	<mat-card class="selection-skill">
+		<form [formGroup]="selectSkillForm" (ngSubmit)="onSubmit()">
+			<mat-card-header>
+				<mat-card-title>
+					{{course.name}}
+				</mat-card-title>
+			</mat-card-header>
+			<mat-card-content fxLayout="row" fxLayoutAlign="start end" fxLayoutGap="20px" fxLayout.lt-sm="column" fxLayoutAlign.lt-sm="center center" fxLayoutGap.lt-sm="10px">
+				<mat-spinner *ngIf="isLoading$ | async"></mat-spinner>
+				<mat-form-field class="full-width">
+				  <mat-select placeholder="Project" formControlName="project">
+				  	<mat-optgroup label="Met ster">
+					  	<mat-option *ngFor="let starredProject of starredProjects$ | async" 
+					  				[value]="starredProject"
+					  				matTooltip="{{ starredProject.name }} - {{starredProject.code}}">
+					      {{ starredProject.name }} - {{starredProject.code}}
+					    </mat-option>
+					</mat-optgroup>
+					<mat-optgroup label="Alle projecten">
+					    <mat-option *ngFor="let project of projects$ | async" 
+					    			[value]="project"
+					    			matTooltip="{{ project.name }} - {{project.code}}">
+					      {{ project.name }} - {{project.code}}
+					    </mat-option>
+					</mat-optgroup>
+				  </mat-select>
+				</mat-form-field>
+				<mat-form-field class="full-width">  
+				  <mat-select 
+				  		placeholder="Selecteer competentie" 
+				  		formControlName="skill">
+				   	<mat-option *ngFor="let skill of skills$ | async" 
+				   				[value]="skill"
+				   				matTooltip="{{skill.order}} - {{skill.competency}}">
+					      {{skill.order}} - {{skill.competency}}
+					</mat-option>
+				  </mat-select>
+				</mat-form-field>
+				
+			</mat-card-content>
+			<mat-card-actions>
+				<button mat-button (click)="onClose()">Terug</button>
+				<button type="button" mat-button color="warn" (click)="onReset()">
+					Reset
+				</button>
+				<button type="submit" mat-button [disabled]="selectSkillForm.invalid">
+					Overzicht
+				</button>
+			</mat-card-actions>
+		</form>
+	</mat-card>
+</section>	
+<section fxLayout="row wrap" fxLayoutAlign="space-between" fxLayout.lt-sm="column">
+	<mat-card *ngFor="let student of courseStudents" class="student-card">
+		<mat-card-header>
+			<mat-card-title>
+				{{student.displayName}}
+			</mat-card-title>
+		</mat-card-header>
+		<mat-card-content>
+			<p *ngIf="hasSelectedSkill && !student.evaluation">
+				Geen evaluatie
+			</p>
+			<p *ngIf="student.evaluation" fxLayout="row" fxLayoutAlign="start center">
+			  <span fxFlex="50"> {{student.evaluation.created.toDate() | date : 'dd-MM-yyyy' }}</span>
+		      <span fxFlex="50">
+		        <mat-icon [ngStyle]="{'color': student.evaluation.colorStudent ? student.evaluation.colorStudent: 'grey'}" >
+		          {{student.evaluation.iconStudent ? student.evaluation.iconStudent : "account_circle"}}
+		        </mat-icon>  
+		        <mat-icon [ngStyle]="{'color': student.evaluation.colorTeacher ? student.evaluation.colorTeacher : 'grey'}" >
+		          {{student.evaluation.iconTeacher ? student.evaluation.iconTeacher : "supervised_user_circle"}}
+		        </mat-icon> 
+		      </span>
+			</p>
+		</mat-card-content>
+		<mat-card-actions>
+			<button mat-button [disabled]="!hasSelectedSkill" (click)="onStartAssessment(student)">
+			    Beoordeel
+			</button>
+		</mat-card-actions>
+	</mat-card>
+</section>

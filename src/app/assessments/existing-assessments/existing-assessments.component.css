@@ -1,0 +1,16 @@
+.existing-assessments {
+	margin-left: 10px;
+	margin-right: 10px;
+}
+
+.courses {
+	margin: 20px;
+}
+
+mat-card {
+	margin-top: 10px;
+}
+
+.placeholder {
+	height: 300px;
+}

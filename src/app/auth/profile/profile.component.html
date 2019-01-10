@@ -1,0 +1,101 @@
+<section class="profile" fxLayout="column" fxLayoutAlign="center center">
+	<form [formGroup]="profileForm" (ngSubmit)="onSubmit()">
+		<mat-card *ngIf="!(isLoading$ | async)" fxFlex.xs="100%" fxFlex="400px">
+			<mat-card-header>
+				<mat-card-title>
+					{{user?.displayName}}
+				</mat-card-title>
+				<mat-card-subtitle>
+					{{user?.role}} - {{user?.organisation}}
+				</mat-card-subtitle>
+			</mat-card-header>
+			<!-- image upload -->
+			<mat-card-content *ngIf="isEditing">
+				<div class="dropzone" 
+			     dropZone
+			     (hovered)="toggleHover($event)"
+			     (dropped)="startUpload($event)"
+			     [class.hovering]="isHovering">
+				     <h3>Drop hier een foto</h3>
+
+					 <button type="button" mat-button color="primary" (click)="fileInput.click()">
+				        Upload een foto
+				     </button>
+				     <input #fileInput type="file" (change)="startUpload($event.target.files)" style="display:none;" />
+
+				 </div>
+				 <input formControlName="imageUrl" style="display:none;">
+				 <input formControlName="thumbnailUrl" style="display:none;">
+				 <div *ngIf="percentage | async as pct">
+					  <mat-progress-bar mode="determinate" value="pct"></mat-progress-bar>
+					  {{ pct | number: '1.0-0' }}%
+				 </div>
+				 <div *ngIf="snapshot | async as snap" style="display:none;">
+					  {{ snap.bytesTransferred | fileSize }} van {{ snap.totalBytes | fileSize }} 
+
+					  <div *ngIf="downloadURL | async as url">
+					    <img class="full-width" [src]="url">
+					  </div> 
+
+					  <button (click)="task.pause()" mat-button color="accent" [disabled]="!isActive(snap)">Pause</button>
+					  <button (click)="task.cancel()" mat-button color="warn" [disabled]="!isActive(snap)">Cancel</button>
+					  <button (click)="task.resume()" mat-button color="primary"  [disabled]="!(snap?.state === 'paused')">Hervatten</button>
+
+				  </div>
+		  	</mat-card-content>
+		  	<!-- show image if the user is not editing the profile -->
+			<img 
+				mat-card-image 
+				src="{{user?.thumbnailURL ? (thumbnail$ | async) : user?.photoURL}}" 
+				*ngIf="!isEditing">
+			<img mat-card-image [src]="url" *ngIf="isEditing && downloadURL | async as url">
+			<mat-spinner *ngIf="user?.thumbnailURL && !(thumbnail$ | async)"></mat-spinner>
+			<!-- card content -->
+			<mat-card-content>
+				<!-- show fields if user is not editing the profile -->
+				<div *ngIf="!isEditing">
+					<div>Klas(sen): {{user?.classes}}</div>
+					<div>Vak(ken): </div>
+					<div *ngFor="let course of user?.subjects">
+						{{course}}
+					</div>
+					<div>Google for Education: 
+						<span *ngIf="user?.hasGoogleForEducation">Ja</span>
+						<span *ngIf="!user?.hasGoogleForEducation">Nee</span>
+					</div>
+				</div>
+				<!-- show the form if the user is editing the profile -->
+				<div *ngIf="isEditing" fxLayout="column" fxLayoutAlign="center center">
+					<mat-form-field class="full-width">  
+					  <mat-select 
+					  		placeholder="Selecteer klas" 
+					  		formControlName="classes"
+					  		multiple>
+					    <mat-option *ngFor="let class of (organisation$ | async)?.classes" [value]="class">
+					      {{class}}
+					    </mat-option>
+					  </mat-select>
+					  <mat-hint>Projecten worden gefilterd op basis van je selectie</mat-hint>
+					</mat-form-field>
+					<mat-form-field class="full-width">  
+					  <mat-select 
+					  		placeholder="Selecteer 1 of meer vakken" 
+					  		formControlName="subjects"
+					  		 multiple>
+					    <mat-option *ngFor="let subject of (organisation$ | async)?.subjects" [value]="subject">
+					      {{subject}}
+					    </mat-option>
+					  </mat-select>
+					  <mat-hint>Indien leeg worden projecten niet gefilterd op relevantie</mat-hint>
+					</mat-form-field>
+				</div>
+			</mat-card-content>
+			 <mat-card-actions>
+			 	<button type="button" mat-button *ngIf="!isEditing" (click)="onEdit()">Bewerk profiel</button>
+			 	<button type="button" mat-button color="warn" *ngIf="isEditing" (click)="onCancel()">Annuleren</button>
+			    <button type="submit" mat-button *ngIf="isEditing">Profiel bewaren</button>
+			 </mat-card-actions>
+		</mat-card>
+	</form>
+	<mat-spinner *ngIf="isLoading$ | async"></mat-spinner>	
+</section>

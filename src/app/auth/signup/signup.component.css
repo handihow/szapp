@@ -1,0 +1,15 @@
+mat-form-field {
+	width: 300px;
+}
+
+.signup-form {
+	padding: 30px;
+}
+
+.warning {
+	color: red;
+}
+
+.message-box {
+	padding: 20px;
+}

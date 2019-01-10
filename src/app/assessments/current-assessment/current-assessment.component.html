@@ -1,0 +1,40 @@
+<section fxLayout="row" fxLayoutAlign="space-evenly start"
+			fxLayout.lt-md="column" fxLayoutAlign.lt-md="space-between" fxLayoutGap="20px">
+	
+	<app-evaluation-card 
+			[evaluation]="evaluation" 
+			[relatedEvaluations]="relatedEvaluations"
+			[isAssessment]="true"
+			[user]="user"></app-evaluation-card>
+
+	<!-- form for the teacher to fill -->
+	<mat-card *ngIf="!isEvaluated" fxFlex.gt-md="60" fxFlex.lt-md="50">
+	  <mat-card-header>
+	    <mat-card-title>Evaluatie leraar</mat-card-title>
+	    <mat-card-subtitle>Vul hier uw beoordeling in</mat-card-subtitle>
+	  </mat-card-header>
+	  <form [formGroup]="assessmentForm" (ngSubmit)="onSubmit()">
+		  <mat-card-content fxLayout="column" fxLayoutAlign="space-between start" fxLayoutGap="10px">
+		    <mat-button-toggle-group formControlName="color" required>
+			  <mat-button-toggle *ngFor="let color of colors" [value]="color" >
+			  	<mat-icon [ngStyle]="{'color': color.color}">{{color.icon}}</mat-icon>
+			  </mat-button-toggle>
+			</mat-button-toggle-group>
+			<mat-form-field class="full-width">
+			   <textarea matInput placeholder="Opmerking" formControlName="comment" [matAutocomplete]="auto" ></textarea>
+			   <button mat-icon-button type="button" matSuffix (click)="editComments($event)"><mat-icon>edit</mat-icon></button>
+			</mat-form-field>
+			<mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
+				  <mat-option *ngFor="let comment of previousComments$ | async" [value]="comment">
+				    {{ comment.comment }}
+				  </mat-option>
+			</mat-autocomplete>
+		  </mat-card-content>
+		  <mat-card-actions>
+		  	<button type="button" mat-raised-button color="warn" (click)="onCancel()">Annuleren</button>
+		    <button type="submit" mat-raised-button color="primary" [disabled]="assessmentForm.invalid">Bewaren</button>
+		  </mat-card-actions>
+	  </form>
+	</mat-card>
+
+</section>

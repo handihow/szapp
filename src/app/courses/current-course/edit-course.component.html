@@ -1,0 +1,28 @@
+<h1 mat-dialog-title>Lesgroep Bewerken</h1>
+<form [formGroup]="courseForm" (ngSubmit)="onSubmit()">
+	<mat-dialog-content>
+		<mat-form-field class="full-width">
+		   <input matInput placeholder="Naam lesgroep" formControlName="name" required>
+		   <mat-error>Vul de naam van de lesgroep in</mat-error>
+		</mat-form-field>
+		<mat-form-field class="full-width">
+		   <input matInput placeholder="Code" formControlName="code" required>
+		   <mat-error>Vul de lesgroep code in</mat-error>
+		</mat-form-field>
+		<mat-form-field class="full-width">  
+		  <mat-select 
+		  		placeholder="Selecteer status" 
+		  		formControlName="status"
+		  		required>
+		    <mat-option *ngFor="let status of availableStatus" [value]="status">
+		      {{status}}
+		    </mat-option>
+		  </mat-select>
+		  <mat-error>Selecteer de status</mat-error>
+		</mat-form-field>
+	</mat-dialog-content>
+	<mat-dialog-actions>
+		<button type="submit" mat-raised-button color="primary">Bewaren</button>
+		<button type="button" mat-raised-button color="accent" [mat-dialog-close]="false">Terug</button>
+	</mat-dialog-actions>
+</form>

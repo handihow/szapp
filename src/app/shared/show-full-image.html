@@ -1,0 +1,9 @@
+<h1 mat-dialog-title>Volledige beeld</h1>
+<mat-dialog-content>
+	<img class="full-width" [src]="passedData.image$ | async" [@photoState]="imageState" *ngIf="passedData.image$ | async"/>
+	<mat-spinner *ngIf="!(passedData.image$ | async)"></mat-spinner>
+</mat-dialog-content>
+<mat-dialog-actions>
+	<button mat-button (click)="rotate()">Roteren</button>
+	<button mat-raised-button color="primary" [mat-dialog-close]="false">Sluiten</button>
+</mat-dialog-actions>

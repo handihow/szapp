@@ -1,0 +1,28 @@
+.current-program {
+  margin-left: 10px;
+  margin-right: 10px;
+}
+
+.full-width {
+	width: 100%;
+}
+
+.table-container {
+  display: flex;
+  flex-direction: column;
+  max-height: 500px;
+  min-width: 300px;
+  overflow: auto;
+}
+
+.mat-column-select {
+  overflow: initial;
+}
+
+.mat-column-select {
+	flex: 0 0 40px;
+}
+
+.mat-column-order {
+	flex: 0 0 90px;
+}
