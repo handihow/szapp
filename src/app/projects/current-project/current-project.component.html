@@ -3,10 +3,16 @@
 	<mat-card fxFlex="30">
 		<mat-card-title fxLayout="row" fxLayoutAlign="space-between start">
 			{{project.name}}
-			<button mat-icon-button (click)="onFavorite()">
-				<mat-icon color="accent" *ngIf="!isFavorite">star_border</mat-icon>
-				<mat-icon color="accent" *ngIf="isFavorite">star</mat-icon> 
-			</button>
+			<span>
+				<button mat-icon-button (click)="onFavorite()">
+					<mat-icon color="accent" *ngIf="!isFavorite">star_border</mat-icon>
+					<mat-icon color="accent" *ngIf="isFavorite">star</mat-icon> 
+				</button>
+				<button mat-icon-button (click)="onLock()">
+					<mat-icon color="accent" *ngIf="isLocked">lock</mat-icon>
+					<mat-icon color="accent" *ngIf="!isLocked">lock_open</mat-icon>
+				</button>
+			</span>
 		</mat-card-title>
 		<mat-card-subtitle>
 			{{project.code}} - {{project.status}}

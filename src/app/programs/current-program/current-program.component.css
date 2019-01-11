@@ -16,13 +16,26 @@
 }
 
 .mat-column-select {
+  flex: 1;
   overflow: initial;
 }
 
-.mat-column-select {
-	flex: 0 0 40px;
+.mat-column-order {
+  flex: 1;
 }
 
-.mat-column-order {
-	flex: 0 0 90px;
+.mat-column-competency {
+  flex: 8;
+}
+
+.mat-column-topic {
+  flex: 2;
+}
+
+.mat-column-link {
+  flex: 2;
+}
+
+.mat-column-attachments {
+  flex: 2;
 }

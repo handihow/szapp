@@ -15,6 +15,8 @@ export interface Project {
 	projectTaskUrl?: string;
 	starred?: any;
 	stickers?: any;
+	isLocked?: boolean;
+	unlocked?: any;
 	//helper properties to be able to generate the correct csv file
 	classStr?: string;
 	subjectStr?: string;
@@ -22,4 +24,5 @@ export interface Project {
 	progress?: number;
 	countSkills?: number;
 	sticker?: any;
+	locked?: boolean;
 }

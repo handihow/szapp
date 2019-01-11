@@ -171,6 +171,11 @@ export class SelectProjectStudentComponent implements OnInit, OnDestroy {
       } else {
         project.sticker = null;
       }
+      if(project.isLocked && (!project.unlocked || !project.unlocked[user.uid])){
+        project.locked = true;
+      } else {
+        project.locked = false;
+      }
     })
   }
 
@@ -185,7 +190,9 @@ export class SelectProjectStudentComponent implements OnInit, OnDestroy {
   }
 
   onSelect(project){
-    this.store.dispatch(new EvaluationAction.SetProject(project));
+    if(!project.locked){
+      this.store.dispatch(new EvaluationAction.SetProject(project));  
+    }
   }
 
   onSubmit(){
@@ -223,6 +230,11 @@ export class SelectProjectStudentComponent implements OnInit, OnDestroy {
     const dialogRef = this.dialog.open(AddStickerComponent, {
       data: {project: project, student: this.selectedStudent}
     });
+  }
+
+  onUnlock(event, project){
+    event.stopPropagation();
+    this.projectService.unlockProject(project, this.selectedStudent);
   }
 
 

@@ -29,10 +29,13 @@
 	  		(click)="onSelect(project)">
 	  	<mat-grid-tile-header fxLayout="row" fxLayoutAlign="space-between center">
 	  		<p>{{project?.code}}</p>
-	  		<img src="{{project.sticker}}" class="sticker" *ngIf="project.sticker">
+	  		<img src="{{project.sticker}}" class="sticker" *ngIf="project.sticker" (click)="onAddSticker($event, project)">
 	  		<button mat-icon-button *ngIf="isTeacher && !project.sticker && project.progress==100" 
 	  					(click)="onAddSticker($event, project)"><mat-icon>add_circle_outline</mat-icon></button>
+	  		<button mat-icon-button *ngIf="isTeacher && project.locked" (click)="onUnlock($event, project)">
+	  				<mat-icon>lock_open</mat-icon></button>
 	  	</mat-grid-tile-header>
+  			<mat-icon *ngIf="project.locked">lock</mat-icon>
   			{{project?.name}}
 	    <mat-grid-tile-footer>
 	    	<mat-progress-bar color="primary" mode="determinate" value="{{project?.progress}}"></mat-progress-bar>

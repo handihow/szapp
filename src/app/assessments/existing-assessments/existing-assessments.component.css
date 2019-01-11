@@ -14,3 +14,32 @@ mat-card {
 .placeholder {
 	height: 300px;
 }
+
+.mat-column-created {
+  flex: 1;
+  min-width: 90px;
+}
+
+.mat-column-student {
+  flex: 2;
+}
+
+.mat-column-class {
+  flex: 1;
+}
+
+.mat-column-skill {
+  flex: 4;
+}
+
+.mat-column-topic {
+  flex: 2;
+}
+
+.mat-column-project {
+  flex: 2;
+}
+
+.mat-column-status {
+  flex: 1;
+}

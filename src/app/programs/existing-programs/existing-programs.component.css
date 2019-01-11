@@ -2,3 +2,19 @@
 	margin-left: 10px;
 	margin-right: 10px;
 }
+
+.mat-column-created {
+  flex: 1;
+}
+
+.mat-column-name {
+  flex: 2;
+}
+
+.mat-column-code {
+  flex: 1;
+}
+
+.mat-column-status {
+  flex: 1;
+}

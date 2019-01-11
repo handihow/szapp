@@ -100,6 +100,14 @@ export class ProjectService {
 		this.db.collection('projects').doc(project.id).update(project);
 	}
 
+	unlockProject(project: Project, student: User){
+		if(!project.unlocked){
+			project.unlocked = {};
+		}
+		project.unlocked[student.uid] = true;
+		this.db.collection('projects').doc(project.id).update(project);
+	}
+
 }
 
   

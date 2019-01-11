@@ -61,6 +61,7 @@ export class CurrentProjectComponent implements OnInit, OnDestroy {
   sub: Subscription;
 
   isFavorite: boolean;
+  isLocked: boolean;
 
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -99,6 +100,9 @@ export class CurrentProjectComponent implements OnInit, OnDestroy {
             }
             if(this.project.starred[user.uid]){
               this.isFavorite = true;
+            }
+            if(this.project.isLocked){
+              this.isLocked = true;
             }
           }
         });
@@ -249,6 +253,11 @@ export class CurrentProjectComponent implements OnInit, OnDestroy {
   onFavorite(){
     this.isFavorite = !this.isFavorite;
     this.project.starred[this.user.uid] = this.isFavorite;
+  }
+
+  onLock(){
+    this.isLocked = !this.isLocked;
+    this.project.isLocked = this.isLocked;
   }
 
 

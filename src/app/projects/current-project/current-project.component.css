@@ -20,13 +20,22 @@
 }
 
 .mat-column-select {
-	flex: 0 0 40px;
+  flex: 1;
+  overflow: initial;
 }
 
 .mat-column-order {
-	flex: 0 0 100px;
+  flex: 1;
 }
 
-.mat-column-program {
-  flex: 0 0 100px;
+.mat-column-competency {
+  flex: 8;
+}
+
+.mat-column-topic {
+  flex: 2;
+}
+
+.mat-column-link {
+  flex: 2;
 }

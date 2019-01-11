@@ -1,7 +1,16 @@
 <h1 mat-dialog-title>Sticker geven</h1>
-<mat-dialog-content>
+<mat-dialog-content fxLayout="row" fxLayoutAlign="space-between">
 	<mat-list>
-	    <mat-list-item *ngFor="let sticker of stickers">
+	    <mat-list-item *ngFor="let sticker of stickers | slice:0:6">
+	    	<img matListAvatar src="{{sticker.asset}}">
+    		<h3 matLine> {{sticker.id}} - {{sticker.description}} </h3>
+    		<button mat-icon-button (click)="giveSticker(sticker)">
+		        <mat-icon>add</mat-icon>
+		    </button>
+		</mat-list-item>
+	</mat-list>
+	<mat-list>
+		<mat-list-item *ngFor="let sticker of stickers | slice:6:12">
 	    	<img matListAvatar src="{{sticker.asset}}">
     		<h3 matLine> {{sticker.id}} - {{sticker.description}} </h3>
     		<button mat-icon-button (click)="giveSticker(sticker)">
