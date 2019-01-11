@@ -13,6 +13,7 @@ section {
   font-weight: 800; 
   text-align: center; 
   text-transform: uppercase;
+  cursor: pointer;
 }
 
 mat-progress-bar {
@@ -33,4 +34,18 @@ mat-progress-bar {
 
 .sticker {
   max-height: 90%;
+}
+
+.locked {
+  background-color: rgba(0,0,0,0.3) !important;
+}
+
+.locked.mat-grid-tile {
+  font-size: 22px;
+}
+
+.locked.mat-grid-tile:hover {
+  font-size: 22px;
+  transition: none;
+  cursor: not-allowed;
 }
