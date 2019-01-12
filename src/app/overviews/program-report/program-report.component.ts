@@ -152,7 +152,8 @@ export class ProgramReportComponent implements OnInit, OnDestroy {
       margin: {top: 50},
       styles: {
         overflow: 'linebreak',
-        cellWidth: 150
+        cellWidth: 'auto',
+        minCellWidth: 60
       }
     });
 

@@ -78,7 +78,9 @@ export class ProgramOverviewComponent implements OnInit {
       	Object.keys(skill.projects).forEach((projectId) => {
       		if(skill.projects[projectId]){
       			let project = projects.find(o => o.id === projectId);
-      			skill.listedUnderProjects.push(project);
+            if(project){
+              skill.listedUnderProjects.push(project);
+            }
       		}
       	})
       }
@@ -137,7 +139,8 @@ export class ProgramOverviewComponent implements OnInit {
       margin: {top: 50},
       styles: {
         overflow: 'linebreak',
-        cellWidth: 'auto'
+        cellWidth: 'auto',
+        minCellWidth: 50
       }
     });
 
