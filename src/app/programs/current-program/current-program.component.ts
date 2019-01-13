@@ -368,6 +368,8 @@ export class CurrentProgramComponent implements OnInit, OnDestroy {
       //remove the id field
       delete skill.id;
       delete skill.program;
+      delete skill.hasAttachments;
+      delete skill.projects;
     });
     this.data = skillsInCsv;
     //give options to the download file

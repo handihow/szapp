@@ -123,6 +123,7 @@ export class ExistingProgramsComponent implements OnInit, AfterViewInit, OnDestr
       delete program.user;
       delete program.organisation;
       delete program.created;
+      delete program.starred;
     });
     this.data = programsInCsv;
     //give options to the download file

@@ -147,6 +147,11 @@ export class ExistingProjectsComponent implements OnInit, AfterViewInit, OnDestr
       delete project.created;
       delete project.organisation;
       delete project.user;
+      delete project.isLocked;
+      delete project.locked;
+      delete project.progress;
+      delete project.starred;
+      delete project.stickers;
     });
     this.data = projectsInCsv;
     //give options to the download file
