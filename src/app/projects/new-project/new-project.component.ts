@@ -12,6 +12,7 @@ import { User } from '../../auth/user.model';
 import { Organisation } from '../../auth/organisation.model';
 
 import { Colors } from '../../shared/colors';
+import { UIService } from '../../shared/ui.service';
 
 @Component({
   selector: 'app-new-project',
@@ -23,6 +24,7 @@ export class NewProjectComponent implements OnInit {
   projectForm: FormGroup;
   user: User;
   organisation: Organisation;
+  projects: Project[];
   isLoading$: Observable<boolean>;
   colors = Colors.projectColors.sort((a,b) => a.colorLabel.localeCompare(b.colorLabel));
 
@@ -31,7 +33,8 @@ export class NewProjectComponent implements OnInit {
   }
 
   constructor(   private store: Store<fromRoot.State>,
-                 private projectService: ProjectService) { }
+                 private projectService: ProjectService,
+                 private uiService: UIService) { }
 
   ngOnInit() {
     //get the loading state
@@ -45,6 +48,9 @@ export class NewProjectComponent implements OnInit {
     this.store.select(fromRoot.getCurrentOrganisation).pipe(take(1)).subscribe(organisation => {
         if(organisation){
           this.organisation = organisation;
+          this.projectService.fetchExistingProjects(organisation).pipe(take(1)).subscribe(projects => {
+            this.projects = projects;
+          });
         }
     });
     //create the project form
@@ -66,6 +72,7 @@ export class NewProjectComponent implements OnInit {
   }
 
   onSubmit(){
+    let codes = this.projects.map(v => v.code);
     let project : Project = {
       name: this.projectForm.value.name,
       code: this.projectForm.value.code,
@@ -76,7 +83,11 @@ export class NewProjectComponent implements OnInit {
       color: this.projectForm.value.color,
       projectTaskUrl: this.projectForm.value.projectTaskUrl ? this.projectForm.value.projectTaskUrl : null
     }
-    this.projectService.startProject(project)
+    if(codes.includes(project.code)){
+      this.uiService.showSnackbar("Deze projectcode is al eens gebruikt. Kan geen nieuw project aanmaken.", null, 3000);
+    } else {
+      this.projectService.startProject(project)
+    }
   }
 
 }
