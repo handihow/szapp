@@ -44,6 +44,7 @@ export class EvaluationCardComponent implements OnInit {
         const refTN = this.storage.ref(this.evaluation.thumbnailURL);
         this.thumbnail$ = refTN.getDownloadURL();
       }
+    console.log(this.evaluation);
   }
 
   onCancel(){

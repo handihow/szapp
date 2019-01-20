@@ -26,6 +26,7 @@ export interface Evaluation {
 	
 	//status of the evaluation
 	status?: string;
+	toBeAdded?: boolean;
 	
 	//database references 
 	id?: string;

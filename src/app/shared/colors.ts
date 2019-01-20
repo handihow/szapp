@@ -1,7 +1,5 @@
-
 export class Colors {	
 
-	
 		//project colors
 		public static projectColors = [
 		    {color: "#F44336", colorLabel: "Rood"},

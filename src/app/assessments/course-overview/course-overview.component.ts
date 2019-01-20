@@ -2,6 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { take, map, startWith } from 'rxjs/operators';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { MatDialog } from '@angular/material';
 
 import { Organisation } from '../../auth/organisation.model';
 import { User } from '../../auth/user.model';
@@ -31,6 +32,12 @@ import Timestamp = firestore.Timestamp;
 import { Router } from '@angular/router';
 import * as OverviewAction from '../../overviews/overview.actions';
 
+import { Colors } from '../../shared/colors';
+import { Color } from '../../shared/color.model';
+
+import { SaveAssessmentComponent } from './save-assessment.component';
+import { Result } from '../result.model';
+
 @Component({
   selector: 'app-course-overview',
   templateUrl: './course-overview.component.html',
@@ -57,13 +64,20 @@ export class CourseOverviewComponent implements OnInit, OnDestroy {
   selectedSkill: Skill;
   selectedProject: Project;
 
+  behaviors: string[] = ["Normaal", "Snel"]
+  formBehavior: string = "Snel"
+  colors = Colors.evaluationColors;
+  groupModel: any[] = [];
+  results: Result[] = [];
+
   constructor(	private courseService: CourseService,
                 private projectService: ProjectService,
                 private skillService: SkillService,
                 private evaluationService: EvaluationService,
   				      private store: Store<fromAssessment.State>,
                 private uiService: UIService,
-                private router: Router) { }
+                private router: Router,
+                private dialog: MatDialog) { }
 
   ngOnInit() {
   	//get the loading state
@@ -86,6 +100,9 @@ export class CourseOverviewComponent implements OnInit, OnDestroy {
           this.courseTeachers$ = this.courseService.fetchCourseTeachersAndStudents(course, 'Leraar');
           this.courseService.fetchCourseTeachersAndStudents(course, 'Leerling').subscribe(students =>{
             this.courseStudents = students;
+            students.forEach( _ => {
+              this.groupModel.push(null)
+            })
           });
         }
     }));
@@ -123,6 +140,9 @@ export class CourseOverviewComponent implements OnInit, OnDestroy {
           student.evaluation = evaluation;
         }
       })
+    });
+    this.courseStudents.forEach( ( _ , index) => {
+      this.groupModel[index] = null
     })
   }
 
@@ -132,23 +152,29 @@ export class CourseOverviewComponent implements OnInit, OnDestroy {
       student.evaluation = null;
     })
     this.selectSkillForm.reset();
+    this.courseStudents.forEach( ( _ , index) => {
+      this.groupModel[index] = null
+    })
+    this.results = [];
   }
 
   onStartAssessment(student: User){  
+    let newEvaluation: Evaluation;
     if(!student.evaluation || student.evaluation.status==="Beoordeeld"){
-      this.onNewAssessment(student);
+      newEvaluation = this.onNewAssessment(student);
     } else {
-      var evaluation: Evaluation = {
+      newEvaluation = {
         id: student.uid + "_" + this.selectedSkill.id, ...student.evaluation
       }
-      this.store.dispatch(new AssessmentAction.StartAssessment(evaluation));
     }
+    this.store.dispatch(new AssessmentAction.StartAssessment(newEvaluation));
   }
 
-  onNewAssessment(student: User){
+  onNewAssessment(student: User): Evaluation{
     var newEvaluation : Evaluation;
     let timestamp = Timestamp.now();
       newEvaluation = {
+        id: student.uid + '_' + this.selectedSkill.id,
         created: timestamp,
         user: student.uid,
         studentName: student.displayName,
@@ -168,16 +194,44 @@ export class CourseOverviewComponent implements OnInit, OnDestroy {
         iconStudent: 'supervised_user_circle',
         commentStudent: 'Direct beoordeeld door de leraar',
         teacher: this.user.uid,
+        toBeAdded: !student.evaluation ? true : false
       };
-      this.evaluationService.addEvaluationToDatabase(newEvaluation, student.uid,this.selectedSkill.id).then( _ => {
-        this.store.dispatch(new AssessmentAction.StartAssessment(newEvaluation));
-      })
+      return newEvaluation;
   }
 
   toUserOverview(student: User){
     this.router.navigate(['/overviews']).then( _ => {
       this.store.dispatch(new OverviewAction.SelectStudent(student));
     })
+  }
+
+  onChanged(color: Color, evaluation: Evaluation, student: User){
+    //first check if the result should overwrite an existing result
+    let index = this.results.findIndex(result => result.student.uid === student.uid);
+    let result: Result = {
+        color: color,
+        evaluation: evaluation,
+        student: student,
+        skill: this.selectedSkill,
+        teacher: this.user,
+        project: this.selectedProject
+      }
+    if(index===-1){
+      this.results.push(result);
+    } else {
+      this.results[index] = result
+    }
+  }
+
+  onSave(){
+    const dialogRef = this.dialog.open(SaveAssessmentComponent, {width: '300px', data: this.results});
+
+    dialogRef.afterClosed().subscribe(result => {
+      if(result){
+        this.evaluationService.saveAssessments(this.results);
+        this.onReset();
+      }
+    });
   }
 
 }

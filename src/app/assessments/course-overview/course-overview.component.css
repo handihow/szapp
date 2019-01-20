@@ -2,28 +2,31 @@
 	margin: 20px;
 }
 
-.selection-skill {
+mat-card {
 	margin: 10px;
 }
 
-@media all and (min-width:600px){
-	.student-card {
-		width: 200px;
-	}
+.half-width {
+	width: 50%;
 }
 
-.student-card {
-	margin: 10px;
+.radio-group {
+  display: inline-flex;
+  flex-direction: column;
 }
 
-@media all and (max-width:600px){
-	.full-width {
-		width: 100%;
-	}
+.radio-button {
+  margin: 5px;
 }
 
-@media all and (min-width:600px){
-	.full-width {
-		width: 50%;
-	}
+@media all and (min-width: 600px) {
+  .student-card{
+    width: 200px;
+  }
 }
+
+/*
+mat-button-toggle-group {
+  width: 100%;
+}
+*/

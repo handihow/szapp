@@ -125,7 +125,12 @@ export class CurrentAssessmentComponent implements OnInit, OnDestroy {
     this.evaluation.evaluated = timestamp;
     this.evaluation.teacherName = this.user.displayName;
     this.evaluation.status = "Beoordeeld";
-    this.evaluationService.updateEvaluationToDatabase(this.evaluation, this.evaluation.user, this.evaluation.skill);
+    if(this.evaluation.toBeAdded){
+      delete this.evaluation.toBeAdded;
+      this.evaluationService.addEvaluationToDatabase(this.evaluation, this.evaluation.user, this.evaluation.skill);
+    } else {
+      this.evaluationService.updateEvaluationToDatabase(this.evaluation, this.evaluation.user, this.evaluation.skill);
+    }
     this.store.dispatch(new AssessmentAction.StopAssessment());
   }
 

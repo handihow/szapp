@@ -20,6 +20,10 @@ import { User } from '../auth/user.model';
 import { Organisation } from '../auth/organisation.model';
 import { Skill } from '../skills/skill.model';
 import { Progress } from '../auth/user.model';
+import { Result } from '../assessments/result.model';
+
+import {firestore} from 'firebase/app';
+import Timestamp = firestore.Timestamp;
 
 @Injectable()
 export class EvaluationService {
@@ -99,32 +103,49 @@ export class EvaluationService {
 			}))
 	}
 
-	addEvaluationToDatabase(evaluation: Evaluation, userId: string, skillId: string){
+	addEvaluationToDatabase(evaluation: Evaluation, userId: string, skillId: string): Promise<boolean>{
 		//first set the evaluation to the skill or override the existing
 		const evalRef: AngularFirestoreDocument<any> = this.db.doc(`evaluations/${userId}_${skillId}`);
 		return evalRef.set(evaluation, { merge: true })
 			.then(doc => {
-				this.uiService.showSnackbar('Zelfevaluatie succesvol bewaard', null, 3000);
+				if(evaluation.status==="Beoordeeld"){
+					return this.db.collection('evaluations').doc(userId + '_' + skillId).collection('history').add(evaluation)
+						.then(doc => {
+							this.uiService.showSnackbar('Beoordeling succesvol bewaard', null, 3000);
+							return true;
+						})
+						.catch(error => {
+							this.uiService.showSnackbar(error.message, null, 3000);
+							return false;
+						});
+				} else {
+					this.uiService.showSnackbar('Zelfevaluatie succesvol bewaard', null, 3000);
+					return true;
+				}
 			})
 			.catch(error => {
 				this.uiService.showSnackbar(error.message, null, 3000);
+				return false;
 			});
 	}
 
-	updateEvaluationToDatabase(evaluation: Evaluation, userId: string, skillId: string){
-		this.db.collection('evaluations').doc(userId + '_' + skillId).update(evaluation)
+	updateEvaluationToDatabase(evaluation: Evaluation, userId: string, skillId: string): Promise<boolean>{
+		return this.db.collection('evaluations').doc(userId + '_' + skillId).update(evaluation)
 		.then(doc => {
 			//then save the evaluation also to the history of previous
-			this.db.collection('evaluations').doc(userId + '_' + skillId).collection('history').add(evaluation)
+			return this.db.collection('evaluations').doc(userId + '_' + skillId).collection('history').add(evaluation)
 				.then(doc => {
 					this.uiService.showSnackbar('Beoordeling succesvol bewaard', null, 3000);
+					return true;
 				})
 				.catch(error => {
 					this.uiService.showSnackbar(error.message, null, 3000);
+					return false;
 				});
 		})
 		.catch(error => {
 			this.uiService.showSnackbar(error.message, null, 3000);
+			return false;
 		})
 	}
 
@@ -186,7 +207,78 @@ export class EvaluationService {
 			});
 	}
 
+	saveAssessments(results: Result[]): boolean{
+		let wasSuccessful = true;
+		results.forEach(async result => {
+			if(!result.evaluation){
+		      let newAssessment: Evaluation = this.onNewAssessment(result);
+		      let success = await this.addEvaluationToDatabase(newAssessment, result.student.uid, result.skill.id);
+		      if(!success){
+		      	wasSuccessful = false;
+		      }
+		    } else if(result.evaluation.status==="Beoordeeld"){
+		      let newAssessment: Evaluation = this.onNewAssessment(result);
+		      let success = await this.updateEvaluationToDatabase(newAssessment, result.student.uid, result.skill.id);
+		      if(!success){
+		      	wasSuccessful = false;
+		      }
+		    } else {
+		      let updatedAssessment: Evaluation = this.onUpdateAssessment(result);
+		      let success = await this.updateEvaluationToDatabase(updatedAssessment, result.student.uid, result.skill.id);
+		      if(!success){
+		      	wasSuccessful = false;
+		      }
+		    }
+		})
+		return wasSuccessful
+	}
 
+	private onNewAssessment(result: Result): Evaluation {
+		let newEvaluation: Evaluation ;
+	    let timestamp = Timestamp.now();
+	      newEvaluation = {
+	        id: result.student.uid + '_' + result.skill.id,
+	        created: timestamp,
+	        evaluated: timestamp,
+	        user: result.student.uid,
+	        studentName: result.student.displayName,
+	        organisation: result.student.organisation,
+	        status: 'Beoordeeld',
+	        class: (result.student.classes && result.student.classes[0]) ? result.student.classes[0] : null,
+	        skill: result.skill.id,
+	        skillCompetency: result.skill.competency,
+	        skillTopic: result.skill.topic,
+	        skillOrder: result.skill.order,
+	        project: result.project.id,
+	        projectCode: result.project.code,
+	        projectName: result.project.name,
+	        program: result.skill.program,
+	        colorStudent: '#9E9E9E',
+	        colorLabelStudent: 'Grijs',
+	        iconStudent: 'supervised_user_circle',
+	        commentStudent: 'Direct beoordeeld door de leraar',
+	        teacher: result.teacher.uid,
+	        commentTeacher: 'Alleen kleurbeoordeling',
+	        colorLabelTeacher: result.color.colorLabel,
+	        iconTeacher: result.color.icon,
+	        ratingTeacher: result.color.rating,
+	        colorTeacher: result.color.color
+	      };
+	    return newEvaluation;
+	}
+
+	private onUpdateAssessment(result: Result): Evaluation {
+		let updatedEvaluation: Evaluation = result.evaluation;
+		let timestamp = Timestamp.now();
+		updatedEvaluation.evaluated = timestamp;
+		updatedEvaluation.teacher = result.teacher.uid;
+	    updatedEvaluation.commentTeacher = 'Alleen kleurbeoordeling';
+	    updatedEvaluation.colorLabelTeacher = result.color.colorLabel;
+	    updatedEvaluation.iconTeacher = result.color.icon;
+	    updatedEvaluation.ratingTeacher = result.color.rating;
+	    updatedEvaluation.colorTeacher = result.color.color;
+		return updatedEvaluation;
+	}
 
 }
 

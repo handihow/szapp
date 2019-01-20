@@ -1,15 +1,14 @@
-
-<section>
-	<mat-card class="selection-skill">
+<div fxLayout="row" fxLayoutAlign="space-around stretch" fxLayoutGap="10px" fxLayout.lt-md="column" fxLayoutAlign.lt-md="start stretch" fxLayoutGap.lt-md="10px">
+	<mat-card fxFlex="75">
 		<form [formGroup]="selectSkillForm" (ngSubmit)="onSubmit()">
 			<mat-card-header>
 				<mat-card-title>
 					{{course.name}}
 				</mat-card-title>
 			</mat-card-header>
-			<mat-card-content fxLayout="row" fxLayoutAlign="start end" fxLayoutGap="20px" fxLayout.lt-sm="column" fxLayoutAlign.lt-sm="center center" fxLayoutGap.lt-sm="10px">
+			<mat-card-content fxLayout="row" fxLayoutAlign="space-evenly start" fxLayoutGap="10px" fxLayout.lt-sm="column" fxLayoutAlign.lt-sm="start stretch" fxLayoutGap.lt-sm="10px">
 				<mat-spinner *ngIf="isLoading$ | async"></mat-spinner>
-				<mat-form-field class="full-width">
+				<mat-form-field fxFlex.gt-xs="30">
 				  <mat-select placeholder="Project" formControlName="project">
 				  	<mat-optgroup label="Met ster">
 					  	<mat-option *ngFor="let starredProject of starredProjects$ | async" 
@@ -27,7 +26,7 @@
 					</mat-optgroup>
 				  </mat-select>
 				</mat-form-field>
-				<mat-form-field class="full-width">  
+				<mat-form-field fxFlex.gt-xs="70">  
 				  <mat-select 
 				  		placeholder="Selecteer competentie" 
 				  		formControlName="skill">
@@ -38,7 +37,6 @@
 					</mat-option>
 				  </mat-select>
 				</mat-form-field>
-				
 			</mat-card-content>
 			<mat-card-actions>
 				<button mat-button (click)="onClose()">Terug</button>
@@ -48,37 +46,58 @@
 				<button type="submit" mat-button [disabled]="selectSkillForm.invalid">
 					Overzicht
 				</button>
+				<button type="button" color="primary" mat-button 
+						[disabled]="!hasSelectedSkill" 
+						*ngIf="formBehavior==='Snel'"
+						(click)="onSave()">
+					Bewaar
+				</button>
 			</mat-card-actions>
 		</form>
 	</mat-card>
-</section>	
-<section fxLayout="row wrap" fxLayoutAlign="space-between" fxLayout.lt-sm="column">
-	<mat-card *ngFor="let student of courseStudents" class="student-card">
+	<mat-card fxFlex="25">
 		<mat-card-header>
 			<mat-card-title>
-				{{student.displayName}}
+				Invoer
 			</mat-card-title>
 		</mat-card-header>
 		<mat-card-content>
-			<p *ngIf="hasSelectedSkill && !student.evaluation">
-				Geen evaluatie
-			</p>
-			<p *ngIf="student.evaluation" fxLayout="row" fxLayoutAlign="start center">
-			  <span fxFlex="50"> {{student.evaluation.created.toDate() | date : 'dd-MM-yyyy' }}</span>
-		      <span fxFlex="50">
-		        <mat-icon [ngStyle]="{'color': student.evaluation.colorStudent ? student.evaluation.colorStudent: 'grey'}" >
-		          {{student.evaluation.iconStudent ? student.evaluation.iconStudent : "account_circle"}}
-		        </mat-icon>  
-		        <mat-icon [ngStyle]="{'color': student.evaluation.colorTeacher ? student.evaluation.colorTeacher : 'grey'}" >
-		          {{student.evaluation.iconTeacher ? student.evaluation.iconTeacher : "supervised_user_circle"}}
-		        </mat-icon> 
-		      </span>
-			</p>
+			<mat-radio-group class="radio-group" [(ngModel)]="formBehavior">
+			  <mat-radio-button class="radio-button" *ngFor="let behavior of behaviors" [value]="behavior">
+			    {{behavior}}
+			  </mat-radio-button>
+			</mat-radio-group>
+		</mat-card-content>
+	</mat-card>
+</div>
+<div fxLayout="row wrap" fxLayoutAlign="space-between stretch" fxLayoutGap="10px" fxLayout.lt-sm="column" fxLayoutAlign.lt-sm="start stretch" fxLayoutGap.lt-sm="10px">
+	<mat-card *ngFor="let student of courseStudents; let i=index" class="student-card">
+		<mat-card-content>
+			<h4>{{student.displayName}}</h4>
+			<mat-icon [ngStyle]="{'color': (student.evaluation && student.evaluation.colorStudent) ? student.evaluation.colorStudent: 'grey'}">
+	          {{(student.evaluation && student.evaluation.iconStudent) ? student.evaluation.iconStudent : "account_circle"}}
+	        </mat-icon>  
+	        <mat-icon [ngStyle]="{'color': (student.evaluation && student.evaluation.colorTeacher) ? student.evaluation.colorTeacher : 'grey'}" >
+	          {{(student.evaluation && student.evaluation.iconTeacher) ? student.evaluation.iconTeacher : "supervised_user_circle"}}
+	        </mat-icon>
+	        <span *ngIf="student.evaluation">
+		      {{student.evaluation.created.toDate() | date : 'dd-MM-yyyy' }}
+		    </span>
 		</mat-card-content>
 		<mat-card-actions>
-			<button mat-button [disabled]="!hasSelectedSkill" (click)="onStartAssessment(student)">
+			<mat-button-toggle-group *ngIf="formBehavior==='Snel'" 
+					[disabled]="!hasSelectedSkill"
+					(change)="onChanged($event.value, student.evaluation, student)"
+					[(ngModel)]="groupModel[i]">
+			  <mat-button-toggle *ngFor="let color of colors" 
+			  					[value]="color" [checked]="groupModel[i] == color">
+			  	<mat-icon [ngStyle]="{'color': color.color}">{{color.icon}}</mat-icon>
+			  </mat-button-toggle>
+			</mat-button-toggle-group>
+			<button mat-button [disabled]="!hasSelectedSkill" (click)="onStartAssessment(student)" 
+				*ngIf="formBehavior==='Normaal'">
 			    Beoordeel
 			</button>
-		</mat-card-actions>
+		</mat-card-actions>   
 	</mat-card>
-</section>
+</div>
