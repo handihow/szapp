@@ -44,7 +44,7 @@ export class ProjectOverviewComponent implements OnInit, OnDestroy {
     this.store.select(fromOverview.getSelectedProject).subscribe(project => {
       if(project){
         this.project = project
-        this.subs.push(this.skillService.fetchSkills(null, project).subscribe(skills => {
+        this.subs.push(this.skillService.fetchSkills(null, project.id).subscribe(skills => {
           this.skills = skills;
         }))
         this.subs.push(this.evaluationService.fetchExistingEvaluations(null, null, project).subscribe(evaluations => {

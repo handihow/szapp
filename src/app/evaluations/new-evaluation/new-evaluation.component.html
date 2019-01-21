@@ -24,7 +24,7 @@
 					<textarea matInput placeholder="Opmerking" formControlName="comment"></textarea>
 				</mat-form-field>
 				
-		<mat-form-field class="full-width" *ngIf="!isMobile">  
+		<mat-form-field class="full-width" *ngIf="(screenType$ | async)!=='phone'">  
 			<mat-select 
 						placeholder="Leraar" 
 						formControlName="teacher"
@@ -47,8 +47,8 @@
 					</mat-select>
 			<mat-error>Selecteer de leraar die je gaat beoordelen</mat-error>
 		</mat-form-field>
-		<h4 *ngIf="isMobile">Selecteer docent</h4>
-		<mat-form-field class="full-width" *ngIf="isMobile">  
+		<h4 *ngIf="(screenType$ | async)==='phone'">Selecteer docent</h4>
+		<mat-form-field class="full-width" *ngIf="(screenType$ | async)==='phone'">  
 			<select matNativeControl
 			formControlName="teacher"
 			required>

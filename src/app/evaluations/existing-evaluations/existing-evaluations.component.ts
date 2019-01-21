@@ -61,7 +61,7 @@ export class ExistingEvaluationsComponent implements OnInit, OnDestroy {
   }
 
   calculateEvaluations() {
-    this.subs.push(this.skillService.fetchSkills(null, this.project).subscribe(skills => {
+    this.subs.push(this.skillService.fetchSkills(null, this.project.id).subscribe(skills => {
       this.skills = skills.sort(this.sortSkills);
       this.skills.forEach((skill) =>{
         let evaluation = this.evaluations.find((evaluation: Evaluation) => evaluation.skill === skill.id);

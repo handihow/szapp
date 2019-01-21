@@ -107,7 +107,7 @@ export class CurrentProjectComponent implements OnInit, OnDestroy {
           }
         });
         //start fetching project skills
-        this.sub = this.skillService.fetchSkills(null, this.project).subscribe(skills => {
+        this.sub = this.skillService.fetchSkills(null, this.project.id).subscribe(skills => {
            this.skills = skills;
            this.dataSource.data = this.skills; 
           this.skillOrderNumbers = this.skills.map(o => o.order);
@@ -122,7 +122,7 @@ export class CurrentProjectComponent implements OnInit, OnDestroy {
     this.skillsForm.get('program').valueChanges.subscribe(
       (program: Program) => {
         if(program){
-          this.skillService.fetchSkills(program)
+          this.skillService.fetchSkills(program.id)
             .subscribe((skills: Skill[]) => {
               //set the skills variable to contain all the skills retrieved from the database
               this.programSkills = skills;

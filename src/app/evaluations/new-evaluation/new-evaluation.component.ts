@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, HostListener } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import * as fromRoot from '../../app.reducer';
@@ -65,16 +65,7 @@ export class NewEvaluationComponent implements OnInit, OnDestroy {
 
   teacherSub: Subscription;
 
-  isMobile: Boolean = false;
-  //listen to changes on the window size
-  @HostListener('window:resize', ['$event'])
-    onResize(event) {
-      if(window.innerWidth<600){
-        this.isMobile = true;
-      } else {
-        this.isMobile = false;
-      }
-   }
+  screenType$: Observable<string>;
 
   constructor(	 private store: Store<fromRoot.State>,
                  private formBuilder: FormBuilder,
@@ -87,6 +78,8 @@ export class NewEvaluationComponent implements OnInit, OnDestroy {
 
     //fetch the current user of the application (it may be a teacher who has selected student)
     this.currentUser$ = this.store.select(fromRoot.getCurrentUser);
+    //fetch the screen size 
+    this.screenType$ = this.store.select(fromRoot.getScreenType);
     //get the current project
     this.store.select(fromEvaluation.getActiveProject).subscribe((project: Project) => {
       this.project = project;
@@ -98,9 +91,9 @@ export class NewEvaluationComponent implements OnInit, OnDestroy {
     //get the loading state
     this.isLoading$ = this.store.select(fromRoot.getIsLoading);
     //check the screen size and detect if on mobile
-    if(window.innerWidth<600){
-      this.isMobile = true;
-    }
+    // if(window.innerWidth<600){
+    //   this.isMobile = true;
+    // }
     //get the user and organisation from the evaluation state
     this.store.select(fromEvaluation.getStudent).subscribe(user => {
         this.user = user;

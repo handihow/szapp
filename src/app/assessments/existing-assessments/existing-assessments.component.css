@@ -16,30 +16,34 @@ mat-card {
 }
 
 .mat-column-created {
+  flex: 2;
+  min-width: 55px;
+}
+
+.mat-column-studentIcon {
   flex: 1;
-  min-width: 90px;
 }
 
 .mat-column-student {
-  flex: 2;
-}
-
-.mat-column-class {
-  flex: 1;
-}
-
-.mat-column-skill {
   flex: 4;
 }
 
-.mat-column-topic {
+.mat-column-class {
   flex: 2;
+}
+
+.mat-column-skill {
+  flex: 8;
+}
+
+.mat-column-topic {
+  flex: 4;
 }
 
 .mat-column-project {
-  flex: 2;
+  flex: 4;
 }
 
 .mat-column-status {
-  flex: 1;
+  flex: 2;
 }

@@ -77,13 +77,13 @@ export class SkillService {
 			})
 	}
 
-	fetchSkills(program?: Program, project?: Project) : Observable<Skill[]> {
+	fetchSkills(programId?: string, projectId?: string) : Observable<Skill[]> {
 		this.store.dispatch(new UI.StartLoading());
 		var queryStr;
-		if(program) {
-			queryStr = (ref => ref.where('program', '==', program.id));
+		if(programId) {
+			queryStr = (ref => ref.where('program', '==', programId));
 		} else {
-			let str = 'projects.' + project.id;
+			let str = 'projects.' + projectId;
 			queryStr = (ref => ref.where(str, '==', true));
 		}
 		return this.db.collection('skills', queryStr)

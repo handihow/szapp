@@ -70,6 +70,8 @@ export class CourseOverviewComponent implements OnInit, OnDestroy {
   groupModel: any[] = [];
   results: Result[] = [];
 
+  screenType$: Observable<string>;
+
   constructor(	private courseService: CourseService,
                 private projectService: ProjectService,
                 private skillService: SkillService,
@@ -82,7 +84,8 @@ export class CourseOverviewComponent implements OnInit, OnDestroy {
   ngOnInit() {
   	//get the loading state
     this.isLoading$ = this.store.select(fromRoot.getIsLoading);
-    //get the current user
+    //fetch the screen size 
+    this.screenType$ = this.store.select(fromRoot.getScreenType);
     //fetch the current user
     this.subs.push(this.store.select(fromRoot.getCurrentUser).subscribe(user => {
         this.user = user;
@@ -112,9 +115,9 @@ export class CourseOverviewComponent implements OnInit, OnDestroy {
       skill: new FormControl(null, Validators.required)
     });
     //listen to changes in the program form field and fetch available skills
-    this.selectSkillForm.get('project').valueChanges.subscribe(project => {
-      if(project){
-        this.skills$ = this.skillService.fetchSkills(null, project);
+    this.selectSkillForm.get('project').valueChanges.subscribe(projectId => {
+      if(projectId){
+        this.skills$ = this.skillService.fetchSkills(null, projectId);
       }
     })
   }

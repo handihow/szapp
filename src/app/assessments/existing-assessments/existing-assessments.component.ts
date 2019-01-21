@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, AfterViewInit, HostListener, OnDestroy } from '@angular/core';
+import { Component, OnInit, ViewChild, AfterViewInit, OnDestroy } from '@angular/core';
 import { MatTableDataSource, MatSort, MatPaginator } from '@angular/material';
 import { Store } from '@ngrx/store';
 import { take } from 'rxjs/operators';
@@ -23,7 +23,7 @@ import { Course } from '../../courses/course.model';
 export class ExistingAssessmentsComponent implements OnInit, AfterViewInit, OnDestroy {
   
   isLoading$: Observable<boolean>;
-  displayedColumns = ['created', 'student', 'class', 'skill', 'topic', 'project', 'status'];
+  displayedColumns = ['created', 'studentIcon', 'student', 'class', 'skill', 'topic', 'project', 'status'];
   dataSource = new MatTableDataSource<Evaluation>();
   selection = new SelectionModel<Evaluation>(false, null);
   evaluations: Evaluation[];
@@ -45,16 +45,14 @@ export class ExistingAssessmentsComponent implements OnInit, AfterViewInit, OnDe
   constructor(  private evaluationService: EvaluationService,
                 private store: Store<fromAssessment.State>,
                 private courseService: CourseService ) { }
-
-  @HostListener('window:resize', ['$event'])
-  onResize(event) {
-    this.setDisplayedColumns(window.innerWidth);
-    
-  }
   
   ngOnInit() {
     //get the loading state
     this.isLoading$ = this.store.select(fromRoot.getIsLoading);
+    //get the screen type
+    this.subs.push(this.store.select(fromRoot.getScreenType).subscribe(screenType => {
+      this.setDisplayedColumns(screenType);
+    }));
     //get the current user and then start fetching the existing evaluations
     this.subs.push(this.store.select(fromRoot.getCurrentUser).subscribe(async (user: User) => {
       if(user){
@@ -78,7 +76,6 @@ export class ExistingAssessmentsComponent implements OnInit, AfterViewInit, OnDe
             this.store.dispatch(new AssessmentAction.StartAssessment(selectedEvaluation.added[0]))
         }
     });
-    this.setDisplayedColumns(window.innerWidth);
   }
 
   //when view is loaded, initialize the sorting and paginator
@@ -86,6 +83,8 @@ export class ExistingAssessmentsComponent implements OnInit, AfterViewInit, OnDe
   	this.dataSource.sort = this.sort;
   	this.dataSource.paginator = this.paginator;
   }
+
+
 
   ngOnDestroy() {
     this.subs.forEach(sub => {
@@ -109,13 +108,14 @@ export class ExistingAssessmentsComponent implements OnInit, AfterViewInit, OnDe
   }
 
   //set the displayed columns of the table depending on the size of the display
-  setDisplayedColumns(innerWidth){
-    if(innerWidth > 1000){
-      this.displayedColumns = ['created', 'student', 'class', 'skill', 'topic', 'project', 'status'];
-    } else if(innerWidth > 800){
-      this.displayedColumns = ['created', 'student', 'skill', 'topic'];
+  setDisplayedColumns(screenType){
+    console.log("received the screentype: " + screenType)
+    if(screenType == "desktop"){
+      this.displayedColumns = ['created', 'studentIcon', 'student', 'class', 'skill', 'topic', 'project', 'status'];
+    } else if(screenType == "tablet"){
+      this.displayedColumns = ['created', 'studentIcon', 'student', 'skill', 'topic'];
     } else {
-      this.displayedColumns = ['created', 'student', 'skill'];
+      this.displayedColumns = ['created', 'studentIcon', 'student', 'skill'];
     }
   }
 

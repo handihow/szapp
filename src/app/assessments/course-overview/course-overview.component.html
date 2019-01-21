@@ -8,23 +8,42 @@
 			</mat-card-header>
 			<mat-card-content fxLayout="row" fxLayoutAlign="space-evenly start" fxLayoutGap="10px" fxLayout.lt-sm="column" fxLayoutAlign.lt-sm="start stretch" fxLayoutGap.lt-sm="10px">
 				<mat-spinner *ngIf="isLoading$ | async"></mat-spinner>
-				<mat-form-field fxFlex.gt-xs="30">
+				<mat-form-field fxFlex="30" *ngIf="(screenType$ | async)!=='phone'">
 				  <mat-select placeholder="Project" formControlName="project">
 				  	<mat-optgroup label="Met ster">
 					  	<mat-option *ngFor="let starredProject of starredProjects$ | async" 
-					  				[value]="starredProject"
+					  				[value]="starredProject.id"
 					  				matTooltip="{{ starredProject.name }} - {{starredProject.code}}">
 					      {{ starredProject.name }} - {{starredProject.code}}
 					    </mat-option>
 					</mat-optgroup>
 					<mat-optgroup label="Alle projecten">
 					    <mat-option *ngFor="let project of projects$ | async" 
-					    			[value]="project"
+					    			[value]="project.id"
 					    			matTooltip="{{ project.name }} - {{project.code}}">
 					      {{ project.name }} - {{project.code}}
 					    </mat-option>
 					</mat-optgroup>
 				  </mat-select>
+				</mat-form-field>
+				<h4 *ngIf="(screenType$ | async)==='phone'">Selecteer project</h4>
+				<mat-form-field *ngIf="(screenType$ | async)==='phone'">  
+					<select matNativeControl
+					formControlName="project">
+						<option value=""></option>
+						<optgroup label="Met ster">
+							<option *ngFor="let starredProject of starredProjects$ | async" 
+					  				[value]="starredProject.id">
+								{{ starredProject.name }} - {{starredProject.code}}
+							</option>
+						</optgroup>
+						<optgroup label="Alle projecten">
+								<option *ngFor="let project of projects$ | async" 
+					    			[value]="project.id">
+								{{ project.name }} - {{project.code}}
+							</option>
+						</optgroup>
+					</select>
 				</mat-form-field>
 				<mat-form-field fxFlex.gt-xs="70">  
 				  <mat-select 

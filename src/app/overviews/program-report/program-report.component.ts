@@ -65,7 +65,7 @@ export class ProgramReportComponent implements OnInit, OnDestroy {
     this.subs.push(this.store.select(fromOverview.getSelectedProgram).subscribe(program => {
         if(program){
           this.program = program;
-          this.subs.push(this.skillService.fetchSkills(program).subscribe(skills => {
+          this.subs.push(this.skillService.fetchSkills(program.id).subscribe(skills => {
               this.analyzeSkills(skills);
           }));
         }

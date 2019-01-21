@@ -98,7 +98,7 @@ export class CurrentProgramComponent implements OnInit, OnDestroy {
             }
           }
         }); 
-        this.sub = this.skillService.fetchSkills(this.program).subscribe(skills => {
+        this.sub = this.skillService.fetchSkills(this.program.id).subscribe(skills => {
           this.skills = skills;
           //set the data source of the table
           this.dataSource.data = this.skills;

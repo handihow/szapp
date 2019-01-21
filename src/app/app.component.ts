@@ -1,7 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, HostListener } from '@angular/core';
 import * as firebase from 'firebase/app';
 import { SwUpdate } from '@angular/service-worker';
 import { environment } from '../environments/environment';
+
+import { Store } from '@ngrx/store';
+import * as UIAction from './shared/ui.actions';
+import * as fromUI from './shared/ui.reducer';
 
 import { AuthService } from './auth/auth.service';
 
@@ -12,9 +16,16 @@ import { AuthService } from './auth/auth.service';
 })
 export class AppComponent implements OnInit {
   
+  //listen to changes on the window size
+  @HostListener('window:resize', ['$event'])
+    onResize(event) {
+      this.setScreenSize(window.innerWidth);
+   }
+
   constructor(
               private updates: SwUpdate,
-              private authService: AuthService) {
+              private authService: AuthService,
+               private store: Store<fromUI.State>) {
   	//eliminate firebase timestamp error
   	const firestore = firebase.firestore();
 	  const settings = {timestampsInSnapshots: true};
@@ -30,6 +41,17 @@ export class AppComponent implements OnInit {
 
   ngOnInit(){
   	this.authService.initAuthListener();
+    this.setScreenSize(window.innerWidth);
+  }
+
+  setScreenSize(innerWidth){
+    if(innerWidth > 1000){
+      this.store.dispatch(new UIAction.ScreenType('desktop'));
+    } else if(innerWidth > 600){
+      this.store.dispatch(new UIAction.ScreenType('tablet'));
+    } else {
+      this.store.dispatch(new UIAction.ScreenType('phone'));
+    }
   }
 
 }

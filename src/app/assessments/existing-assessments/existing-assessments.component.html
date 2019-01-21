@@ -29,13 +29,19 @@
 <div *ngIf="!evaluations || evaluations.length==0" fxLayout="column" fxLayoutAlign="center center" class="placeholder">
 	Geen niet-beoordeelde items
 </div>
-<div *ngIf="evaluations && evaluations.length>0">
+<div [hidden]="!evaluations || evaluations.length==0">
 	<mat-table [dataSource]="dataSource" matSort>
 
 		<ng-container matColumnDef="created">
 			<mat-header-cell *matHeaderCellDef mat-sort-header>Datum</mat-header-cell>
 			<mat-cell *matCellDef="let element">
 				{{ element.created.toDate() | date : 'dd-MM-yy' }}
+			</mat-cell>
+		</ng-container>
+
+		<ng-container matColumnDef="studentIcon">
+			<mat-header-cell *matHeaderCellDef>Icon</mat-header-cell>
+			<mat-cell *matCellDef="let element">
 				<mat-icon [ngStyle]="{'color': element?.colorStudent}" >
 		    		{{element?.iconStudent}}
 		    	</mat-icon>
