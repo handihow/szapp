@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, AfterViewInit, HostListener, OnDestroy } from '@angular/core';
+import { Component, OnInit, ViewChild, AfterViewInit, OnDestroy } from '@angular/core';
 import { MatTableDataSource, MatSort, MatPaginator } from '@angular/material';
 import { Store } from '@ngrx/store';
 import { take } from 'rxjs/operators';
@@ -42,15 +42,14 @@ export class ExistingProgramsComponent implements OnInit, AfterViewInit, OnDestr
   constructor( private programService: ProgramService,
                 private store: Store<fromProgram.State> ) { }
 
-  @HostListener('window:resize', ['$event'])
-  onResize(event) {
-    this.setDisplayedColumns(window.innerWidth);
-    
-  }
 
   ngOnInit() {
     //get the loading state
     this.isLoading$ = this.store.select(fromRoot.getIsLoading);
+    //get the screen type
+    this.store.select(fromRoot.getScreenType).subscribe(screenType => {
+      this.setDisplayedColumns(screenType);
+    });
     //get the current organisation and then the programs
     this.store.select(fromRoot.getCurrentOrganisation).subscribe(organisation => {
       if(organisation){
@@ -72,7 +71,6 @@ export class ExistingProgramsComponent implements OnInit, AfterViewInit, OnDestr
             this.programService.editProgram(selectedProgram.added[0]);
         }
     });
-    this.setDisplayedColumns(window.innerWidth);
   }
 
   ngOnDestroy() {
@@ -91,10 +89,10 @@ export class ExistingProgramsComponent implements OnInit, AfterViewInit, OnDestr
   }
 
   //set the displayed columns of the table depending on the size of the display
-  setDisplayedColumns(innerWidth){
-    if(innerWidth > 1000){
+  setDisplayedColumns(screenType){
+    if(screenType==="desktop"){
       this.displayedColumns = ['created', 'name', 'code', 'status'];
-    } else if(innerWidth > 800){
+    } else if(screenType==="tablet"){
       this.displayedColumns = ['created', 'name', 'code'];
     } else {
       this.displayedColumns = ['name', 'code'];

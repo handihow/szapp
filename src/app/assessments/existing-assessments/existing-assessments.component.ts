@@ -50,9 +50,9 @@ export class ExistingAssessmentsComponent implements OnInit, AfterViewInit, OnDe
     //get the loading state
     this.isLoading$ = this.store.select(fromRoot.getIsLoading);
     //get the screen type
-    this.subs.push(this.store.select(fromRoot.getScreenType).subscribe(screenType => {
+    this.store.select(fromRoot.getScreenType).subscribe(screenType => {
       this.setDisplayedColumns(screenType);
-    }));
+    });
     //get the current user and then start fetching the existing evaluations
     this.subs.push(this.store.select(fromRoot.getCurrentUser).subscribe(async (user: User) => {
       if(user){
@@ -109,7 +109,6 @@ export class ExistingAssessmentsComponent implements OnInit, AfterViewInit, OnDe
 
   //set the displayed columns of the table depending on the size of the display
   setDisplayedColumns(screenType){
-    console.log("received the screentype: " + screenType)
     if(screenType == "desktop"){
       this.displayedColumns = ['created', 'studentIcon', 'student', 'class', 'skill', 'topic', 'project', 'status'];
     } else if(screenType == "tablet"){

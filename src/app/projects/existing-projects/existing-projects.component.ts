@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, AfterViewInit, HostListener, OnDestroy } from '@angular/core';
+import { Component, OnInit, ViewChild, AfterViewInit, OnDestroy } from '@angular/core';
 import { MatTableDataSource, MatSort, MatPaginator } from '@angular/material';
 import { Store } from '@ngrx/store';
 import { take } from 'rxjs/operators';
@@ -42,15 +42,13 @@ export class ExistingProjectsComponent implements OnInit, AfterViewInit, OnDestr
   constructor( private projectService: ProjectService,
                 private store: Store<fromProject.State> ) { }
 
-  @HostListener('window:resize', ['$event'])
-  onResize(event) {
-    this.setDisplayedColumns(window.innerWidth);
-    
-  }
-
   ngOnInit() {
     //get the loading state
     this.isLoading$ = this.store.select(fromRoot.getIsLoading);
+    //get the screen type
+    this.store.select(fromRoot.getScreenType).subscribe(screenType => {
+      this.setDisplayedColumns(screenType);
+    });
     //get the current organisation
     this.store.select(fromRoot.getCurrentOrganisation).subscribe(async organisation => {
       if(organisation){
@@ -69,7 +67,6 @@ export class ExistingProjectsComponent implements OnInit, AfterViewInit, OnDestr
             this.projectService.editProject(selectedProject.added[0]);
         }
     });
-    this.setDisplayedColumns(window.innerWidth);
   }
 
   //when view is loaded, initialize the sorting and paginator
@@ -88,10 +85,10 @@ export class ExistingProjectsComponent implements OnInit, AfterViewInit, OnDestr
   }
 
   //set the displayed columns of the table depending on the size of the display
-  setDisplayedColumns(innerWidth){
-    if(innerWidth > 1000){
+  setDisplayedColumns(screenType){
+    if(screenType==="desktop"){
       this.displayedColumns = ['created', 'name', 'code', 'classes', 'subjects', 'status'];
-    } else if(innerWidth > 800){
+    } else if(screenType==="tablet"){
       this.displayedColumns = ['created', 'name', 'code', 'status'];
     } else {
       this.displayedColumns = ['name', 'code'];

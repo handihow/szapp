@@ -12,7 +12,7 @@
 		    </mat-option>
 		</mat-select>
 	</mat-form-field>
-	<mat-form-field fxFlex="40%" *ngIf="!(isLoading$ | async)">
+	<mat-form-field fxFlex.gt-sm="40%" *ngIf="!(isLoading$ | async)">
 		<input matInput type="text" [(ngModel)]="filterValue" (keyup)="doFilter($event.target.value)" placeholder="Filter">
 	</mat-form-field>
 	<button mat-button *ngIf="!allEvaluationsDisplayed" (click)="onChange()">Toon reeds beoordeelde items</button>

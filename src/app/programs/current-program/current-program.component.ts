@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, AfterViewInit, OnDestroy, HostListener } from '@angular/core';
+import { Component, OnInit, ViewChild, AfterViewInit, OnDestroy } from '@angular/core';
 import { MatDialog } from '@angular/material';
 import { NgForm } from '@angular/forms';
 import { Store } from '@ngrx/store';
@@ -60,12 +60,6 @@ export class CurrentProgramComponent implements OnInit, OnDestroy {
 
   @ViewChild(Angular2CsvComponent) csvComponent: Angular2CsvComponent;
 
-  @HostListener('window:resize', ['$event'])
-  onResize(event) {
-    this.setDisplayedColumns(window.innerWidth);
-    
-  }
-
   selection = new SelectionModel<Skill>(true, null);
 
   constructor( private dialog: MatDialog, 
@@ -77,7 +71,10 @@ export class CurrentProgramComponent implements OnInit, OnDestroy {
   ngOnInit() {
     //get the loading state
     this.isLoading$ = this.store.select(fromRoot.getIsLoading);
-    
+    //get the screen type
+    this.store.select(fromRoot.getScreenType).subscribe(screenType => {
+      this.setDisplayedColumns(screenType);
+    });
     //get the current program and then fetch the corresponding program skills
     this.store.select(fromProgram.getActiveProgram).pipe(take(1)).subscribe(program => {
         this.program = program;
@@ -132,13 +129,13 @@ export class CurrentProgramComponent implements OnInit, OnDestroy {
   }
 
   //set the displayed columns of the table depending on the size of the display
-  setDisplayedColumns(innerWidth){
-    if(innerWidth > 1000){
+  setDisplayedColumns(screenType){
+    if(screenType==="desktop"){
       this.displayedColumns = ['select', 'order' ,'competency', 'topic', 'link', 'attachments'];
-    } else if(innerWidth > 800){
+    } else if(screenType==="tablet"){
       this.displayedColumns = ['select', 'order' ,'competency', 'topic', 'link'];
     } else {
-      this.displayedColumns = ['select', 'order' ,'competency', 'topic'];
+      this.displayedColumns = ['select', 'order' ,'competency'];
     }
   }
  

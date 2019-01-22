@@ -80,6 +80,10 @@ export class CurrentProjectComponent implements OnInit, OnDestroy {
   ngOnInit() {
     //get the loading state
     this.isLoading$ = this.store.select(fromRoot.getIsLoading);
+    //get the screen type
+    this.store.select(fromRoot.getScreenType).subscribe(screenType => {
+      this.setDisplayedColumns(screenType);
+    });
     //get the current organisation and start fetching programs
     this.store.select(fromRoot.getCurrentOrganisation).subscribe(organisation => {
       if(organisation){
@@ -170,6 +174,17 @@ export class CurrentProjectComponent implements OnInit, OnDestroy {
     this.isAllSelected() ?
         this.selection.clear() :
         this.dataSource.data.forEach(row => this.selection.select(row));
+  }
+
+  //set the displayed columns of the table depending on the size of the display
+  setDisplayedColumns(screenType){
+    if(screenType == "desktop"){
+      this.displayedColumns = ['select' ,'order' ,'competency', 'topic', 'link']; 
+    } else if(screenType == "tablet"){
+      this.displayedColumns = ['select' ,'order' ,'competency', 'topic']; 
+    } else {
+      this.displayedColumns = ['select' ,'order' ,'competency']; 
+    }
   }
 
   onSubmit(skillsForm: FormGroup, formDirective: FormGroupDirective){

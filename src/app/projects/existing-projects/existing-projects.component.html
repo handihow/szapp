@@ -1,11 +1,11 @@
 <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="20px"
 		fxLayout.lt-md="column" fxLayoutAlign.lt-md="center stretch" fxLayoutGap.lt-md="10px" class="existing-projects">
-	<mat-form-field fxFlex="40%" *ngIf="!(isLoading$ | async)">
+	<mat-form-field fxFlex.gt-sm="40%" *ngIf="!(isLoading$ | async)">
 		<input matInput type="text" (keyup)="doFilter($event.target.value)" placeholder="Filter">
 	</mat-form-field>
 	<div>
 		<mat-slide-toggle color="primary" [(ngModel)]="showArchived" (ngModelChange)="onChange()">
-	        Toon gearchiveerde projecten
+	        Archief
 	    </mat-slide-toggle>
 	    <button mat-button (click)="downloadCsv()">Download csv</button>
 	    <angular2csv [data]="data" filename="projecten.csv" [options]="options" style="display:none;" #csvComponent></angular2csv>

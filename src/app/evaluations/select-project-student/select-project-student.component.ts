@@ -1,4 +1,4 @@
-import { Component, OnInit, HostListener, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Store } from '@ngrx/store';
 import * as fromRoot from '../../app.reducer';
@@ -45,23 +45,21 @@ export class SelectProjectStudentComponent implements OnInit, OnDestroy {
   evaluations: Evaluation[];
   subs: Subscription[] = [];
 
+  screenType: string;
+
   constructor(   private store: Store<fromEvaluation.State>,
                  private evaluationService: EvaluationService,
                  private authService: AuthService,
                  private dialog: MatDialog,
                  private projectService: ProjectService) { }
 
-  @HostListener('window:resize', ['$event'])
-  onResize(event) {
-    this.setColumns(window.innerWidth);
-    
-  }
-
   ngOnInit() {
     //get the isLoading state
     this.isLoading$ = this.store.select(fromRoot.getIsLoading); 
-    //get the window width in order to set the number of grid tiles on each row
-    this.setColumns(window.innerWidth);
+    //get the screen type
+    this.store.select(fromRoot.getScreenType).subscribe(screenType => {
+      this.setColumns(screenType);
+    });
     //get the current user 
     this.store.select(fromRoot.getCurrentUser).subscribe((user:User) => {
       if(user){
@@ -213,12 +211,10 @@ export class SelectProjectStudentComponent implements OnInit, OnDestroy {
     this.store.dispatch(new EvaluationAction.UnsetStudent());
   }
 
-  setColumns(innerWidth){
-    if(innerWidth > 1000){
+  setColumns(screenType){
+    if(screenType == "desktop"){
       this.columns = 4;
-    } else if(innerWidth > 800){
-      this.columns = 3;
-    } else if(innerWidth > 500) {
+    } else if(screenType == "tablet"){
       this.columns = 2;
     } else {
       this.columns = 1;

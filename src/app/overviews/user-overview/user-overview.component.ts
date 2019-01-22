@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, HostListener } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable, Subscription } from 'rxjs';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
@@ -35,12 +35,6 @@ export class UserOverviewComponent implements OnInit, OnDestroy {
   chart = []; // This will hold our chart info
   chartType: string;
 
-  @HostListener('window:resize', ['$event'])
-  onResize(event) {
-    this.setChartType(window.innerWidth);
-    
-  }
-
   constructor(  private programService: ProgramService,
     private authService: AuthService,
     private store: Store<fromOverview.State> ) { }
@@ -50,6 +44,10 @@ export class UserOverviewComponent implements OnInit, OnDestroy {
     this.currentUser$ = this.store.select(fromRoot.getCurrentUser);
     //get the loading state of the app
     this.isLoading$ = this.store.select(fromRoot.getIsLoading);
+    //get the screen type
+    this.store.select(fromRoot.getScreenType).subscribe(screenType => {
+      this.setChartType(screenType);
+    });
     //fetch the evaluations belonging to the project
     this.store.select(fromOverview.getSelectedStudent).subscribe(student => {
       if(student){
@@ -68,7 +66,6 @@ export class UserOverviewComponent implements OnInit, OnDestroy {
     this.selectProgramForm = new FormGroup({
       program: new FormControl(null, Validators.required)
     });
-    this.setChartType(window.innerWidth);
   }
 
   fetchPrograms() {
@@ -102,11 +99,12 @@ export class UserOverviewComponent implements OnInit, OnDestroy {
   }
 
   //set the chart type depending on the size of the display
-  setChartType(innerWidth){
-    if(innerWidth > 1000){
-      this.chartType="bar";
-    } else {
+  setChartType(screenType){
+    console.log(screenType);
+    if(screenType==="phone"){
       this.chartType = "horizontalBar";
+    } else {
+      this.chartType="bar";
     }
   }
 

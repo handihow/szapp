@@ -21,21 +21,26 @@
 }
 
 .mat-column-order {
-  flex: 1;
+  flex: 2;
+  min-width: 60px
 }
 
 .mat-column-competency {
-  flex: 8;
+  flex: 12;
 }
 
 .mat-column-topic {
-  flex: 2;
+  flex: 4;
 }
 
 .mat-column-link {
-  flex: 2;
+  flex: 4;
 }
 
 .mat-column-attachments {
   flex: 2;
+}
+
+mat-card {
+  margin: 10px;
 }
