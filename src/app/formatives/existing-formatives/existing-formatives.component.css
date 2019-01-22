@@ -1,0 +1,32 @@
+.existing-formatives {
+	margin-left: 10px;
+	margin-right: 10px;
+}
+
+.mat-column-created {
+  flex: 1;
+}
+
+.mat-column-name {
+  flex: 2;
+}
+
+.mat-column-date {
+  flex: 1;
+}
+
+.mat-column-classes {
+  flex: 2;
+}
+
+.mat-column-subjects {
+  flex: 2;
+}
+
+.mat-column-tags {
+  flex: 2;
+}
+
+.mat-column-url {
+	flex: 2;
+}

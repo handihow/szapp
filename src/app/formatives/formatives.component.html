@@ -1,0 +1,8 @@
+<mat-tab-group [(selectedIndex)]="index">
+  <mat-tab label="Formatieven">
+  	<app-existing-formatives></app-existing-formatives>
+  </mat-tab>
+  <mat-tab label="Nieuw formatief">
+  	<app-new-formative (isDone)="onDone($event)"></app-new-formative>
+  </mat-tab>
+</mat-tab-group>

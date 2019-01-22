@@ -1,0 +1,67 @@
+<section class="new-formative" fxLayout fxLayoutAlign="center">
+	<form [formGroup]="formativeForm" (ngSubmit)="onSubmit()">
+		<mat-card fxFlex.xs="100%" fxFlex="400px">
+			<mat-card-title fxLayoutAlign="center">
+				Maak een nieuw formatief
+			</mat-card-title>
+			<mat-card-content fxLayout="column" fxLayoutAlign="center center" *ngIf="!(isLoading$ | async)">
+				<mat-form-field class="full-width">
+				   <input matInput placeholder="Naam" formControlName="name" required>
+				   <mat-error>Vul de naam van de formatief in</mat-error>
+				</mat-form-field>
+				<mat-form-field class="full-width">
+				  <input matInput [matDatepicker]="picker" placeholder="Datum formatief" formControlName="date" required>
+				  <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+				  <mat-datepicker #picker></mat-datepicker>
+				</mat-form-field>
+				<mat-form-field class="full-width">  
+				  <mat-select 
+				  		placeholder="Selecteer 1 of meer klassen" 
+				  		formControlName="classes"
+				  		multiple
+				  		required>
+				    <mat-option *ngFor="let class of organisation?.classes" [value]="class">
+				      {{class}}
+				    </mat-option>
+				  </mat-select>
+				  <mat-error>Selecteer minimaal 1 klas</mat-error>
+				</mat-form-field>
+				<mat-form-field class="full-width">  
+				  <mat-select 
+				  		placeholder="Selecteer 1 of meer vakken" 
+				  		formControlName="subjects"
+				  		 multiple
+				  		 required>
+				    <mat-option *ngFor="let subject of organisation?.subjects" [value]="subject">
+				      {{subject}}
+				    </mat-option>
+				  </mat-select>
+				  <mat-error>Selecteer minimaal 1 vak</mat-error>
+				</mat-form-field>
+				<mat-form-field class="full-width">  
+				  <mat-select 
+				  		placeholder="Selecteer 1 of meer tags" 
+				  		formControlName="tags"
+				  		multiple>
+				    <mat-option *ngFor="let tag of availableTags" [value]="tag">
+				      {{tag}}
+				    </mat-option>
+				  </mat-select>
+				</mat-form-field>
+				<mat-form-field class="full-width">
+				   <input type="text" matInput 
+				   			placeholder="Link naar formatief" formControlName="formativeUrl"
+				   			pattern="https?://.+">
+				   <mat-hint>Hier kun je een link naar de formatief plaatsen</mat-hint>
+				   <mat-error>Dit is geen geldige url</mat-error>
+				</mat-form-field>
+			</mat-card-content>
+			<mat-spinner *ngIf="isLoading$ | async"></mat-spinner>	
+			<mat-card-actions fxLayoutAlign="center">
+				<button type="submit" mat-raised-button color="primary" [disabled]="formativeForm.invalid">
+					Bewaar
+				</button>
+			</mat-card-actions>
+		</mat-card>	
+	</form>
+</section>

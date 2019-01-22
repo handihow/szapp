@@ -35,6 +35,12 @@
 		<mat-icon>school</mat-icon>
 		<span class="nav-caption">Lesgroepen</span>
 	</a>
+	<a mat-list-item routerLink="/formatives" 
+		(click)="onClose()"
+		*ngIf="isTeacher$  | async">
+		<mat-icon>assignment_ind</mat-icon>
+		<span class="nav-caption">Formatieven</span>
+	</a>
 	<a mat-list-item routerLink="/overviews" 
 		(click)="onClose()"
 		*ngIf="isAuth$ | async">

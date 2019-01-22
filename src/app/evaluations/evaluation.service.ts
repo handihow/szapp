@@ -258,6 +258,7 @@ export class EvaluationService {
 	        iconStudent: 'supervised_user_circle',
 	        commentStudent: 'Direct beoordeeld door de leraar',
 	        teacher: result.teacher.uid,
+	        teacherName: result.teacher.displayName,
 	        commentTeacher: 'Alleen kleurbeoordeling',
 	        colorLabelTeacher: result.color.colorLabel,
 	        iconTeacher: result.color.icon,

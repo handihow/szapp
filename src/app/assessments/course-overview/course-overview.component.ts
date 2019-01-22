@@ -197,6 +197,7 @@ export class CourseOverviewComponent implements OnInit, OnDestroy {
         iconStudent: 'supervised_user_circle',
         commentStudent: 'Direct beoordeeld door de leraar',
         teacher: this.user.uid,
+        teacherName: this.user.displayName,
         toBeAdded: !student.evaluation ? true : false
       };
       return newEvaluation;
