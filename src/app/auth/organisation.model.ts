@@ -5,5 +5,6 @@ export interface Organisation {
 	roleDetectionRule?: any,
 	registrationCode?: string,
 	classes?: string[],
-	subjects?: string[]
+	subjects?: string[],
+	tags?: string[]
 }

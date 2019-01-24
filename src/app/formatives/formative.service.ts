@@ -23,26 +23,32 @@ export class FormativeService {
 	addFormative(formative: Formative){
 		this.db.collection('formatives').add(formative)
 			.then(doc => {
-				this.uiService.showSnackbar("Toets is succesvol bewaard.", null, 3000);
+				this.uiService.showSnackbar("Formatief is succesvol bewaard.", null, 3000);
 			})
 			.catch(error => {
 				this.uiService.showSnackbar(error.message, null, 3000);
 			});
 	}
 
-	updateFormativeToDatabase(formative: Formative){
-		this.db.collection('formatives').doc(formative.id).update(formative)
+	updateFormativeToDatabase(formative: Formative): Promise<boolean>{
+		return this.db.collection('formatives').doc(formative.id).set(formative, {merge: true})
+			.then( _ => {
+				this.uiService.showSnackbar("Formatief updated", null, 3000);
+				return true;
+			})
 			.catch(error => {
 				this.uiService.showSnackbar(error.message, null, 3000);
+				return false;
 			})
 	}
 
-	fetchExistingFormatives(organisation: Organisation, user?: User, starred?: boolean): Observable<Formative[]> {
+	fetchExistingFormatives(organisation?: Organisation, user?: User): Observable<Formative[]> {
 		this.store.dispatch(new UI.StartLoading());
-		var queryStr = (ref => ref.where('organisation', '==', organisation.id));
-		if(starred){
-			let str = 'starred.' + user.uid;
-			queryStr = (ref => ref.where(str, '==', true));
+		var queryStr;
+		if(organisation){
+			queryStr = (ref => ref.where('organisation', '==', organisation.id));
+		} else {
+			queryStr = (ref => ref.where('user', '==', user.uid));
 		}
 		return this.db.collection('formatives', queryStr)
 			.snapshotChanges().pipe(
@@ -54,6 +60,18 @@ export class FormativeService {
 						return { id, ...data };
 					})
 			}))	
+	}
+
+	removeFormatives(formatives: Formative[]){
+		formatives.forEach((formative) => {
+			this.db.collection('formatives').doc(formative.id).delete()
+			.then(_ => {
+				this.uiService.showSnackbar("Formatief verwijderd", null, 3000);
+			})
+			.catch(error => {
+				this.uiService.showSnackbar(error.message, null, 3000);
+			})
+		});
 	}
 	
 		

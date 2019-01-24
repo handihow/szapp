@@ -20,7 +20,6 @@ import { EditProgramComponent } from './edit-program.component';
 import { AddAttachmentsComponent } from './add-attachments.component';
 
 import { User } from '../../auth/user.model';
-import { Superusers } from '../../shared/superusers';
 
 import { UIService } from '../../shared/ui.service';
 import { Observable, Subscription } from 'rxjs';
@@ -90,7 +89,7 @@ export class CurrentProgramComponent implements OnInit, OnDestroy {
               this.isFavorite = true;
             }
             //make the csv upload button only available to the superusers of the application
-            if(Superusers.superUsers.includes(user.email)){
+            if(user.isAdmin){
               this.superUser = true;
             }
           }

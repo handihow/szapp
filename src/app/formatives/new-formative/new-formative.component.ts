@@ -23,8 +23,6 @@ export class NewFormativeComponent implements OnInit {
   organisation: Organisation;
   isLoading$: Observable<boolean>;
   @Output() isDone = new EventEmitter<boolean>();
-  availableTags = ["Beoordeling", "Exit kaart", "Formatieve toets", 
-                          "Huiswerk", "Oefening", "Opdracht",  "Prestatietaak", "Quiz", "Test", "Toets", "Werkblad"]
 
   constructor(   private store: Store<fromRoot.State>,
                  private formativeService: FormativeService) { }
@@ -63,6 +61,7 @@ export class NewFormativeComponent implements OnInit {
       tags: this.formativeForm.value.tags,
       organisation: this.organisation.id,
       user: this.user.uid,
+      teacherName: this.user.displayName,
       created: new Date(),
       formativeUrl: this.formativeForm.value.formativeUrl ? this.formativeForm.value.formativeUrl : null
     }

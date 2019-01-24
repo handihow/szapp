@@ -43,7 +43,7 @@
 				  		placeholder="Selecteer 1 of meer tags" 
 				  		formControlName="tags"
 				  		multiple>
-				    <mat-option *ngFor="let tag of availableTags" [value]="tag">
+				    <mat-option *ngFor="let tag of organisation?.tags" [value]="tag">
 				      {{tag}}
 				    </mat-option>
 				  </mat-select>

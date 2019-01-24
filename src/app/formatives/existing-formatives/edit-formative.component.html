@@ -1,0 +1,63 @@
+<h1 mat-dialog-title>Formatief Bewerken</h1>
+<form [formGroup]="formativeForm" (ngSubmit)="onSubmit()">
+	<mat-dialog-content>
+		<mat-form-field class="full-width">
+			<input matInput placeholder="Naam" formControlName="name" required>
+			<mat-error>Vul de naam van de formatief in</mat-error>
+		</mat-form-field>
+		<mat-form-field class="full-width">
+			<input matInput [matDatepicker]="picker" placeholder="Datum formatief" formControlName="date" required>
+			<mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+			<mat-datepicker #picker></mat-datepicker>
+		</mat-form-field>
+		<mat-form-field class="full-width">  
+			<mat-select 
+				placeholder="Selecteer 1 of meer klassen" 
+				formControlName="classes"
+				multiple
+				required>
+				<mat-option *ngFor="let class of passedData.organisation?.classes" [value]="class">
+					{{class}}
+				</mat-option>
+			</mat-select>
+			<mat-error>Selecteer minimaal 1 klas</mat-error>
+		</mat-form-field>
+		<mat-form-field class="full-width">  
+			<mat-select 
+				placeholder="Selecteer 1 of meer vakken" 
+				formControlName="subjects"
+				multiple
+				required>
+				<mat-option *ngFor="let subject of passedData.organisation?.subjects" [value]="subject">
+					{{subject}}
+				</mat-option>
+			</mat-select>
+			<mat-error>Selecteer minimaal 1 vak</mat-error>
+		</mat-form-field>
+		<mat-form-field class="full-width">  
+			<mat-select 
+			placeholder="Selecteer 1 of meer tags" 
+			formControlName="tags"
+			multiple>
+			<mat-option *ngFor="let tag of passedData.organisation?.tags" [value]="tag">
+				{{tag}}
+			</mat-option>
+		</mat-select>
+		</mat-form-field>
+		<mat-form-field class="full-width">
+			<input type="text" matInput 
+			placeholder="Link naar formatief" formControlName="formativeUrl"
+			pattern="https?://.+">
+			<mat-hint>Hier kun je een link naar de formatief plaatsen</mat-hint>
+			<mat-error>Dit is geen geldige url</mat-error>
+		</mat-form-field>
+	</mat-dialog-content>	
+
+	<mat-dialog-actions>
+		<button type="submit" mat-raised-button color="primary" 
+				[disabled]="formativeForm.invalid">
+			Bewaar
+		</button>
+		<button type="button" mat-raised-button color="accent" [mat-dialog-close]="false">Terug</button>
+	</mat-dialog-actions>
+</form>

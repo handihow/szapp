@@ -3,30 +3,30 @@
 	margin-right: 10px;
 }
 
-.mat-column-created {
+.mat-column-select {
   flex: 1;
 }
 
 .mat-column-name {
-  flex: 2;
+  flex: 4;
 }
 
 .mat-column-date {
-  flex: 1;
+  flex: 2;
 }
 
 .mat-column-classes {
-  flex: 2;
+  flex: 4;
 }
 
 .mat-column-subjects {
-  flex: 2;
+  flex: 4;
 }
 
 .mat-column-tags {
-  flex: 2;
+  flex: 4;
 }
 
 .mat-column-url {
-	flex: 2;
+	flex: 4;
 }

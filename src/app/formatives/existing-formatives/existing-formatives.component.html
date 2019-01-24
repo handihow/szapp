@@ -1,25 +1,48 @@
 <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="20px"
 		fxLayout.lt-md="column" fxLayoutAlign.lt-md="center stretch" fxLayoutGap.lt-md="10px" class="existing-formatives">
-	<mat-form-field fxFlex="40%" *ngIf="!(isLoading$ | async)">
+	<mat-form-field fxFlex.gt-sm="40%" *ngIf="!(isLoading$ | async)">
 		<input matInput type="text" (keyup)="doFilter($event.target.value)" placeholder="Filter">
 	</mat-form-field>
+	<mat-slide-toggle 
+				color="primary" 
+				[(ngModel)]="allOrganisation" 
+				*ngIf="user?.isAdmin" 
+				(ngModelChange)="onChange()">
+        Alle formatieven
+    </mat-slide-toggle>
+	<div>
+		<button type="button" mat-button
+				(click)="onEdit()" [disabled]="!(selection.selected.length===1)">Bewerk item</button>
+		<button type="button" mat-button color="warn" 
+				(click)="onRemove()" [disabled]="selection.selected.length===0">Verwijder selectie</button>
+	</div>
 	<mat-spinner *ngIf="isLoading$ | async"></mat-spinner>		
 </div>
-<mat-table [dataSource]="dataSource" matSort>
+<mat-table [dataSource]="dataSource" matSort matSortActive="date" matSortDirection="desc">
 
-	<ng-container matColumnDef="created">
-		<mat-header-cell *matHeaderCellDef mat-sort-header>Datum gemaakt</mat-header-cell>
-		<mat-cell *matCellDef="let element">{{ element.created.toDate() | date : 'dd-MM-yyyy' }}</mat-cell>
-	</ng-container>
-
-	<ng-container matColumnDef="name">
-		<mat-header-cell *matHeaderCellDef mat-sort-header>Formatief</mat-header-cell>
-		<mat-cell *matCellDef="let element">{{ element.name }}</mat-cell>
+	<ng-container matColumnDef="select">
+	  <mat-header-cell *matHeaderCellDef>
+	    <mat-checkbox (change)="$event ? masterToggle() : null"
+	                  [checked]="selection.hasValue() && isAllSelected()"
+	                  [indeterminate]="selection.hasValue() && !isAllSelected()">
+	    </mat-checkbox>
+	  </mat-header-cell>
+	  <mat-cell *matCellDef="let row">
+	    <mat-checkbox (click)="$event.stopPropagation()"
+	                  (change)="$event ? selection.toggle(row) : null"
+	                  [checked]="selection.isSelected(row)">
+	    </mat-checkbox>
+	  </mat-cell>
 	</ng-container>
 
 	<ng-container matColumnDef="date">
 		<mat-header-cell *matHeaderCellDef mat-sort-header>Datum formatief</mat-header-cell>
 		<mat-cell *matCellDef="let element">{{ element.date.toDate() | date : 'dd-MM-yyyy' }}</mat-cell>
+	</ng-container>
+
+	<ng-container matColumnDef="name">
+		<mat-header-cell *matHeaderCellDef mat-sort-header>Formatief</mat-header-cell>
+		<mat-cell *matCellDef="let element">{{ element.name }}</mat-cell>
 	</ng-container>
 
 	<ng-container matColumnDef="subjects">
