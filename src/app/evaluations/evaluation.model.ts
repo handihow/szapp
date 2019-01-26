@@ -45,5 +45,8 @@ export interface Evaluation {
 	projectName?: string;
 	projectCode?: string;
 	program?: string;
+	formative?: string;
+	formativeName?: string;
+	formativeDate?: any;
 	
 }

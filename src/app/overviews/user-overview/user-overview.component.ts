@@ -9,6 +9,7 @@ import { ProgramService } from '../../programs/program.service';
 import { Chart } from 'chart.js';
 
 import { User} from '../../auth/user.model';
+import { Organisation } from '../../auth/organisation.model';
 import { AuthService } from '../../auth/auth.service';
 
 import * as fromOverview from '../overview.reducer';
@@ -25,6 +26,7 @@ import { Colors } from '../../shared/colors';
 export class UserOverviewComponent implements OnInit, OnDestroy {
   
   student: User;
+  organisation: Organisation;
   programs: Program[];
   isLoading$: Observable<boolean>;
   currentUser$: Observable<User>;
@@ -42,6 +44,10 @@ export class UserOverviewComponent implements OnInit, OnDestroy {
   ngOnInit() {
     //get the current user
     this.currentUser$ = this.store.select(fromRoot.getCurrentUser);
+    //get the current organisation
+    this.subs.push(this.store.select(fromRoot.getCurrentOrganisation).subscribe(org => {
+      this.organisation = org;
+    }));
     //get the loading state of the app
     this.isLoading$ = this.store.select(fromRoot.getIsLoading);
     //get the screen type
@@ -69,17 +75,15 @@ export class UserOverviewComponent implements OnInit, OnDestroy {
   }
 
   fetchPrograms() {
-    this.subs.push(this.store.select(fromRoot.getCurrentOrganisation).subscribe(organisation => {
-      this.subs.push(this.programService.fetchExistingPrograms(organisation, true).subscribe(programs => {
-        var filteredPrograms = [];
-        programs.forEach(program => {
-          if(Object.keys(this.student.programs).includes(program.id)){
-            filteredPrograms.push(program);
-          }
-        })
-        this.programs = filteredPrograms;
-        this.calculateProgramProgress();
-      }));
+    this.subs.push(this.programService.fetchExistingPrograms(this.organisation, true).subscribe(programs => {
+      var filteredPrograms = [];
+      programs.forEach(program => {
+        if(Object.keys(this.student.programs).includes(program.id)){
+          filteredPrograms.push(program);
+        }
+      })
+      this.programs = filteredPrograms;
+      this.calculateProgramProgress();
     }));
   }
 
@@ -96,6 +100,10 @@ export class UserOverviewComponent implements OnInit, OnDestroy {
 
   onReturnToOverview(){
     this.store.dispatch(new OverviewAction.UnselectStudent());
+  }
+
+  onSelectedProgram(program){
+    this.selectProgramForm.get('program').setValue(program);
   }
 
   //set the chart type depending on the size of the display

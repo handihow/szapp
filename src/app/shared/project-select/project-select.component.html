@@ -1,0 +1,35 @@
+<mat-form-field *ngIf="(screenType$ | async)!=='phone'" class="full-width">
+	<mat-select placeholder="Project" [(ngModel)]="selectedProjectId" (ngModelChange)="selectProject($event)">
+		<mat-optgroup label="Met ster">
+		  	<mat-option *ngFor="let starredProject of starredProjects$ | async" 
+		  				[value]="starredProject.id"
+		  				matTooltip="{{ starredProject.name }} - {{starredProject.code}}">
+		      {{ starredProject.name }} - {{starredProject.code}}
+		    </mat-option>
+		</mat-optgroup>
+		<mat-optgroup label="Alle projecten">
+		    <mat-option *ngFor="let project of projects" 
+		    			[value]="project.id"
+		    			matTooltip="{{ project.name }} - {{project.code}}">
+		      {{ project.name }} - {{project.code}}
+		    </mat-option>
+		</mat-optgroup>
+	</mat-select>
+</mat-form-field>
+<mat-form-field *ngIf="(screenType$ | async)==='phone'" class="full-width">
+	<select matNativeControl placeholder="Project" [(ngModel)]="selectedProjectId" (ngModelChange)="selectProject($event)">
+		<option value=""></option>
+		<optgroup label="Met ster">
+			<option *ngFor="let starredProject of starredProjects$ | async" 
+	  				[value]="starredProject.id">
+				{{ starredProject.name }} - {{starredProject.code}}
+			</option>
+		</optgroup>
+		<optgroup label="Alle projecten">
+				<option *ngFor="let project of projects" 
+	    			[value]="project.id">
+				{{ project.name }} - {{project.code}}
+			</option>
+		</optgroup>
+	</select>
+</mat-form-field>

@@ -21,6 +21,7 @@ import { Organisation } from '../auth/organisation.model';
 import { Skill } from '../skills/skill.model';
 import { Progress } from '../auth/user.model';
 import { Result } from '../assessments/result.model';
+import { Formative } from '../formatives/formative.model';
 
 import {firestore} from 'firebase/app';
 import Timestamp = firestore.Timestamp;
@@ -157,7 +158,6 @@ export class EvaluationService {
 				data.historyId = doc.payload.doc.id;
 				return data;
 			}).sort((a,b)=>{return b.created - a.created});
-			console.log(evaluationsInHistory);
 			if(evaluationsInHistory.length==0){
 				//there is no history in the evaluation, safe to delete
 				this.deleteSingleEvaluation(evaluation);
@@ -207,23 +207,23 @@ export class EvaluationService {
 			});
 	}
 
-	saveAssessments(results: Result[]): boolean{
+	saveAssessments(results: Result[], formative?: Formative): boolean{
 		let wasSuccessful = true;
 		results.forEach(async result => {
 			if(!result.evaluation){
-		      let newAssessment: Evaluation = this.onNewAssessment(result);
+		      let newAssessment: Evaluation = this.onNewAssessment(result, formative);
 		      let success = await this.addEvaluationToDatabase(newAssessment, result.student.uid, result.skill.id);
 		      if(!success){
 		      	wasSuccessful = false;
 		      }
 		    } else if(result.evaluation.status==="Beoordeeld"){
-		      let newAssessment: Evaluation = this.onNewAssessment(result);
+		      let newAssessment: Evaluation = this.onNewAssessment(result, formative);
 		      let success = await this.updateEvaluationToDatabase(newAssessment, result.student.uid, result.skill.id);
 		      if(!success){
 		      	wasSuccessful = false;
 		      }
 		    } else {
-		      let updatedAssessment: Evaluation = this.onUpdateAssessment(result);
+		      let updatedAssessment: Evaluation = this.onUpdateAssessment(result, formative);
 		      let success = await this.updateEvaluationToDatabase(updatedAssessment, result.student.uid, result.skill.id);
 		      if(!success){
 		      	wasSuccessful = false;
@@ -233,10 +233,9 @@ export class EvaluationService {
 		return wasSuccessful
 	}
 
-	private onNewAssessment(result: Result): Evaluation {
-		let newEvaluation: Evaluation ;
+	private onNewAssessment(result: Result, formative?: Formative): Evaluation {
 	    let timestamp = Timestamp.now();
-	      newEvaluation = {
+	    let newEvaluation : Evaluation = {
 	        id: result.student.uid + '_' + result.skill.id,
 	        created: timestamp,
 	        evaluated: timestamp,
@@ -265,10 +264,18 @@ export class EvaluationService {
 	        ratingTeacher: result.color.rating,
 	        colorTeacher: result.color.color
 	      };
+	    if(formative){
+	        newEvaluation.formative = formative.id;
+	        newEvaluation.formativeName = formative.name;
+	        newEvaluation.formativeDate = formative.date;
+	        var options = { year: 'numeric', month: 'long', day: 'numeric' };
+	        newEvaluation.commentTeacher = "Kleurbeoordeling voor " + formative.name + " d.d. " 
+	        									+ formative.date.toDate().toLocaleDateString('nl-be', options);
+	    }
 	    return newEvaluation;
 	}
 
-	private onUpdateAssessment(result: Result): Evaluation {
+	private onUpdateAssessment(result: Result, formative?: Formative): Evaluation {
 		let updatedEvaluation: Evaluation = result.evaluation;
 		let timestamp = Timestamp.now();
 		updatedEvaluation.evaluated = timestamp;
@@ -278,6 +285,14 @@ export class EvaluationService {
 	    updatedEvaluation.iconTeacher = result.color.icon;
 	    updatedEvaluation.ratingTeacher = result.color.rating;
 	    updatedEvaluation.colorTeacher = result.color.color;
+	    if(formative){
+	        updatedEvaluation.formative = formative.id;
+	        updatedEvaluation.formativeName = formative.name;
+	        updatedEvaluation.formativeDate = formative.date;
+	        var options = { year: 'numeric', month: 'long', day: 'numeric' };
+	        updatedEvaluation.commentTeacher = "Kleurbeoordeling voor " + formative.name + " d.d. " 
+	        									+ formative.date.toDate().toLocaleDateString('nl-be', options);
+	    }
 		return updatedEvaluation;
 	}
 

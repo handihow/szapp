@@ -1,0 +1,31 @@
+<mat-form-field *ngIf="(screenType$ | async)!=='phone'" class="full-width">
+    <input type="text" placeholder="Leerling" matInput [formControl]="studentControl" [matAutocomplete]="auto">
+    <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
+      <mat-option 	*ngFor="let student of filteredStudents$ | async" 
+      				[value]="student"
+      				matTooltip="{{student.classes}} - {{ student.displayName }}">
+        {{student.classes}} - {{ student.displayName }}
+      </mat-option>
+    </mat-autocomplete>
+    <mat-hint>Selecteer een leerling door de naam of klas in te geven</mat-hint>
+ </mat-form-field>
+
+ <mat-form-field *ngIf="(screenType$ | async)==='phone'" class="full-width">  
+  <select matNativeControl
+  		placeholder="Selecteer klas" 
+  		[(ngModel)]="officialClass" (ngModelChange)="onSelectClass($event)">
+    <option *ngFor="let class of organisation.classes" [value]="class">
+      {{class}}
+    </option>
+  </select>
+</mat-form-field>
+<mat-form-field *ngIf="(screenType$ | async)==='phone'" class="full-width">  
+  <select matNativeControl
+  		placeholder="Selecteer leerling" 
+  		[(ngModel)]="student" (ngModelChange)="onSelectStudent($event)">
+      <option value=""></option>
+	    <option *ngFor="let student of filteredStudents" [value]="student.uid">
+	       {{student.displayName}} - {{student.classes}}
+	    </option>
+  </select>
+</mat-form-field>

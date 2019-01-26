@@ -12,15 +12,12 @@ import * as fromAssessment from '../assessment.reducer';
 import * as AssessmentAction from '../assessment.actions';
 
 import { UIService } from '../../shared/ui.service';
-import { Observable, Subscription } from 'rxjs';
+import { Observable, Subscription, of } from 'rxjs';
 
 import { CourseService } from '../../courses/course.service';
 import { Course } from '../../courses/course.model';
 
-import { ProjectService } from '../../projects/project.service';
 import { Project } from '../../projects/project.model';
-
-import { SkillService } from '../../skills/skill.service';
 import { Skill } from '../../skills/skill.model';
 
 import { EvaluationService } from '../../evaluations/evaluation.service';
@@ -37,6 +34,9 @@ import { Color } from '../../shared/color.model';
 
 import { SaveAssessmentComponent } from './save-assessment.component';
 import { Result } from '../result.model';
+
+import { SelectFormativeComponent } from './select-formative.component';
+import { Formative } from '../../formatives/formative.model';
 
 @Component({
   selector: 'app-course-overview',
@@ -56,25 +56,21 @@ export class CourseOverviewComponent implements OnInit, OnDestroy {
 
   selectSkillForm: FormGroup;
 
-  projects$: Observable<Project[]>;
-  starredProjects$: Observable<Project[]>;
-  skills$: Observable<Skill[]>;
+  skills: Skill[];
 
   hasSelectedSkill: boolean;
   selectedSkill: Skill;
   selectedProject: Project;
 
   behaviors: string[] = ["Normaal", "Snel"]
-  formBehavior: string = "Snel"
+  formBehavior: string = "Normaal"
   colors = Colors.evaluationColors;
   groupModel: any[] = [];
   results: Result[] = [];
 
-  screenType$: Observable<string>;
+  formative: Formative;
 
   constructor(	private courseService: CourseService,
-                private projectService: ProjectService,
-                private skillService: SkillService,
                 private evaluationService: EvaluationService,
   				      private store: Store<fromAssessment.State>,
                 private uiService: UIService,
@@ -84,17 +80,12 @@ export class CourseOverviewComponent implements OnInit, OnDestroy {
   ngOnInit() {
   	//get the loading state
     this.isLoading$ = this.store.select(fromRoot.getIsLoading);
-    //fetch the screen size 
-    this.screenType$ = this.store.select(fromRoot.getScreenType);
     //fetch the current user
     this.subs.push(this.store.select(fromRoot.getCurrentUser).subscribe(user => {
-        this.user = user;
-        this.subs.push(this.store.select(fromRoot.getCurrentOrganisation).subscribe(org => {
-            this.organisation = org;
-            //fetch the programs belonging to the organisation
-            this.projects$ = this.projectService.fetchExistingProjects(this.organisation,true);
-            this.starredProjects$ = this.projectService.fetchExistingProjects(this.organisation,false,this.user,true);
-        }));
+       this.user = user;
+    }));
+    this.subs.push(this.store.select(fromRoot.getCurrentOrganisation).subscribe(org => {
+      this.organisation = org;
     }));
     //get the current evaluation to be assessed by the teacher
     this.subs.push(this.store.select(fromAssessment.getActiveCourse).subscribe(course => {
@@ -114,18 +105,24 @@ export class CourseOverviewComponent implements OnInit, OnDestroy {
       project: new FormControl(null, Validators.required),
       skill: new FormControl(null, Validators.required)
     });
-    //listen to changes in the program form field and fetch available skills
-    this.selectSkillForm.get('project').valueChanges.subscribe(projectId => {
-      if(projectId){
-        this.skills$ = this.skillService.fetchSkills(null, projectId);
-      }
-    })
+    this.store.select(fromAssessment.getCurrentFormative).subscribe(formative => {
+      this.formative = formative;
+    });
   }
 
   ngOnDestroy(){
   	this.subs.forEach(sub=> {
   		sub.unsubscribe();
   	})
+  }
+
+  onSelectedProject(project){
+    this.selectSkillForm.get('project').setValue(project);
+    this.selectedProject = project;
+  }
+
+  onSelectedSkill(skill){
+    this.selectSkillForm.get('skill').setValue(skill);
   }
 
   onClose(){
@@ -200,6 +197,11 @@ export class CourseOverviewComponent implements OnInit, OnDestroy {
         teacherName: this.user.displayName,
         toBeAdded: !student.evaluation ? true : false
       };
+      if(this.formative){
+        newEvaluation.formative = this.formative.id;
+        newEvaluation.formativeName = this.formative.name;
+        newEvaluation.formativeDate = this.formative.date;
+      }
       return newEvaluation;
   }
 
@@ -228,14 +230,31 @@ export class CourseOverviewComponent implements OnInit, OnDestroy {
   }
 
   onSave(){
-    const dialogRef = this.dialog.open(SaveAssessmentComponent, {width: '300px', data: this.results});
+    const dialogRef = this.dialog.open(SaveAssessmentComponent, {width: '350px', data: this.results});
 
     dialogRef.afterClosed().subscribe(result => {
       if(result){
-        this.evaluationService.saveAssessments(this.results);
+        this.evaluationService.saveAssessments(this.results, this.formative);
         this.onReset();
       }
     });
+  }
+
+  onSelectFormative(){
+    //get the loading state
+    this.isLoading$ = of(false);
+    const dialogRef = this.dialog.open(SelectFormativeComponent, {width: '350px', data: this.user});
+
+    dialogRef.afterClosed().subscribe(result => {
+      if(result){
+        //get the loading state
+        this.isLoading$ = this.store.select(fromRoot.getIsLoading);
+      }
+    });
+  }
+
+  onRemoveFormative(){
+    this.store.dispatch(new AssessmentAction.UnsetFormative());
   }
 
 }

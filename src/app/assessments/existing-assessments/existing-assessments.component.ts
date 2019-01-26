@@ -12,8 +12,6 @@ import * as fromAssessment from '../assessment.reducer';
 import * as fromRoot from '../../app.reducer'; 
 import * as AssessmentAction from '../assessment.actions';
 
-import { CourseService } from '../../courses/course.service';
-import { Course } from '../../courses/course.model';
 
 @Component({
   selector: 'app-existing-assessments',
@@ -28,9 +26,7 @@ export class ExistingAssessmentsComponent implements OnInit, AfterViewInit, OnDe
   selection = new SelectionModel<Evaluation>(false, null);
   evaluations: Evaluation[];
   user: User;
-  courses: Course[];
   subs: Subscription[] = [];
-  selectedCourse: Course;
   filterValue: string;
 
   //slide toggle that allows teachers to display only non-evaluated items in the list
@@ -43,8 +39,7 @@ export class ExistingAssessmentsComponent implements OnInit, AfterViewInit, OnDe
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
   constructor(  private evaluationService: EvaluationService,
-                private store: Store<fromAssessment.State>,
-                private courseService: CourseService ) { }
+                private store: Store<fromAssessment.State> ) { }
   
   ngOnInit() {
     //get the loading state
@@ -63,9 +58,6 @@ export class ExistingAssessmentsComponent implements OnInit, AfterViewInit, OnDe
           //check if there is an active filter
           this.checkActiveFilter();
         })); 
-        this.subs.push(this.courseService.fetchUserCourses(user).subscribe(courses => {
-          this.courses = courses;
-        }))
       }
     }));
     // selection changed

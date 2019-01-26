@@ -77,8 +77,10 @@ export class SkillService {
 			})
 	}
 
-	fetchSkills(programId?: string, projectId?: string) : Observable<Skill[]> {
-		this.store.dispatch(new UI.StartLoading());
+	fetchSkills(programId?: string, projectId?: string, disableLoading?: boolean) : Observable<Skill[]> {
+		if(!disableLoading){
+			this.store.dispatch(new UI.StartLoading());	
+		}
 		var queryStr;
 		if(programId) {
 			queryStr = (ref => ref.where('program', '==', programId));
@@ -89,7 +91,9 @@ export class SkillService {
 		return this.db.collection('skills', queryStr)
 			.snapshotChanges().pipe(
 			map(docArray => {
-				this.store.dispatch(new UI.StopLoading());
+				if(!disableLoading){
+					this.store.dispatch(new UI.StopLoading());	
+				}
 				return docArray.map(doc => {
 						const data = doc.payload.doc.data() as Skill;
 						const id = doc.payload.doc.id;

@@ -11,6 +11,7 @@ import { CourseOverviewComponent } from './course-overview/course-overview.compo
 
 import { EditCommentsComponent } from './current-assessment/edit-comments.component';
 import { SaveAssessmentComponent } from './course-overview/save-assessment.component';
+import { SelectFormativeComponent } from './course-overview/select-formative.component';
 
 @NgModule({
 	declarations: [
@@ -19,13 +20,14 @@ import { SaveAssessmentComponent } from './course-overview/save-assessment.compo
 	    CurrentAssessmentComponent,
 	    CourseOverviewComponent,
 	    EditCommentsComponent,
-	    SaveAssessmentComponent
+	    SaveAssessmentComponent,
+	    SelectFormativeComponent
 	],
 	imports: [
 		SharedModule,
 		AssessmentRoutingModule,
 		StoreModule.forFeature('assessment', assessmentReducer)
 	],
-	entryComponents: [EditCommentsComponent, SaveAssessmentComponent]	
+	entryComponents: [EditCommentsComponent, SaveAssessmentComponent, SelectFormativeComponent]	
 })
 export class AssessmentModule {}

@@ -10,13 +10,9 @@
 		<form (ngSubmit)="onSubmit()" [formGroup]="selectProgramForm">
 
 			<mat-card-content>
-				<mat-form-field class="full-width">
-					<mat-select placeholder="Selecteer leerplan" formControlName="program">
-					    <mat-option *ngFor="let program of programs" [value]="program">
-					      {{program.code}} - {{ program.name }}
-					    </mat-option>
-					</mat-select>
-				</mat-form-field>
+				<input type="hidden" formControlName="program">
+				<app-program-select [user]="student" [organisation]="organisation" [relevantProgramsOnly]="true" 
+									(selectedProgram)="onSelectedProgram($event)"></app-program-select>
 				
 			</mat-card-content>
 			<mat-card-actions>

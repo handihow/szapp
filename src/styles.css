@@ -40,3 +40,6 @@ body {
   float: left;
 }
 
+.full-width {
+  width:100%;
+}

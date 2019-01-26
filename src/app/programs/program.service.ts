@@ -49,8 +49,11 @@ export class ProgramService {
 		})
 	}
 
-	fetchExistingPrograms(organisation: Organisation, activeOnly?: boolean, user?: User, starred?: boolean): Observable<Program[]> {
-		this.store.dispatch(new UI.StartLoading());
+	fetchExistingPrograms(organisation: Organisation, activeOnly?: boolean, 
+							user?: User, starred?: boolean, disableLoading?: boolean): Observable<Program[]> {
+		if(!disableLoading){
+			this.store.dispatch(new UI.StartLoading());	
+		}
 		var queryStr = (ref => ref.where('organisation', '==', organisation.id));
 		if(activeOnly){
 			queryStr = (ref => ref.where('organisation', '==', organisation.id).where('status', '==', "Actief"))
@@ -62,7 +65,9 @@ export class ProgramService {
 		return this.db.collection('programs', queryStr)
 			.snapshotChanges().pipe(
 			map(docArray => {
-				this.store.dispatch(new UI.StopLoading());
+				if(!disableLoading){
+					this.store.dispatch(new UI.StopLoading());	
+				}
 				return docArray.map(doc => {
 						const data = doc.payload.doc.data() as Program;
 						const id = doc.payload.doc.id;

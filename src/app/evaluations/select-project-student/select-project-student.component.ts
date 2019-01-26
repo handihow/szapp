@@ -28,6 +28,7 @@ import { AddStickerComponent } from './add-sticker.component';
 })
 export class SelectProjectStudentComponent implements OnInit, OnDestroy {
   
+  organisation: Organisation;
   user: User;
   isLoading$: Observable<boolean>;
   projects: Project[];
@@ -38,8 +39,6 @@ export class SelectProjectStudentComponent implements OnInit, OnDestroy {
   isTeacher: boolean;
   hasSelectedStudent$: Observable<boolean>;
   selectStudentForm: FormGroup;
-  students: User[];
-  filteredStudents: Observable<User[]>;
   studentForm: FormGroup;
   selectedStudent: User;
   evaluations: Evaluation[];
@@ -87,6 +86,7 @@ export class SelectProjectStudentComponent implements OnInit, OnDestroy {
     //get the current organisation and start fetching projects
     this.store.select(fromRoot.getCurrentOrganisation).subscribe(organisation => {
       if(organisation){
+        this.organisation = organisation;
         this.subs.push(this.projectService.fetchExistingProjects(organisation, true).subscribe(projects => {
           this.projects = projects;
           this.hasSelectedStudent$ = this.store.select(fromEvaluation.hasSelectedStudent);
@@ -129,32 +129,13 @@ export class SelectProjectStudentComponent implements OnInit, OnDestroy {
       }
   }
 
+  onSelectedStudent(student){
+    this.selectStudentForm.get('student').setValue(student);
+  }
+
   initializeTeacherView(user: User){
     //set the isTeacher variable to true
     this.isTeacher = true;
-    //start fetching students
-    this.subs.push(this.authService.fetchUsers(user.organisationId, "Leerling").subscribe(students => {
-      this.students = students.sort(this.sortStudents);
-      //filter students in the autocomplete form
-      this.filteredStudents = this.selectStudentForm.get("student").valueChanges
-        .pipe(
-          startWith<string | User>(''),
-          map(value => typeof value === 'string' ? value : value.displayName),
-          map(name => name ? this.filter(name) : this.students.slice())
-        );
-    }));
-  }
-
-  private sortStudents(A,B) {
-    if(!A.classes || !A.classes[0]){
-      return 1
-    } else if(!B.classes || !B.classes[0]){
-      return -1
-    } else if (A.classes[0] == B.classes[0]){
-      return (A.displayName > B.displayName) ? 1 : ((B.displayName > A.displayName) ? -1 : 0);
-    } else {
-      return (A.classes[0] > B.classes[0]) ? 1 : ((B.classes[0] > A.classes[0]) ? -1 : 0);  
-    }
   }
 
   updateProgressBarsAndStickers(user: User){
@@ -175,16 +156,6 @@ export class SelectProjectStudentComponent implements OnInit, OnDestroy {
         project.locked = false;
       }
     })
-  }
-
-  filter(userInput: string): User[] {
-    return this.students.filter(option =>
-      (option.displayName.toLowerCase().indexOf(userInput.toLowerCase()) === 0 
-          || (option.classes && option.classes.includes(userInput))));
-  }
-
-  displayFn(user?: User): string | undefined {
-    return user ? user.displayName : undefined;
   }
 
   onSelect(project){

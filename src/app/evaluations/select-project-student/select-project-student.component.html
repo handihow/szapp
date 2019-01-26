@@ -3,15 +3,9 @@
 <section fxLayout="column" fxLayoutAlign="center center" *ngIf="isTeacher && !(hasSelectedStudent$ | async)">
 	<h3>Selecteer een leerling</h3>
 	<form class="student-form" (ngSubmit)="onSubmit()" [formGroup]="selectStudentForm">
-	  <mat-form-field class="student-full-width">
-	    <input type="text" placeholder="Leerling" matInput formControlName="student" [matAutocomplete]="auto">
-	    <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
-	      <mat-option *ngFor="let student of filteredStudents | async" [value]="student">
-	        {{student.classes}} - {{ student.displayName }}
-	      </mat-option>
-	    </mat-autocomplete>
-	    <mat-hint>Selecteer een leerling door de naam of klas in te geven</mat-hint>
-	  </mat-form-field>
+	  	<input type="hidden" formControlName="student">
+		<app-student-select [organisation]="organisation" 
+							(selectedStudent)="onSelectedStudent($event)"></app-student-select>
 	  <button type="submit" mat-raised-button color="accent" [disabled]="selectStudentForm.invalid">Selecteren</button>
 	</form>
 </section>

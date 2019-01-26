@@ -6,15 +6,10 @@ import * as fromOverview from '../overview.reducer';
 import * as OverviewAction from '../overview.actions';
 
 import { Subscription, Observable } from 'rxjs';
-import { take, map, startWith } from 'rxjs/operators';
 
 import { Project } from '../../projects/project.model';
-import { ProjectService } from '../../projects/project.service';
-
 import { Program } from '../../programs/program.model';
-import { ProgramService } from '../../programs/program.service';
 
-import { AuthService } from '../../auth/auth.service';
 import { User } from '../../auth/user.model';
 import { Organisation } from '../../auth/organisation.model';
 
@@ -29,9 +24,10 @@ import { CourseService } from '../../courses/course.service';
 export class OverviewSelectProjectComponent implements OnInit, OnDestroy {
   
   user: User;
+  organisation: Organisation;
   isLoading$: Observable<boolean>;
   starredProjects$: Observable<Project[]>;
-  projects$: Observable<Project[]>;
+  projects: Project[];
   programs$: Observable<Program[]>;
   starredPrograms$: Observable<Program[]>;
   courses$: Observable<Course[]>;
@@ -39,14 +35,9 @@ export class OverviewSelectProjectComponent implements OnInit, OnDestroy {
   selectProjectForm: FormGroup;
   selectProgramForm: FormGroup;
   selectClassroomForm: FormGroup;
-  students: User[];
-  filteredStudents: Observable<User[]>;
   subs: Subscription[] = [];
 
   constructor(   private store: Store<fromOverview.State>,
-                 private authService: AuthService,
-                 private projectService: ProjectService,
-                 private programService: ProgramService,
                  private courseService: CourseService ) { }
 
   ngOnInit() {
@@ -55,6 +46,9 @@ export class OverviewSelectProjectComponent implements OnInit, OnDestroy {
       this.user = user;
       //get the courses related to the user
       this.courses$ = this.courseService.fetchUserCourses(user);
+    });
+    this.store.select(fromRoot.getCurrentOrganisation).subscribe(org => {
+      this.organisation = org;
     });
     this.isLoading$ = this.store.select(fromRoot.getIsLoading);
     //create the project input form
@@ -74,55 +68,12 @@ export class OverviewSelectProjectComponent implements OnInit, OnDestroy {
       course: new FormControl(null, Validators.required),
       program: new FormControl(null, Validators.required)
     })
-    //get the current organisation and start fetching projects
-    this.subs.push(this.store.select(fromRoot.getCurrentOrganisation).subscribe(organisation => {
-      if(organisation){
-        //get the projects
-        this.projects$ = this.projectService.fetchExistingProjects(organisation, true);
-        this.starredProjects$ = this.projectService.fetchExistingProjects(organisation,false,this.user,true);
-        this.programs$ = this.programService.fetchExistingPrograms(organisation, true);
-        this.starredPrograms$ = this.programService.fetchExistingPrograms(organisation,false,this.user,true);
-        this.subs.push(this.authService.fetchUsers(organisation.id, "Leerling").subscribe(students => {
-          this.students = students.sort(this.sortStudents); 
-          //filter students in the autocomplete form
-          this.filteredStudents = this.selectStudentForm.get("student").valueChanges
-            .pipe(
-              startWith<string | User>(''),
-              map(value => typeof value === 'string' ? value : value.displayName),
-              map(name => name ? this.filter(name) : this.students.slice())
-            );
-        }));
-      };
-    }))
-    
-  }
-
-  private sortStudents(A,B) {
-    if(!A.classes || !A.classes[0]){
-      return 1
-    } else if(!B.classes || !B.classes[0]){
-      return -1
-    } else if (A.classes[0] == B.classes[0]){
-      return (A.displayName > B.displayName) ? 1 : ((B.displayName > A.displayName) ? -1 : 0);
-    } else {
-      return (A.classes[0] > B.classes[0]) ? 1 : ((B.classes[0] > A.classes[0]) ? -1 : 0);  
-    }
   }
 
   ngOnDestroy(){
     this.subs.forEach(sub => {
       sub.unsubscribe();
     });
-  }
-
-  filter(userInput: string): User[] {
-    return this.students.filter(option =>
-      (option.displayName.toLowerCase().indexOf(userInput.toLowerCase()) === 0 
-          || (option.classes && option.classes.includes(userInput))));
-  }
-
-  displayFn(user?: User): string | undefined {
-    return user ? user.displayName : undefined;
   }
 
   onSubmitStudent(){
@@ -135,6 +86,26 @@ export class OverviewSelectProjectComponent implements OnInit, OnDestroy {
     this.store.dispatch(new OverviewAction.SelectProject(this.selectProjectForm.value.project));
     this.selectStudentForm.get("student").setValue("");
     this.selectProjectForm.reset();
+  }
+
+  onSelectedProject(project){
+    this.selectProjectForm.get('project').setValue(project);
+  }
+
+  onSelectedProgram(program){
+    this.selectProgramForm.get('program').setValue(program);
+  }
+
+  onSelectedProgramWithClassroom(program){
+    this.selectClassroomForm.get('program').setValue(program);
+  }
+
+  onSelectedCourse(course){
+    this.selectClassroomForm.get('course').setValue(course);
+  }
+
+  onSelectedStudent(student){
+    this.selectStudentForm.get('student').setValue(student);
   }
 
   onSubmitProgram(){

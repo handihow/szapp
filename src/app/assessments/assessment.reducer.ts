@@ -2,15 +2,17 @@ import { Action, createFeatureSelector, createSelector } from '@ngrx/store'
 import { Evaluation } from '../evaluations/evaluation.model';
 import { User } from '../auth/user.model';
 import { Course } from '../courses/course.model';
+import { Formative } from '../formatives/formative.model';
 
 import { AssessmentActions, START_ASSESSMENT, STOP_ASSESSMENT, START_COURSE, STOP_COURSE, 
-				SET_ASSESSMENT_FILTER, UNSET_ASSESSMENT_FILTER } from './assessment.actions';
+				SET_ASSESSMENT_FILTER, UNSET_ASSESSMENT_FILTER, SET_FORMATIVE, UNSET_FORMATIVE } from './assessment.actions';
 import * as fromRoot from '../app.reducer';
 
 export interface AssessmentState {
 	activeAssessment: Evaluation;
 	activeCourse: Course;
-	currentFilter: string
+	currentFilter: string;
+	currentFormative: Formative;
 }
 
 export interface State extends fromRoot.State{
@@ -20,7 +22,8 @@ export interface State extends fromRoot.State{
 const initialState: AssessmentState = {
 	activeAssessment: null,
 	activeCourse: null,
-	currentFilter: null
+	currentFilter: null,
+	currentFormative: null
 };
 
 export function assessmentReducer(state = initialState, action: AssessmentActions) {
@@ -55,6 +58,16 @@ export function assessmentReducer(state = initialState, action: AssessmentAction
 				...state,
 				currentFilter: null
 			}
+		case SET_FORMATIVE:
+			return {
+				...state,
+				currentFormative: action.payload
+			}
+		case UNSET_FORMATIVE:
+			return {
+				...state,
+				currentFormative: null
+			}
 		default: {
 			return state;
 		}
@@ -68,4 +81,5 @@ export const getIsEditingAssessment = createSelector(getAssessmentState, (state:
 export const getActiveCourse = createSelector(getAssessmentState, (state: AssessmentState) => state.activeCourse);
 export const getIsEditingCourse = createSelector(getAssessmentState, (state: AssessmentState) => state.activeCourse != null);
 export const getCurrentFilter = createSelector(getAssessmentState, (state: AssessmentState) => state.currentFilter);
+export const getCurrentFormative = createSelector(getAssessmentState, (state: AssessmentState) => state.currentFormative);
 

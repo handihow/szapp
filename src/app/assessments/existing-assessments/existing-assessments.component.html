@@ -1,17 +1,9 @@
 
 <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="20px"
 		fxLayout.lt-sm="column" fxLayoutAlign.lt-sm="center stretch" fxLayoutGap.lt-sm="10px" class="existing-assessments">
-	<mat-form-field>
-		<mat-select
-			[(ngModel)]="selectedCourse"
-	  		placeholder="Selecteer lesgroep"
-	  		(ngModelChange)="displayCourse($event)">
-	  		<mat-option>None</mat-option>
-		    <mat-option *ngFor="let course of courses" [value]="course">
-		      {{course.name}}
-		    </mat-option>
-		</mat-select>
-	</mat-form-field>
+	
+	<app-course-select [user]="user" (selectedCourse)="displayCourse($event)"></app-course-select>
+
 	<mat-form-field fxFlex.gt-sm="40%" *ngIf="!(isLoading$ | async)">
 		<input matInput type="text" [(ngModel)]="filterValue" (keyup)="doFilter($event.target.value)" placeholder="Filter">
 	</mat-form-field>

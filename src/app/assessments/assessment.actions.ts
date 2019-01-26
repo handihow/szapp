@@ -1,6 +1,7 @@
 import { Action } from '@ngrx/store'; 
 import { Evaluation } from '../evaluations/evaluation.model';
 import { Course } from '../courses/course.model';
+import { Formative } from '../formatives/formative.model';
 
 export const START_COURSE = '[Course] Start Course';
 export const STOP_COURSE = '[Course] Stop Course';
@@ -10,6 +11,9 @@ export const STOP_ASSESSMENT = '[Assessment] Stop Assessment';
 
 export const SET_ASSESSMENT_FILTER = '[String] Set Assessment Filter';
 export const UNSET_ASSESSMENT_FILTER = '[String] Unset Assessment Filter';
+
+export const SET_FORMATIVE = '[Formative] Set Formative'
+export const UNSET_FORMATIVE = '[Formative] UnSet Formative'
 
 export class StartCourse implements Action {
 	readonly type = START_COURSE;
@@ -43,5 +47,16 @@ export class UnsetAssessmentFilter implements Action {
 	readonly type = UNSET_ASSESSMENT_FILTER;
 }
 
-export type AssessmentActions = StartAssessment | StopAssessment | StartCourse | StopCourse | SetAssessmentFilter | UnsetAssessmentFilter;
+export class SetFormative implements Action {
+	readonly type = SET_FORMATIVE;
+
+	constructor(public payload: Formative){};
+}
+
+export class UnsetFormative implements Action {
+	readonly type = UNSET_FORMATIVE;
+}
+
+export type AssessmentActions = StartAssessment | StopAssessment | StartCourse | StopCourse | 
+									SetAssessmentFilter | UnsetAssessmentFilter | SetFormative | UnsetFormative;
 

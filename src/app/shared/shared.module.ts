@@ -23,6 +23,11 @@ import { FilesListComponent } from './files-list/files-list.component';
 import { ShowAttachmentsComponent } from './skills-expansion-panel/show-attachments.component';
 
 import { AngularFontAwesomeModule } from 'angular-font-awesome';
+import { ProjectSelectComponent } from './project-select/project-select.component';
+import { SkillSelectComponent } from './skill-select/skill-select.component';
+import { CourseSelectComponent } from './course-select/course-select.component';
+import { ProgramSelectComponent } from './program-select/program-select.component';
+import { StudentSelectComponent } from './student-select/student-select.component';
 
 @NgModule({
 	declarations: [
@@ -35,7 +40,12 @@ import { AngularFontAwesomeModule } from 'angular-font-awesome';
 		ShowHistoryComponent,
 		UploadComponent,
 		FilesListComponent,
-		RemoveEvaluationComponent
+		RemoveEvaluationComponent,
+		ProjectSelectComponent,
+		SkillSelectComponent,
+		CourseSelectComponent,
+		ProgramSelectComponent,
+		StudentSelectComponent
 	],
 	imports: [
 		CommonModule,
@@ -62,6 +72,11 @@ import { AngularFontAwesomeModule } from 'angular-font-awesome';
 		EvaluationCardComponent,
 		UploadComponent,
 		FilesListComponent,
+		ProjectSelectComponent,
+		SkillSelectComponent,
+		CourseSelectComponent,
+		ProgramSelectComponent,
+		StudentSelectComponent,
     	AngularFontAwesomeModule
 	],
 	entryComponents: [ShowFullImageComponent, ShowHistoryComponent, ShowAttachmentsComponent, RemoveEvaluationComponent]
