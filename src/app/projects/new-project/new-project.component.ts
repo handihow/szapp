@@ -116,12 +116,13 @@ export class NewProjectComponent implements OnInit {
   }
 
   generateCode(){
-    let year = this.projectForm.get('codeYear').value;
-    let place = this.projectForm.get('codePlace').value;
-    let course = this.projectForm.get('codeCourse').value;
-    let order = this.projectForm.get('codeOrder').value;
+    let year = this.projectForm.get('codeYear').valid;
+    let place = this.projectForm.get('codePlace').valid;
+    let course = this.projectForm.get('codeCourse').valid;
+    let order = this.projectForm.get('codeOrder').valid;
     if(year && place && course && order){
-      let code = year + " " + place + " " + course + " " + order 
+      let code = this.projectForm.get('codeYear').value + " " + this.projectForm.get('codePlace').value.toUpperCase() + " " 
+            + this.projectForm.get('codeCourse').value.toUpperCase() + " " + this.projectForm.get('codeOrder').value; 
       this.projectForm.get('code').setValue(code);
     } else {
       this.uiService.showSnackbar("Completeer eerst de vier velden om de code te genereren", null, 3000);
