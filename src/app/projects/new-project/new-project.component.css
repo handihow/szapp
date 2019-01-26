@@ -2,6 +2,7 @@
 	padding: 30px;
 }
 
-.full-width {
-	width: 100%;
+.quarter-width {
+	width: 20%;
+	margin: 4px;
 }

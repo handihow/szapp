@@ -12,11 +12,11 @@
 }
 
 .mat-column-code {
-  flex: 1;
+  flex: 2;
 }
 
 .mat-column-subjects {
-  flex: 4;
+  flex: 3;
 }
 
 .mat-column-classes {

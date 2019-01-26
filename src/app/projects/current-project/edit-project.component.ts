@@ -39,7 +39,11 @@ export class EditProjectComponent implements OnInit {
 		//create the edit project form
 		this.projectForm = new FormGroup({
 	      name: new FormControl(null, Validators.required),
-	      code: new FormControl(null, Validators.required),
+	      code: new FormControl(null, Validators.compose([
+                  Validators.required,
+                  Validators.minLength(19),
+                  Validators.maxLength(19)
+                ])),
 	      classes: new FormControl(null, Validators.required),
 	      subjects: new FormControl(null, Validators.required),
 	      status: new FormControl(null, Validators.required),

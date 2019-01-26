@@ -7,7 +7,7 @@
 		</mat-form-field>
 		<mat-form-field class="full-width">
 		   <input matInput placeholder="Code" formControlName="code" required>
-		   <mat-error>Vul de code van het project in</mat-error>
+		   <mat-error>Code moet bestaan uit 19 karakters - XXXX XXXX XXXX XXXX</mat-error>
 		</mat-form-field>
 		<mat-form-field class="full-width">  
 		  <mat-select 
@@ -64,7 +64,7 @@
 		</mat-form-field>
 	</mat-dialog-content>
 	<mat-dialog-actions>
-		<button type="submit" mat-raised-button color="primary">Bewaren</button>
+		<button type="submit" mat-raised-button color="primary" [disabled]="projectForm.invalid">Bewaren</button>
 		<button type="button" mat-raised-button color="accent" [mat-dialog-close]="false">Terug</button>
 	</mat-dialog-actions>
 </form>

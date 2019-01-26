@@ -9,10 +9,30 @@
 				   <input matInput placeholder="Naam" formControlName="name" required>
 				   <mat-error>Vul de naam van het project in</mat-error>
 				</mat-form-field>
+				<div>
+					<mat-form-field class="quarter-width">
+					   <input matInput placeholder="Jaar" formControlName="codeYear" required type="number">
+					   <mat-error>4 cijfers</mat-error>
+					</mat-form-field>
+					<mat-form-field class="quarter-width">
+					   <input matInput placeholder="Plaats" formControlName="codePlace" required>
+					   <mat-error>4 letters</mat-error>
+					</mat-form-field>
+					<mat-form-field class="quarter-width">
+					   <input matInput placeholder="Lesgroep" formControlName="codeCourse" required>
+					   <mat-error>4 karakters</mat-error>
+					</mat-form-field>
+					<mat-form-field class="quarter-width">
+					   <input matInput placeholder="Volgorde" formControlName="codeOrder" required type="number">
+					   <mat-error>4 cijfers</mat-error>
+					</mat-form-field>
+					<button mat-icon-button (click)="generateCode()" type="button">
+						<mat-icon>build</mat-icon>
+					</button>
+				</div>
 				<mat-form-field class="full-width">
 				   <input matInput placeholder="Code" formControlName="code" required>
-				   <mat-hint>Zoek het project sneller met een code</mat-hint>
-				   <mat-error>Vul de code van het project in</mat-error>
+				   <mat-error>Code moet bestaan uit 19 karakters - XXXX XXXX XXXX XXXX</mat-error>
 				</mat-form-field>
 				<mat-form-field class="full-width">  
 				  <mat-select 

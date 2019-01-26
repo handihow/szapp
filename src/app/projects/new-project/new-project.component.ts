@@ -56,7 +56,31 @@ export class NewProjectComponent implements OnInit {
     //create the project form
     this.projectForm = new FormGroup({
       name: new FormControl(null, Validators.required),
-      code: new FormControl(null, Validators.required),
+      codeYear: new FormControl(null, Validators.compose([
+                  Validators.required,
+                  Validators.minLength(4),
+                  Validators.maxLength(4)
+                ])),
+      codePlace: new FormControl(null, Validators.compose([
+                  Validators.required,
+                  Validators.minLength(4),
+                  Validators.maxLength(4)
+                ])),
+      codeCourse: new FormControl(null, Validators.compose([
+                  Validators.required,
+                  Validators.minLength(4),
+                  Validators.maxLength(4)
+                ])),
+      codeOrder: new FormControl(null, Validators.compose([
+                  Validators.required,
+                  Validators.minLength(4),
+                  Validators.maxLength(4)
+                ])),
+      code: new FormControl({value: null, disabled: true}, Validators.compose([
+                  Validators.required,
+                  Validators.minLength(19),
+                  Validators.maxLength(19)
+                ])),
       classes: new FormControl(null, Validators.required),
       subjects: new FormControl(null, Validators.required),
       color: new FormControl(null, Validators.required),
@@ -72,6 +96,7 @@ export class NewProjectComponent implements OnInit {
   }
 
   onSubmit(){
+    this.projectForm.get('code').enable();
     let codes = this.projects.map(v => v.code);
     let project : Project = {
       name: this.projectForm.value.name,
@@ -88,6 +113,20 @@ export class NewProjectComponent implements OnInit {
     } else {
       this.projectService.startProject(project)
     }
+  }
+
+  generateCode(){
+    let year = this.projectForm.get('codeYear').value;
+    let place = this.projectForm.get('codePlace').value;
+    let course = this.projectForm.get('codeCourse').value;
+    let order = this.projectForm.get('codeOrder').value;
+    if(year && place && course && order){
+      let code = year + " " + place + " " + course + " " + order 
+      this.projectForm.get('code').setValue(code);
+    } else {
+      this.uiService.showSnackbar("Completeer eerst de vier velden om de code te genereren", null, 3000);
+    }
+    
   }
 
 }
