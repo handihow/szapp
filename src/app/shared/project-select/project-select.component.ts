@@ -20,6 +20,7 @@ export class ProjectSelectComponent implements OnInit, OnDestroy {
   projects: Project[];
   starredProjects$: Observable<Project[]>;
   selectedProjectId: string;
+  @Input() resetTrigger: boolean;
   @Input() user: User;
   @Input() organisation: Organisation;
   @Output() selectedProject = new EventEmitter<Project>();
@@ -40,6 +41,12 @@ export class ProjectSelectComponent implements OnInit, OnDestroy {
   selectProject(projectId){
     let project = this.projects.find(project => project.id === projectId);
     this.selectedProject.emit(project);
+  }
+
+  ngOnChanges(){
+    if(this.resetTrigger){
+      this.selectedProjectId = null;
+    }
   }
 
   ngOnDestroy(){

@@ -17,7 +17,8 @@ export class SkillSelectComponent implements OnInit {
   
   screenType$: Observable<string>;
   skills: Skill[];
-  skillId: string;
+  selectedSkillId: string;
+  @Input() resetTrigger: boolean;
   @Input() project: Project;
   @Output() selectedSkill = new EventEmitter<Skill>();
   sub: Subscription;
@@ -37,6 +38,9 @@ export class SkillSelectComponent implements OnInit {
   	} else {
   		this.cancelSubscription();
   	}	
+    if(this.resetTrigger){
+      this.selectedSkillId = null;
+    }
   }
 
   ngOnDestroy(){
@@ -45,8 +49,8 @@ export class SkillSelectComponent implements OnInit {
 
   private cancelSubscription(){
   	if(this.sub){
-		this.sub.unsubscribe()
-	}
+		  this.sub.unsubscribe()
+	  }
   }
 
   selectSkill(skillId){

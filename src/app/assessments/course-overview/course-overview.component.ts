@@ -61,6 +61,8 @@ export class CourseOverviewComponent implements OnInit, OnDestroy {
   hasSelectedSkill: boolean;
   selectedSkill: Skill;
   selectedProject: Project;
+  resetProject: boolean;
+  resetSkill: boolean;
 
   behaviors: string[] = ["Normaal", "Snel"]
   formBehavior: string = "Normaal"
@@ -117,11 +119,13 @@ export class CourseOverviewComponent implements OnInit, OnDestroy {
   }
 
   onSelectedProject(project){
+    this.resetProject = false;
     this.selectSkillForm.get('project').setValue(project);
     this.selectedProject = project;
   }
 
   onSelectedSkill(skill){
+    this.resetSkill = false;
     this.selectSkillForm.get('skill').setValue(skill);
   }
 
@@ -151,7 +155,8 @@ export class CourseOverviewComponent implements OnInit, OnDestroy {
     this.courseStudents.forEach(student => {
       student.evaluation = null;
     })
-    this.selectSkillForm.reset();
+    this.resetProject = true;
+    this.resetSkill = true;
     this.courseStudents.forEach( ( _ , index) => {
       this.groupModel[index] = null
     })

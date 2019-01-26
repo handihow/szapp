@@ -10,12 +10,13 @@
 				<mat-spinner *ngIf="isLoading$ | async"></mat-spinner>
 				<div fxFlex.gt-xs="30">
 					<input type="hidden" formControlName="project">
-					<app-project-select [user]="user" [organisation]="organisation" 
+					<app-project-select [user]="user" [organisation]="organisation" [resetTrigger]="resetProject" 
 										(selectedProject)="onSelectedProject($event)"></app-project-select>
 				</div>
 				<div fxFlex.gt-xs="70">
 					<input type="hidden" formControlName="skill">
-					<app-skill-select [project]="selectedProject" (selectedSkill)="onSelectedSkill($event)"></app-skill-select>
+					<app-skill-select [project]="selectedProject" [resetTrigger]="resetSkill" 
+										(selectedSkill)="onSelectedSkill($event)"></app-skill-select>
 				</div>
 			</mat-card-content>
 			<mat-card-actions>
