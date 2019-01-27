@@ -55,8 +55,6 @@ export class ExistingAssessmentsComponent implements OnInit, AfterViewInit, OnDe
         this.subs.push(this.evaluationService.fetchExistingEvaluations(user,null,null,false,true,true).subscribe(evaluations => {
           this.evaluations = evaluations;
           this.dataSource.data = this.evaluations;
-          //check if there is an active filter
-          this.checkActiveFilter();
         })); 
       }
     }));
@@ -68,6 +66,8 @@ export class ExistingAssessmentsComponent implements OnInit, AfterViewInit, OnDe
             this.store.dispatch(new AssessmentAction.StartAssessment(selectedEvaluation.added[0]))
         }
     });
+    //check if there is an active filter
+    this.checkActiveFilter();
   }
 
   //when view is loaded, initialize the sorting and paginator

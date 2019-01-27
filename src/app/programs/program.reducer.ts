@@ -1,11 +1,12 @@
 import { Action, createFeatureSelector, createSelector } from '@ngrx/store'
 import { Program } from './program.model';
 
-import { ProgramActions, START_PROGRAM, STOP_PROGRAM } from './program.actions';
+import { ProgramActions, START_PROGRAM, STOP_PROGRAM, SET_PROGRAM_FILTER, UNSET_PROGRAM_FILTER } from './program.actions';
 import * as fromRoot from '../app.reducer';
 
 export interface ProgramState {
 	activeProgram: Program;
+	programFilter: string;
 }
 
 export interface State extends fromRoot.State{
@@ -14,6 +15,7 @@ export interface State extends fromRoot.State{
 
 const initialState: ProgramState = {
 	activeProgram: null,
+	programFilter: null,
 };
 
 export function programReducer(state = initialState, action: ProgramActions) {
@@ -28,6 +30,16 @@ export function programReducer(state = initialState, action: ProgramActions) {
 				...state,
 				activeProgram: null,
 			}
+		case SET_PROGRAM_FILTER:
+			return {
+				...state,
+				programFilter: action.payload
+			}
+		case UNSET_PROGRAM_FILTER:
+			return {
+				...state,
+				programFilter: null
+			}
 		default: {
 			return state;
 		}
@@ -37,4 +49,5 @@ export function programReducer(state = initialState, action: ProgramActions) {
 export const getProgramState = createFeatureSelector<ProgramState>('program');
 
 export const getActiveProgram = createSelector(getProgramState, (state: ProgramState) => state.activeProgram);
+export const getProgramFilter = createSelector(getProgramState, (state: ProgramState) => state.programFilter);
 export const getIsEditingProgram = createSelector(getProgramState, (state: ProgramState) => state.activeProgram != null);

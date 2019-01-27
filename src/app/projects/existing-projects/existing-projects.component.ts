@@ -10,6 +10,7 @@ import { Project } from '../project.model';
 import { ProjectService } from '../project.service';
 import * as fromProject from '../project.reducer';
 import * as fromRoot from '../../app.reducer'; 
+import * as ProjectAction from '../project.actions';
 
 import { Angular2CsvComponent } from 'angular2-csv';
 
@@ -27,12 +28,13 @@ export class ExistingProjectsComponent implements OnInit, AfterViewInit, OnDestr
 
   data: any;
   options: any;
+  filterValue: string;
 
   //slide toggle that shows archived programs
   showArchived: boolean;
 
   projects: Project[];
-  sub: Subscription;
+  subs: Subscription[] = [];
 
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -53,10 +55,12 @@ export class ExistingProjectsComponent implements OnInit, AfterViewInit, OnDestr
     this.store.select(fromRoot.getCurrentOrganisation).subscribe(async organisation => {
       if(organisation){
         //get the projects
-        this.sub = this.projectService.fetchExistingProjects(organisation).subscribe(projects => {
+        this.subs.push(this.projectService.fetchExistingProjects(organisation).subscribe(projects => {
            this.projects = projects;
            this.onChange();
-        });
+           //check if there is an active filter
+          this.checkActiveFilter();
+        }));
       };
     })
     // selection changed
@@ -76,12 +80,24 @@ export class ExistingProjectsComponent implements OnInit, AfterViewInit, OnDestr
   }
 
   ngOnDestroy() {
-    this.sub.unsubscribe();
+    this.subs.forEach(sub => {
+       sub.unsubscribe() 
+    });
   }
 
   //filter the table based on user input
   doFilter(filterValue: string) {
   	this.dataSource.filter = filterValue.trim().toLowerCase();
+    this.store.dispatch(new ProjectAction.SetProjectFilter(filterValue));
+  }
+
+  checkActiveFilter(){
+    this.subs.push(this.store.select(fromProject.getActiveFilter).subscribe(filter => {
+        if(filter){
+          this.filterValue = filter;
+          this.doFilter(filter);
+        }
+      }));
   }
 
   //set the displayed columns of the table depending on the size of the display

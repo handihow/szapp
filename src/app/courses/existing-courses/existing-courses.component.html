@@ -1,7 +1,7 @@
 <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="20px"
 		fxLayout.lt-md="column" fxLayoutAlign.lt-md="center stretch" fxLayoutGap.lt-md="10px" class="existing-courses">
 	<mat-form-field fxFlex="40%" *ngIf="!(isLoading$ | async)">
-		<input matInput type="text" (keyup)="doFilter($event.target.value)" placeholder="Filter">
+		<input matInput type="text" (keyup)="doFilter($event.target.value)" placeholder="Filter" [(ngModel)]="filterValue">
 	</mat-form-field>
 	<div>
 		<mat-slide-toggle color="primary" [(ngModel)]="showArchived" (ngModelChange)="onChange()">

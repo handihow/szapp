@@ -10,6 +10,7 @@ import { Course } from '../course.model';
 import { CourseService } from '../course.service';
 import * as fromCourse from '../course.reducer';
 import * as fromRoot from '../../app.reducer'; 
+import * as CourseAction from '../course.actions';
 
 @Component({
   selector: 'app-existing-courses',
@@ -30,7 +31,7 @@ export class ExistingCoursesComponent implements OnInit, AfterViewInit, OnDestro
   sub: Subscription;
   options: any;
   data: any;
-
+  filterValue: string;
   screenType: string;
 
   @ViewChild(MatSort) sort: MatSort;
@@ -67,6 +68,8 @@ export class ExistingCoursesComponent implements OnInit, AfterViewInit, OnDestro
             this.courseService.editCourse(selectedCourse.added[0]);
         }
     });
+    //check if there is an active filter
+    this.checkActiveFilter();
   }
 
   ngOnDestroy() {
@@ -82,6 +85,16 @@ export class ExistingCoursesComponent implements OnInit, AfterViewInit, OnDestro
   //filter the table based on user input
   doFilter(filterValue: string) {
   	this.dataSource.filter = filterValue.trim().toLowerCase();
+    this.store.dispatch(new CourseAction.SetCourseFilter(filterValue));
+  }
+
+  checkActiveFilter(){
+    this.store.select(fromCourse.getCourseFilter).subscribe(filter => {
+      if(filter){
+        this.filterValue = filter;
+        this.doFilter(filter);
+      }
+    });
   }
 
   //set the displayed columns of the table depending on the size of the display

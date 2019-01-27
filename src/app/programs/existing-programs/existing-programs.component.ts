@@ -10,6 +10,7 @@ import { Program } from '../program.model';
 import { ProgramService } from '../program.service';
 import * as fromProgram from '../program.reducer';
 import * as fromRoot from '../../app.reducer'; 
+import * as ProgramAction from '../program.actions';
 
 import { Angular2CsvComponent } from 'angular2-csv';
 
@@ -25,6 +26,7 @@ export class ExistingProgramsComponent implements OnInit, AfterViewInit, OnDestr
   dataSource = new MatTableDataSource<Program>();
   selection = new SelectionModel<Program>(false, null);
 
+  filterValue: string;
   options: any;
   data: any;
 
@@ -71,6 +73,8 @@ export class ExistingProgramsComponent implements OnInit, AfterViewInit, OnDestr
             this.programService.editProgram(selectedProgram.added[0]);
         }
     });
+    //check if there is an active filter
+    this.checkActiveFilter();
   }
 
   ngOnDestroy() {
@@ -86,6 +90,7 @@ export class ExistingProgramsComponent implements OnInit, AfterViewInit, OnDestr
   //filter the table based on user input
   doFilter(filterValue: string) {
   	this.dataSource.filter = filterValue.trim().toLowerCase();
+    this.store.dispatch(new ProgramAction.SetProgramFilter(filterValue));
   }
 
   //set the displayed columns of the table depending on the size of the display
@@ -97,6 +102,15 @@ export class ExistingProgramsComponent implements OnInit, AfterViewInit, OnDestr
     } else {
       this.displayedColumns = ['name', 'code'];
     }
+  }
+
+  checkActiveFilter(){
+    this.store.select(fromProgram.getProgramFilter).subscribe(filter => {
+      if(filter){
+        this.filterValue = filter;
+        this.doFilter(filter);
+      }
+    });
   }
 
   onChange(){
