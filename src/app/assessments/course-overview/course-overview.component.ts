@@ -150,17 +150,19 @@ export class CourseOverviewComponent implements OnInit, OnDestroy {
     })
   }
 
-  onReset(){
+  onReset(dontResetProject?: boolean){
     this.hasSelectedSkill = false;
     this.courseStudents.forEach(student => {
       student.evaluation = null;
     })
-    this.resetProject = true;
-    this.resetSkill = true;
     this.courseStudents.forEach( ( _ , index) => {
       this.groupModel[index] = null
     })
     this.results = [];
+    if(!dontResetProject){
+      this.resetProject = true;
+      this.resetSkill = true;
+    }
   }
 
   onStartAssessment(student: User){  
@@ -240,7 +242,7 @@ export class CourseOverviewComponent implements OnInit, OnDestroy {
     dialogRef.afterClosed().subscribe(result => {
       if(result){
         this.evaluationService.saveAssessments(this.results, this.formative);
-        this.onReset();
+        this.onReset(true);
       }
     });
   }
