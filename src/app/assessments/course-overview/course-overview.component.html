@@ -49,10 +49,7 @@
 			  </mat-radio-button>
 			</mat-radio-group>
 			<div *ngIf="formative">
-				<h4>
-					{{formative.date.toDate() | date : 'dd-MM-yyyy' }} -- {{formative.name}}
-				</h4>
-				{{formative.tags}} 
+				{{formative.date.toDate() | date : 'dd-MM-yyyy' }} -- {{formative.name}}
 				<button mat-icon-button (click)="onRemoveFormative()">
 					<mat-icon>clear</mat-icon>
 				</button>

@@ -14,7 +14,6 @@ import { User } from '../../auth/user.model';
 import { Organisation } from '../../auth/organisation.model';
 
 import { Course } from '../../courses/course.model';
-import { CourseService } from '../../courses/course.service';
 
 @Component({
   selector: 'app-overview-select-project',
@@ -35,17 +34,16 @@ export class OverviewSelectProjectComponent implements OnInit, OnDestroy {
   selectProjectForm: FormGroup;
   selectProgramForm: FormGroup;
   selectClassroomForm: FormGroup;
+  selectFormativeForm: FormGroup;
+  selectClassroomReportForm: FormGroup;
   subs: Subscription[] = [];
 
-  constructor(   private store: Store<fromOverview.State>,
-                 private courseService: CourseService ) { }
+  constructor(   private store: Store<fromOverview.State> ) { }
 
   ngOnInit() {
     //get the current user and isLoading state
     this.store.select(fromRoot.getCurrentUser).subscribe(user => {
       this.user = user;
-      //get the courses related to the user
-      this.courses$ = this.courseService.fetchUserCourses(user);
     });
     this.store.select(fromRoot.getCurrentOrganisation).subscribe(org => {
       this.organisation = org;
@@ -67,6 +65,14 @@ export class OverviewSelectProjectComponent implements OnInit, OnDestroy {
     this.selectClassroomForm = new FormGroup({
       course: new FormControl(null, Validators.required),
       program: new FormControl(null, Validators.required)
+    });
+    //create the formative input form
+    this.selectFormativeForm = new FormGroup({
+      formative: new FormControl(null, Validators.required)
+    })
+    //create the select classroom for report form
+    this.selectClassroomReportForm = new FormGroup({
+      course: new FormControl(null, Validators.required)
     })
   }
 
@@ -88,6 +94,14 @@ export class OverviewSelectProjectComponent implements OnInit, OnDestroy {
     this.selectProjectForm.reset();
   }
 
+  onSubmitFormative(){
+    console.log(this.selectFormativeForm.value.formative);
+  }
+
+  onSubmitClassroomReport(){
+    console.log(this.selectClassroomReportForm.value.course);
+  }
+
   onSelectedProject(project){
     this.selectProjectForm.get('project').setValue(project);
   }
@@ -102,6 +116,14 @@ export class OverviewSelectProjectComponent implements OnInit, OnDestroy {
 
   onSelectedCourse(course){
     this.selectClassroomForm.get('course').setValue(course);
+  }
+
+  onSelectedCourseReport(course){
+    this.selectClassroomReportForm.get('course').setValue(course);
+  }
+
+  onSelectedFormative(formative){
+    this.selectFormativeForm.get('formative').setValue(formative);
   }
 
   onSelectedStudent(student){

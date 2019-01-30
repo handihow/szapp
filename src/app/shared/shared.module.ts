@@ -28,6 +28,7 @@ import { SkillSelectComponent } from './skill-select/skill-select.component';
 import { CourseSelectComponent } from './course-select/course-select.component';
 import { ProgramSelectComponent } from './program-select/program-select.component';
 import { StudentSelectComponent } from './student-select/student-select.component';
+import { FormativeSelectComponent } from './formative-select/formative-select.component';
 
 @NgModule({
 	declarations: [
@@ -45,7 +46,8 @@ import { StudentSelectComponent } from './student-select/student-select.componen
 		SkillSelectComponent,
 		CourseSelectComponent,
 		ProgramSelectComponent,
-		StudentSelectComponent
+		StudentSelectComponent,
+		FormativeSelectComponent
 	],
 	imports: [
 		CommonModule,
@@ -77,7 +79,8 @@ import { StudentSelectComponent } from './student-select/student-select.componen
 		CourseSelectComponent,
 		ProgramSelectComponent,
 		StudentSelectComponent,
-    	AngularFontAwesomeModule
+    	AngularFontAwesomeModule,
+    	FormativeSelectComponent
 	],
 	entryComponents: [ShowFullImageComponent, ShowHistoryComponent, ShowAttachmentsComponent, RemoveEvaluationComponent]
 })

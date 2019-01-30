@@ -1,0 +1,26 @@
+<mat-form-field class="full-width" *ngIf="(screenType$ | async)!=='phone'" class="full-width">  
+	<mat-select 
+		placeholder="Selecteer formatief" 
+		[(ngModel)]="selectedFormativeId"
+		(ngModelChange)="selectFormative($event)"
+		required>
+		<mat-option *ngFor="let formative of formatives" [value]="formative.id">
+			{{formative.date.toDate() | date : 'dd-MM-yyyy'}} -- {{formative.name}} 
+		</mat-option>
+	</mat-select>
+	<mat-error>Selecteer formatief</mat-error>
+</mat-form-field>
+<mat-form-field class="full-width" *ngIf="(screenType$ | async)==='phone'" class="full-width">  
+	<select 
+		matNativeControl
+		placeholder="Selecteer formatief" 
+		[(ngModel)]="selectedFormativeId"
+		(ngModelChange)="selectFormative($event)"
+		required>
+		<option value=""></option>
+		<option *ngFor="let formative of formatives" [value]="formative.id">
+			{{formative.date.toDate() | date : 'dd-MM-yyyy'}} -- {{formative.name}} 
+		</option>
+	</select>
+	<mat-error>Selecteer formatief</mat-error>
+</mat-form-field>

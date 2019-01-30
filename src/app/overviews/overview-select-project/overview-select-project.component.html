@@ -75,4 +75,41 @@
 		</form>
 	</mat-card>
 
+	<!-- per formative -->
+	<mat-card>
+		<mat-card-header>
+		    <mat-card-title>Formatief</mat-card-title>
+		    <mat-card-subtitle>Overzicht per formatief (in aanbouw)</mat-card-subtitle>
+		    <img mat-card-avatar src="https://cdn.pixabay.com/photo/2013/07/12/14/06/construction-work-147759_960_720.png">
+		</mat-card-header>
+		<form (ngSubmit)="onSubmitFormative()" [formGroup]="selectFormativeForm">
+			<mat-card-content>
+				<input type="hidden" formControlName="formative">
+				<app-formative-select [user]="user" 
+									(selectedFormative)="onSelectedFormative($event)"></app-formative-select>
+			</mat-card-content>
+			<mat-card-actions>
+				<button type="submit" mat-raised-button color="accent" [disabled]="selectFormativeForm.invalid">Selecteren</button>
+			</mat-card-actions>		
+		</form>
+	</mat-card>
+
+	<!-- per course -->
+	<mat-card >
+		<mat-card-header>
+		    <mat-card-title>Lesgroep</mat-card-title>
+		    <mat-card-subtitle>Rapport van lesgroep (in aanbouw)</mat-card-subtitle>
+		    <img mat-card-avatar src="https://cdn.pixabay.com/photo/2013/07/12/14/06/construction-work-147759_960_720.png">
+		</mat-card-header>
+		<form (ngSubmit)="onSubmitClassroomReport()" [formGroup]="selectClassroomReportForm">
+			<mat-card-content>
+				<input type="hidden" formControlName="course">
+				<app-course-select [user]="user" (selectedCourse)="onSelectedCourseReport($event)"></app-course-select>
+			</mat-card-content>
+			<mat-card-actions>
+				<button type="submit" mat-raised-button color="accent" [disabled]="selectClassroomReportForm.invalid">Selecteren</button>
+			</mat-card-actions>	
+		</form>
+	</mat-card>
+
 </section>

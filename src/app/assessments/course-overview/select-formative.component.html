@@ -1,34 +1,12 @@
 <h1 mat-dialog-title>Selecteer formatief</h1>
 <form [formGroup]="formativeForm" (ngSubmit)="onSubmit()">
 	<mat-dialog-content>
-		<mat-form-field class="full-width" *ngIf="(screenType$ | async)!=='phone'" class="full-width">  
-			<mat-select 
-				matNativeControl
-				placeholder="Selecteer formatief" 
-				formControlName="formative"
-				required>
-				<mat-option *ngFor="let formative of formatives" [value]="formative.id">
-					{{formative.date.toDate() | date : 'dd-MM-yyyy'}} -- {{formative.name}} 
-				</mat-option>
-			</mat-select>
-			<mat-error>Selecteer formatief</mat-error>
-		</mat-form-field>
-		<mat-form-field class="full-width" *ngIf="(screenType$ | async)==='phone'" class="full-width">  
-			<select 
-				matNativeControl
-				placeholder="Selecteer formatief" 
-				formControlName="formative"
-				required>
-				<option value=""></option>
-				<option *ngFor="let formative of formatives" [value]="formative.id">
-					{{formative.date.toDate() | date : 'dd-MM-yyyy'}} -- {{formative.name}} 
-				</option>
-			</select>
-			<mat-error>Selecteer formatief</mat-error>
-		</mat-form-field>
+		<input type="hidden" formControlName="formative">
+		<app-formative-select [user]="passedData"
+			(selectedFormative)="onSelectedFormative($event)"></app-formative-select>
 	</mat-dialog-content>
 	<mat-dialog-actions>
 		<button mat-button color="warn" type="button" [mat-dialog-close]="true">Annuleren</button>
-		<button mat-button color="primary" type="submit">Bewaren</button>
+		<button mat-button color="primary" type="submit" [disabled]="formativeForm.invalid">Bewaren</button>
 	</mat-dialog-actions>
 </form>

@@ -107,9 +107,11 @@ export class CourseOverviewComponent implements OnInit, OnDestroy {
       project: new FormControl(null, Validators.required),
       skill: new FormControl(null, Validators.required)
     });
-    this.store.select(fromAssessment.getCurrentFormative).subscribe(formative => {
+    //get the formative
+    this.subs.push(this.store.select(fromAssessment.getCurrentFormative).subscribe(formative => {
       this.formative = formative;
-    });
+    }));
+
   }
 
   ngOnDestroy(){

@@ -5,7 +5,7 @@ import { Course } from '../courses/course.model';
 import { Formative } from '../formatives/formative.model';
 
 import { AssessmentActions, START_ASSESSMENT, STOP_ASSESSMENT, START_COURSE, STOP_COURSE, 
-				SET_ASSESSMENT_FILTER, UNSET_ASSESSMENT_FILTER, SET_FORMATIVE, UNSET_FORMATIVE } from './assessment.actions';
+				SET_ASSESSMENT_FILTER, UNSET_ASSESSMENT_FILTER, SET_FORMATIVE, UNSET_FORMATIVE} from './assessment.actions';
 import * as fromRoot from '../app.reducer';
 
 export interface AssessmentState {
@@ -23,7 +23,7 @@ const initialState: AssessmentState = {
 	activeAssessment: null,
 	activeCourse: null,
 	currentFilter: null,
-	currentFormative: null
+	currentFormative: null,
 };
 
 export function assessmentReducer(state = initialState, action: AssessmentActions) {
@@ -47,6 +47,16 @@ export function assessmentReducer(state = initialState, action: AssessmentAction
 			return {
 				...state,
 				activeAssessment: null
+			}
+		case SET_ASSESSMENT_FILTER:
+			return {
+				...state,
+				currentFilter: action.payload
+			}
+		case UNSET_ASSESSMENT_FILTER:
+			return {
+				...state,
+				currentFilter: null
 			}
 		case SET_ASSESSMENT_FILTER:
 			return {

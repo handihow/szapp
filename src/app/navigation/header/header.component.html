@@ -13,13 +13,13 @@
 		<!-- Student links -->
 		<ul fxLayout fxLayoutGap="10px" class="navigation-items" fxHide fxShow.gt-xs>
 			<li *ngIf="isTeacher$ | async">
-				<a routerLink="/assessments">Beoordeling</a>
+				<a routerLink="/assessments" routerLinkActive="active">Beoordeling</a>
 			</li>
 			<li *ngIf="isAuth$ | async">
-				<a routerLink="/evaluations">Evaluatie</a>
+				<a routerLink="/evaluations" routerLinkActive="active">Evaluatie</a>
 			</li>
 			<li *ngIf="isAuth$ | async">
-				<a routerLink="/overviews">Overzicht</a>
+				<a routerLink="/overviews" routerLinkActive="active">Overzicht</a>
 			</li>
 		</ul>
 		<!-- Administration part -->
