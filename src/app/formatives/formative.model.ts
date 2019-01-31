@@ -11,5 +11,5 @@ export interface Formative {
 	organisation?: string;
 	user?: string;
 	teacherName?: string;
-
+	hasSavedResults?: boolean;
 }

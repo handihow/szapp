@@ -56,13 +56,19 @@ export class FormativeOverviewComponent implements OnInit, OnDestroy {
   	this.subs.push(this.store.select(fromOverview.getSelectedFormative).subscribe(formative => {
       if(formative){
         this.formative = formative;
-        this.subs.push(this.formativeService.fetchFormativeResults(formative).subscribe(evaluations => {
-          this.evaluations = evaluations;
-          this.calculateEvaluations();
-        }));
+        if(!formative.hasSavedResults){
+          this.subs.push(this.formativeService.fetchFormativeResults(formative).subscribe(evaluations => {
+              this.evaluations = evaluations;
+              this.calculateEvaluations();
+          }));
+        } else {
+          this.subs.push(this.formativeService.fetchSavedResultsOfFormative(formative).subscribe(evaluations => {
+              this.evaluations = evaluations;
+              this.calculateEvaluations();
+          }));
+        }
       }
   	}))
-  	
   }
 
   ngOnDestroy(){
@@ -208,6 +214,10 @@ export class FormativeOverviewComponent implements OnInit, OnDestroy {
   onBack(){
     this.store.dispatch(new OverviewAction.UnselectFormative());
     this.router.navigate(['/overviews'])
+  }
+
+  onSave(){
+    this.formativeService.saveResultsOfFormative(this.formative,this.evaluations);
   }
 
 
