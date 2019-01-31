@@ -20,7 +20,7 @@ import * as CourseAction from '../course.actions';
 export class ExistingCoursesComponent implements OnInit, AfterViewInit, OnDestroy {
   
   isLoading$: Observable<boolean>;
-  displayedColumns = ['created', 'name', 'code', 'status'];
+  displayedColumns = ['created', 'icon', 'name', 'code', 'status'];
   dataSource = new MatTableDataSource<Course>();
   selection = new SelectionModel<Course>(false, null);
 
@@ -100,9 +100,9 @@ export class ExistingCoursesComponent implements OnInit, AfterViewInit, OnDestro
   //set the displayed columns of the table depending on the size of the display
   setDisplayedColumns(screenType){
     if(screenType == "desktop"){
-      this.displayedColumns = ['created', 'name', 'code', 'status'];
+      this.displayedColumns = ['created', 'icon', 'name', 'code', 'status'];
     } else if(screenType == "tablet"){
-      this.displayedColumns = ['created', 'name', 'code'];
+      this.displayedColumns = ['created', 'icon','name', 'code'];
     } else {
       this.displayedColumns = ['name', 'code'];
     }

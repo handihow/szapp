@@ -1,6 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable, Subscription } from 'rxjs';
+import { Router } from '@angular/router';
 
 import { Evaluation } from '../../evaluations/evaluation.model';
 import { EvaluationService } from '../../evaluations/evaluation.service';
@@ -35,7 +36,8 @@ export class ProjectOverviewComponent implements OnInit, OnDestroy {
 
   constructor(  private evaluationService: EvaluationService,
                 private skillService: SkillService,
-                private store: Store<fromOverview.State> ) { }
+                private store: Store<fromOverview.State>,
+                private router: Router ) { }
 
   ngOnInit() {
     //get the loading state of the app
@@ -65,6 +67,7 @@ export class ProjectOverviewComponent implements OnInit, OnDestroy {
 
    onReturnToOverview(){
      this.store.dispatch(new OverviewAction.UnselectProject());
+     this.router.navigate(['/overviews']);
    }
 
    drawChart(evaluations: Evaluation[]){
@@ -113,7 +116,7 @@ export class ProjectOverviewComponent implements OnInit, OnDestroy {
        student.progress.push({projectId: this.project.id, red: countRedAssessmentsByTeacher});
        student.progress.push({projectId: this.project.id, remaining: countRemainingAssessments});
      });
-     this.chart = new Chart('canvas', {
+     this.chart = new Chart('project-chart', {
         type: 'horizontalBar',
         data: {
           labels: students.map(o=>o.displayName),

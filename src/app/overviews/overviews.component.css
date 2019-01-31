@@ -1,0 +1,35 @@
+section {
+  padding: 20px;
+}
+
+.mat-grid-tile:hover {
+  font-size: 1.5em;
+  transition: 300ms;
+}
+
+.mat-grid-tile {
+  color: #ffffff; 
+  font-size: 22px; 
+  font-weight: 800; 
+  text-align: center; 
+  text-transform: uppercase;
+}
+
+img {
+  max-height: 100px;
+  max-width: 25%
+}
+
+mat-progress-bar {
+  margin-right: 10px;
+  margin-left: 10px;
+}
+
+.full-width {
+  width: 100%;
+}
+
+mat-card {
+  width: 350px;
+  margin-top: 20px;
+}

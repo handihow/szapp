@@ -1,7 +1,7 @@
-
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable, Subscription } from 'rxjs';
+import { Router } from '@angular/router';
 
 import { Evaluation } from '../../evaluations/evaluation.model';
 import { EvaluationService } from '../../evaluations/evaluation.service';
@@ -44,7 +44,8 @@ export class ProgramReportComponent implements OnInit, OnDestroy {
   constructor(  private uiService: UIService,
                 private evaluationService: EvaluationService,
                 private skillService: SkillService,
-                private store: Store<fromOverview.State> ) { }
+                private store: Store<fromOverview.State>,
+                private router: Router ) { }
 
   ngOnInit() {
     //get the loading state of the app
@@ -163,6 +164,7 @@ export class ProgramReportComponent implements OnInit, OnDestroy {
 
   onStopProgram(){
     this.store.dispatch(new OverviewAction.UnselectProgram());
+    this.router.navigate(['/overviews/user']);
   }
 
   

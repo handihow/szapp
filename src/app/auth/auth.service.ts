@@ -69,7 +69,6 @@ export class AuthService {
 	    			} else {
 	    				this.router.navigate(['/assessments'])
 	    			}
-	    			
 	    		}
 	    		this.store.dispatch(new UI.StopLoading());
 	    	} else {

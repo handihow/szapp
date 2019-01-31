@@ -5,9 +5,11 @@ import { Skill } from '../skills/skill.model';
 import { User } from '../auth/user.model';
 import { Evaluation } from '../evaluations/evaluation.model';
 import { Course } from '../courses/course.model';
+import { Formative } from '../formatives/formative.model';
 
 import { OverviewActions, SELECT_PROJECT, UNSELECT_PROJECT, SELECT_PROGRAM, 
-					UNSELECT_PROGRAM, SELECT_STUDENT, UNSELECT_STUDENT, START_COURSE, STOP_COURSE } from './overview.actions';
+					UNSELECT_PROGRAM, SELECT_STUDENT, UNSELECT_STUDENT, START_COURSE, STOP_COURSE,
+					SELECT_FORMATIVE, UNSELECT_FORMATIVE } from './overview.actions';
 import * as fromRoot from '../app.reducer';
 
 export interface OverviewState {
@@ -15,6 +17,7 @@ export interface OverviewState {
 	selectedProgram: Program;
 	selectedStudent: User;
 	activeCourse: Course;
+	selectedFormative: Formative;
 }
 
 export interface State extends fromRoot.State{
@@ -25,7 +28,8 @@ const initialState: OverviewState = {
 	selectedProject: null,
 	selectedProgram: null,
 	selectedStudent: null,
-	activeCourse: null
+	activeCourse: null,
+	selectedFormative: null
 };
 
 export function overviewReducer(state = initialState, action: OverviewActions) {
@@ -70,6 +74,16 @@ export function overviewReducer(state = initialState, action: OverviewActions) {
 				...state,
 				activeCourse: null,
 			}
+		case SELECT_FORMATIVE:
+			return {
+				...state,
+				selectedFormative: action.payload
+			}
+		case UNSELECT_FORMATIVE:
+			return {
+				...state,
+				selectedFormative: null,
+			}
 		default: {
 			return state;
 		}
@@ -89,3 +103,6 @@ export const hasSelectedStudent = createSelector(getOverviewState, (state: Overv
 
 export const getActiveCourse = createSelector(getOverviewState, (state: OverviewState) => state.activeCourse);
 export const getIsEditingCourse = createSelector(getOverviewState, (state: OverviewState) => state.activeCourse != null);
+
+export const getSelectedFormative = createSelector(getOverviewState, (state: OverviewState) => state.selectedFormative);
+export const hasSelectedFormative = createSelector(getOverviewState, (state: OverviewState) => state.selectedFormative != null);

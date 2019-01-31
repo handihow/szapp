@@ -4,19 +4,18 @@ import { Routes, RouterModule } from '@angular/router';
 import { AuthGuard } from './auth/auth.guard';
 
 const routes: Routes = [
-	{ path: 'projects', loadChildren: './projects/project.module#ProjectModule', canLoad: [AuthGuard] },
-	{ path: 'programs', loadChildren: './programs/program.module#ProgramModule', canLoad: [AuthGuard] },
-	{ path: 'courses', loadChildren: './courses/course.module#CourseModule', canLoad: [AuthGuard] },
-	{ path: 'formatives', loadChildren: './formatives/formative.module#FormativeModule', canLoad: [AuthGuard] },
-	{ path: 'evaluations', loadChildren: './evaluations/evaluation.module#EvaluationModule', canLoad: [AuthGuard] },
-	{ path: 'assessments', loadChildren: './assessments/assessment.module#AssessmentModule', canLoad: [AuthGuard] },
-	{ path: 'overviews', loadChildren: './overviews/overviews.module#OverviewsModule', canLoad: [AuthGuard] }
+	{ path: 'projects', loadChildren: './projects/project.module#ProjectModule' },
+	{ path: 'programs', loadChildren: './programs/program.module#ProgramModule' },
+	{ path: 'courses', loadChildren: './courses/course.module#CourseModule' },
+	{ path: 'formatives', loadChildren: './formatives/formative.module#FormativeModule' },
+	{ path: 'evaluations', loadChildren: './evaluations/evaluation.module#EvaluationModule' },
+	{ path: 'assessments', loadChildren: './assessments/assessment.module#AssessmentModule' },
+	{ path: 'overviews', loadChildren: './overviews/overviews.module#OverviewsModule' }
 ];
 
 @NgModule({
 	imports: [RouterModule.forRoot(routes)],
-	exports: [RouterModule],
-	providers: [AuthGuard]
+	exports: [RouterModule]
 })
 
 export class AppRoutingModule{}

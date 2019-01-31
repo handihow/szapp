@@ -33,20 +33,25 @@ export class StudentSelectComponent implements OnInit, OnDestroy {
   ngOnInit() {
   	//fetch the screen size 
     this.screenType$ = this.store.select(fromRoot.getScreenType);
-    //fetch users
-  	this.sub = this.authService.fetchUsers(this.organisation.id, "Leerling").subscribe(students => {
-        this.students = students.sort(this.sortStudents); 
-        //filter students in the autocomplete form
-		this.filteredStudents$ = this.studentControl.valueChanges
-		    .pipe(
-		      startWith<string | User>(''),
-		      map(value => typeof value === 'string' ? value : value.displayName),
-		      map(name => name ? this.filter(name) : this.students.slice())
-		    );
-    });
-    this.studentControl.valueChanges.subscribe(student => {
-    	this.selectedStudent.emit(student);	
-    })
+   }
+
+   ngOnChanges(){
+     if(this.organisation){
+       //fetch users
+        this.sub = this.authService.fetchUsers(this.organisation.id, "Leerling").subscribe(students => {
+            this.students = students.sort(this.sortStudents); 
+            //filter students in the autocomplete form
+        this.filteredStudents$ = this.studentControl.valueChanges
+            .pipe(
+              startWith<string | User>(''),
+              map(value => typeof value === 'string' ? value : value.displayName),
+              map(name => name ? this.filter(name) : this.students.slice())
+            );
+        });
+        this.studentControl.valueChanges.subscribe(student => {
+          this.selectedStudent.emit(student);  
+        })
+      }
    }
 
    ngOnDestroy(){

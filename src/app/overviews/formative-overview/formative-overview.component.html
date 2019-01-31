@@ -1,0 +1,47 @@
+<section class="student-results" fxLayout="row" fxLayoutAlign="space-around center">
+	<h2>{{formative?.name}}</h2>
+	<h5>{{formative?.date.toDate() | date : 'dd-MM-yyyy'}} -- {{formative?.tags}}</h5>
+	<button mat-icon-button matTooltip="Bekijk de beoordeelde competenties" (click)="toggleSkills()">
+		<mat-icon>{{viewSkills ? 'toggle_on' : 'toggle_off'}}</mat-icon>
+	</button>
+	<button mat-icon-button matTooltip="Download PDF" (click)="onDownloadPDF()">
+		<mat-icon>print</mat-icon>
+	</button>
+	<button mat-button (click)="onBack()">Terug</button>
+</section>
+<mat-card *ngIf="viewSkills" class="competency-list">
+ 	<mat-list dense>
+ 		<mat-list-item *ngFor="let skill of skills">
+ 			<h3 matLine>{{skill.order}} -- {{skill.topic}}</h3>
+ 			<p matLine>{{skill.competency}} </p>
+ 		</mat-list-item>
+ 	</mat-list>
+</mat-card>
+<section *ngIf="hasFinishedCalculations" class="table-container mat-elevation-z8">
+	<mat-table [dataSource]="dataSource">
+
+		<ng-container matColumnDef="student" sticky>
+			<mat-header-cell *matHeaderCellDef>Leerling</mat-header-cell>
+			<mat-cell *matCellDef="let element">{{ element.student }}</mat-cell>
+		</ng-container>
+
+		<ng-container matColumnDef="course">
+			<mat-header-cell *matHeaderCellDef>Klas</mat-header-cell>
+			<mat-cell *matCellDef="let element">{{ element.course }}</mat-cell>
+		</ng-container>
+
+		<ng-container *ngFor="let skill of skills" matColumnDef="{{skill.id}}">
+			<mat-header-cell *matHeaderCellDef>{{skill.order}}</mat-header-cell>
+			<mat-cell *matCellDef="let element">
+				<mat-icon [ngStyle]="{'color': element[skill.id].iconColor}"
+							matTooltip="{{element[skill.id].comment}}">
+					{{element[skill.id].icon}}
+				</mat-icon>
+			</mat-cell>
+		</ng-container>
+		
+		<mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+		<mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
+	</mat-table>
+
+</section>

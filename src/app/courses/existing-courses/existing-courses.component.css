@@ -4,17 +4,21 @@
 }
 
 .mat-column-created {
+  flex: 2;
+}
+
+.mat-column-icon {
   flex: 1;
 }
 
 .mat-column-name {
-  flex: 4;
+  flex: 8;
 }
 
 .mat-column-code {
-  flex: 1;
+  flex: 2;
 }
 
 .mat-column-status {
-  flex: 1;
+  flex: 2;
 }

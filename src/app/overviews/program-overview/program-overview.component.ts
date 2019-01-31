@@ -1,7 +1,7 @@
-
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable, Subscription } from 'rxjs';
+import { Router } from '@angular/router';
 
 import { Evaluation } from '../../evaluations/evaluation.model';
 import { EvaluationService } from '../../evaluations/evaluation.service';
@@ -42,7 +42,8 @@ export class ProgramOverviewComponent implements OnInit {
 
   constructor(	private skillService: SkillService,
                 private store: Store<fromOverview.State>,
-                private projectService: ProjectService) { }
+                private projectService: ProjectService,
+                private router: Router) { }
 
   ngOnInit() {
 
@@ -150,6 +151,7 @@ export class ProgramOverviewComponent implements OnInit {
 
   onStopProgram(){
     this.store.dispatch(new OverviewAction.UnselectProgram());
+    this.router.navigate(['/overviews']);
   }
 
 }

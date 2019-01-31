@@ -1,5 +1,7 @@
 <mat-tab-group *ngIf="!(currentCourse$ | async)">
   <mat-tab label="Lesgroepen">
+  	<button mat-button *ngIf="(currentUser$ | async).hasGoogleForEducation && !hasToken" class="centered"
+  				(click)="onConnectGC()">Verbind met Google Classroom</button>
   	<app-existing-courses></app-existing-courses>
   </mat-tab>
   <mat-tab label="Nieuwe lesgroep">

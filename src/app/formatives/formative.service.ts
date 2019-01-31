@@ -11,6 +11,7 @@ import * as fromUI from '../shared/ui.reducer';
 import { Formative } from './formative.model';
 import { User } from '../auth/user.model';
 import { Organisation } from '../auth/organisation.model';
+import { Evaluation } from '../evaluations/evaluation.model';
 
 @Injectable()
 export class FormativeService {
@@ -72,6 +73,21 @@ export class FormativeService {
 				this.uiService.showSnackbar(error.message, null, 3000);
 			})
 		});
+	}
+
+	fetchFormativeResults(formative: Formative): Observable<Evaluation[]>{
+		this.store.dispatch(new UI.StartLoading());
+		var queryStr = (ref => ref.where('formative', '==', formative.id));
+		return this.db.collection('evaluations', queryStr)
+		.snapshotChanges().pipe(
+			map(docArray => {
+				this.store.dispatch(new UI.StopLoading());
+				return docArray.map(doc => {
+						const data = doc.payload.doc.data() as Evaluation;
+						const id = doc.payload.doc.id;
+						return { id, ...data };
+					})
+			}))	
 	}
 	
 		

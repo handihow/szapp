@@ -2,6 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable, Subscription } from 'rxjs';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 
 import { Program } from '../../programs/program.model';
 import { ProgramService } from '../../programs/program.service';
@@ -39,7 +40,8 @@ export class UserOverviewComponent implements OnInit, OnDestroy {
 
   constructor(  private programService: ProgramService,
     private authService: AuthService,
-    private store: Store<fromOverview.State> ) { }
+    private store: Store<fromOverview.State>,
+    private router: Router ) { }
 
   ngOnInit() {
     //get the current user
@@ -95,11 +97,12 @@ export class UserOverviewComponent implements OnInit, OnDestroy {
 
   onSubmit(){
     this.store.dispatch(new OverviewAction.SelectProgram(this.selectProgramForm.value.program));
-    this.selectProgramForm.reset();
+    this.router.navigate(['/overviews/report']);
   }
 
   onReturnToOverview(){
     this.store.dispatch(new OverviewAction.UnselectStudent());
+    this.router.navigate(['/overviews']);
   }
 
   onSelectedProgram(program){
@@ -108,7 +111,6 @@ export class UserOverviewComponent implements OnInit, OnDestroy {
 
   //set the chart type depending on the size of the display
   setChartType(screenType){
-    console.log(screenType);
     if(screenType==="phone"){
       this.chartType = "horizontalBar";
     } else {
@@ -270,7 +272,7 @@ export class UserOverviewComponent implements OnInit, OnDestroy {
     })
 
     //now create the chart
-    this.chart = new Chart('canvas', {
+    this.chart = new Chart('user-chart', {
       type: this.chartType,
       data: data,
       options: options

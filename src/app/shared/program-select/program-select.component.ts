@@ -31,21 +31,26 @@ export class ProgramSelectComponent implements OnInit {
   ngOnInit() {
   	//fetch the screen size 
     this.screenType$ = this.store.select(fromRoot.getScreenType);
-    //fetch the programs
-    this.subs.push(this.programService.fetchExistingPrograms(this.organisation, true, null, null, true).subscribe(programs => {
-      if(this.relevantProgramsOnly){
-        var filteredPrograms = [];
-        programs.forEach(program => {
-          if(Object.keys(this.user.programs).includes(program.id)){
-            filteredPrograms.push(program);
-          }
-        })
-        this.programs = filteredPrograms;
-      } else {
-        this.programs = programs;  
-      }
-    }));
-    this.starredPrograms$ = this.programService.fetchExistingPrograms(this.organisation, false, this.user, true, true);
+  }
+
+  ngOnChanges(){
+    if(this.organisation && this.user){
+      //fetch the programs
+      this.subs.push(this.programService.fetchExistingPrograms(this.organisation, true, null, null, true).subscribe(programs => {
+        if(this.relevantProgramsOnly){
+          var filteredPrograms = [];
+          programs.forEach(program => {
+            if(this.user.programs && Object.keys(this.user.programs).includes(program.id)){
+              filteredPrograms.push(program);
+            }
+          })
+          this.programs = filteredPrograms;
+        } else {
+          this.programs = programs;  
+        }
+      }));
+      this.starredPrograms$ = this.programService.fetchExistingPrograms(this.organisation, false, this.user, true, true);
+    }  
   }
 
   selectProgram(programId){

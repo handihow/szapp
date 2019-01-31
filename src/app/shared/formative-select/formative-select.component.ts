@@ -29,10 +29,15 @@ export class FormativeSelectComponent implements OnInit {
   ngOnInit() {
   	 //fetch the screen size 
     this.screenType$ = this.store.select(fromRoot.getScreenType);
-    //get the courses
-    this.subs.push(this.formativeService.fetchExistingFormatives(null,this.user).subscribe(formatives => {
-      this.formatives = formatives;
-    }))
+  }
+
+  ngOnChanges(){
+    if(this.user){
+      //get the formatives
+      this.subs.push(this.formativeService.fetchExistingFormatives(null,this.user).subscribe(formatives => {
+        this.formatives = formatives;
+      }))
+    }
   }
 
   ngOnDestroy(){

@@ -2,6 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable, Subscription } from 'rxjs';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 
 import { Course } from '../../courses/course.model';
 import { CourseService } from '../../courses/course.service';
@@ -29,6 +30,7 @@ export class CourseOverviewComponent implements OnInit, OnDestroy  {
   course: Course;
   program: Program;
   isLoading$: Observable<boolean>;
+  hasFinishedCalculating: boolean;
   currentUser$: Observable<User>;
 
   subs: Subscription[] = [];
@@ -37,7 +39,8 @@ export class CourseOverviewComponent implements OnInit, OnDestroy  {
 
   constructor(  private courseService: CourseService,
                 private authService: AuthService,
-                private store: Store<fromOverview.State> ) { }
+                private store: Store<fromOverview.State>,
+                private router: Router ) { }
 
   ngOnInit() {
     //get the current user
@@ -58,11 +61,11 @@ export class CourseOverviewComponent implements OnInit, OnDestroy  {
               let indexOfProgramResults = results.findIndex(o => o.id ==="program");
               if(indexOfProgramResults > -1) {
                   student.programs = results[indexOfProgramResults];
-                }
-                if(index===(students.length - 1)){
-                  this.students = students;
-                  this.drawChart();
-                }
+              }
+              if(index===(students.length - 1)){
+                this.students = students;
+                this.drawChart();
+              }
             }))
           })
         }))  
@@ -79,12 +82,13 @@ export class CourseOverviewComponent implements OnInit, OnDestroy  {
 
    onReturnToOverview(){
      this.store.dispatch(new OverviewAction.UnselectProgram());
-     this.store.dispatch(new OverviewAction.StopCourse())
+     this.store.dispatch(new OverviewAction.StopCourse());
+     this.router.navigate(['/overviews']);
    }
 
    drawChart(){
-     if(!this.students  || !this.program){
-       return
+     if(!this.students || !this.program){
+       return 
      }
      var programProgress = [];
      //loop through the student program progress results
@@ -114,7 +118,7 @@ export class CourseOverviewComponent implements OnInit, OnDestroy  {
       })
 
      //now create the chart
-     this.chart = new Chart('canvas', {
+     this.chart = new Chart('course-program-chart', {
         type: 'horizontalBar',
         data: {
           labels: programProgress.map(o=>o.studentName),
@@ -180,6 +184,8 @@ export class CourseOverviewComponent implements OnInit, OnDestroy  {
         },
 
      });
+
+     this.hasFinishedCalculating = true;
   }
 
 }

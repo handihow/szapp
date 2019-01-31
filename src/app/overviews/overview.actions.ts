@@ -3,6 +3,7 @@ import { Project } from '../projects/project.model';
 import { Program } from '../programs/program.model';
 import { User } from '../auth/user.model';
 import { Course } from '../courses/course.model';
+import { Formative } from '../formatives/formative.model';
 
 export const SELECT_PROJECT = '[Project] Start Project';
 export const UNSELECT_PROJECT = '[Project] Stop Project';
@@ -12,6 +13,8 @@ export const SELECT_STUDENT = '[User] Set Student';
 export const UNSELECT_STUDENT = '[User] Unset Student'
 export const START_COURSE = '[Course] Start Course';
 export const STOP_COURSE = '[Course] Stop Course';
+export const SELECT_FORMATIVE = '[Formative] Start Formative';
+export const UNSELECT_FORMATIVE = '[Formative] Stop Formative';
 
 export class SelectProject implements Action {
 	readonly type = SELECT_PROJECT;
@@ -56,5 +59,18 @@ export class StopCourse implements Action {
 
 }
 
+export class SelectFormative implements Action {
+	readonly type = SELECT_FORMATIVE;
+
+	constructor(public payload: Project){}
+}
+
+export class UnselectFormative implements Action {
+	readonly type = UNSELECT_FORMATIVE;
+
+}
+
+
 export type OverviewActions = SelectProject | UnselectProject | SelectProgram | 
-				UnselectProgram | SelectStudent | UnselectStudent | StartCourse | StopCourse;
+				UnselectProgram | SelectStudent | UnselectStudent | StartCourse | StopCourse | 
+				SelectFormative | UnselectFormative;

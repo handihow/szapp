@@ -49,7 +49,7 @@ export class ExistingAssessmentsComponent implements OnInit, AfterViewInit, OnDe
       this.setDisplayedColumns(screenType);
     });
     //get the current user and then start fetching the existing evaluations
-    this.subs.push(this.store.select(fromRoot.getCurrentUser).subscribe(async (user: User) => {
+    this.subs.push(this.store.select(fromRoot.getCurrentUser).subscribe((user: User) => {
       if(user){
         this.user = user;
         this.subs.push(this.evaluationService.fetchExistingEvaluations(user,null,null,false,true,true).subscribe(evaluations => {

@@ -31,11 +31,6 @@ export class ProjectSelectComponent implements OnInit, OnDestroy {
   ngOnInit() {
   	//fetch the screen size 
     this.screenType$ = this.store.select(fromRoot.getScreenType);
-    //fetch the projects
-    this.subs.push(this.projectService.fetchExistingProjects(this.organisation,true, null, false, true).subscribe(projects => {
-      this.projects = projects;
-    }));
-    this.starredProjects$ = this.projectService.fetchExistingProjects(this.organisation,false,this.user,true, true);
   }
 
   selectProject(projectId){
@@ -46,6 +41,13 @@ export class ProjectSelectComponent implements OnInit, OnDestroy {
   ngOnChanges(){
     if(this.resetTrigger){
       this.selectedProjectId = null;
+    }
+    if(this.organisation && this.user){
+      //fetch the projects
+      this.subs.push(this.projectService.fetchExistingProjects(this.organisation,true, null, false, true).subscribe(projects => {
+        this.projects = projects;
+      }));
+      this.starredProjects$ = this.projectService.fetchExistingProjects(this.organisation,false,this.user,true, true);
     }
   }
 

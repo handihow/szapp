@@ -1,0 +1,11 @@
+.competency-list {
+	width: 95%;
+	max-width: 800px;
+	margin: 10px auto;
+}
+
+
+.mat-column-student {
+  flex: 2;
+  min-width: 150px;
+}

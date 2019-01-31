@@ -29,12 +29,17 @@ export class CourseSelectComponent implements OnInit {
   ngOnInit() {
     //fetch the screen size 
     this.screenType$ = this.store.select(fromRoot.getScreenType);
-    //get the courses
-    this.subs.push(this.courseService.fetchUserCourses(this.user).subscribe(courses => {
-      this.courses = courses;
-    }))
   }
 
+  ngOnChanges(){
+    //get the courses
+    if(this.user){
+      this.subs.push(this.courseService.fetchUserCourses(this.user).subscribe(courses => {
+        this.courses = courses;
+      }))
+    }
+  }
+  
   ngOnDestroy(){
   	this.subs.forEach(sub=> {
   		sub.unsubscribe();
