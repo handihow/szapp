@@ -7,40 +7,40 @@ import { Observable, Subscription } from 'rxjs';
 import { User } from '../../auth/user.model';
 import { Organisation } from '../../auth/organisation.model';
 
-import { Formative } from '../formative.model';
-import { FormativeService } from '../formative.service';
+import { Comment } from '../comment.model';
+import { CommentService } from '../comment.service';
 import * as fromRoot from '../../app.reducer'; 
 
-import { RemoveFormativesComponent } from './remove-formatives.component';
-import { EditFormativeComponent } from './edit-formative.component';
+import { RemoveCommentsComponent } from './remove-comments.component';
+import { EditCommentComponent } from './edit-comment.component';
 
 @Component({
-  selector: 'app-existing-formatives',
-  templateUrl: './existing-formatives.component.html',
-  styleUrls: ['./existing-formatives.component.css']
+  selector: 'app-existing-comments',
+  templateUrl: './existing-comments.component.html',
+  styleUrls: ['./existing-comments.component.css']
 })
-export class ExistingFormativesComponent implements OnInit, AfterViewInit, OnDestroy {
+export class ExistingCommentsComponent implements OnInit, AfterViewInit, OnDestroy {
   
   isLoading$: Observable<boolean>;
   user: User;
   organisation: Organisation;
-  displayedColumns = ['select', 'date', 'name', 'subjects', 'classes', 'tags', 'url'];
-  dataSource = new MatTableDataSource<Formative>();
-  selection = new SelectionModel<Formative>(true, null);
+  displayedColumns = ['select', 'created', 'comment', 'studentName', 'className', 'read', 'reported'];
+  dataSource = new MatTableDataSource<Comment>();
+  selection = new SelectionModel<Comment>(true, null);
 
   allOrganisation: boolean;
 
   options: any;
   data: any;
 
-  formatives: Formative[];
+  comments: Comment[];
   subs: Subscription[] = [];
 
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator) paginator: MatPaginator;
 
   constructor(  private dialog: MatDialog,
-                private formativeService: FormativeService,
+                private commentService: CommentService,
                 private store: Store<fromRoot.State> ) { }
 
 
@@ -51,9 +51,9 @@ export class ExistingFormativesComponent implements OnInit, AfterViewInit, OnDes
     this.store.select(fromRoot.getCurrentUser).subscribe(user => {
       if(user){
         this.user = user;
-        this.subs.push(this.formativeService.fetchExistingFormatives(null, user).subscribe(formatives => {
-          this.formatives = formatives;
-          this.dataSource.data = this.formatives;        
+        this.subs.push(this.commentService.fetchExistingComments(null, user).subscribe(comments => {
+          this.comments = comments;
+          this.dataSource.data = this.comments;        
         }));
       }
     });
@@ -61,7 +61,7 @@ export class ExistingFormativesComponent implements OnInit, AfterViewInit, OnDes
     this.store.select(fromRoot.getScreenType).subscribe(screenType => {
       this.setDisplayedColumns(screenType);
     });
-    //get the current organisation and then the formatives
+    //get the current organisation and then the comments
     this.store.select(fromRoot.getCurrentOrganisation).subscribe(organisation => {
       if(organisation){
         this.organisation = organisation;
@@ -89,11 +89,11 @@ export class ExistingFormativesComponent implements OnInit, AfterViewInit, OnDes
   //set the displayed columns of the table depending on the size of the display
   setDisplayedColumns(screenType){
     if(screenType==="desktop"){
-      this.displayedColumns = ['select', 'date', 'name', 'subjects', 'classes', 'tags', 'url'];
+      this.displayedColumns = ['select', 'created', 'comment', 'studentName', 'className', 'read', 'reported'];
     } else if(screenType==="tablet"){
-      this.displayedColumns = ['select', 'date', 'name', 'subjects', 'classes'];
+      this.displayedColumns = ['select', 'created', 'comment', 'studentName', 'className'];
     } else {
-      this.displayedColumns = ['select', 'date', 'name'];
+      this.displayedColumns = ['select', 'created', 'comment', 'studentName'];
     }
   }
 
@@ -113,28 +113,28 @@ export class ExistingFormativesComponent implements OnInit, AfterViewInit, OnDes
 
   onChange(){
     if(this.allOrganisation){
-      this.subs.push(this.formativeService.fetchExistingFormatives(this.organisation, null).subscribe(formatives => {
-        this.formatives = formatives;
-        this.dataSource.data = this.formatives;    
+      this.subs.push(this.commentService.fetchExistingComments(this.organisation, null).subscribe(comments => {
+        this.comments = comments;
+        this.dataSource.data = this.comments;
+        this.displayedColumns.push('teacherName');        
       }));
-      this.displayedColumns.push('teacherName'); 
     } else {
-      this.subs.push(this.formativeService.fetchExistingFormatives(null, this.user).subscribe(formatives => {
-        this.formatives = formatives;
-        this.dataSource.data = this.formatives;        
-      }));
-      let index = this.displayedColumns.findIndex(str => str == "teacherName");
+      this.subs.push(this.commentService.fetchExistingComments(null, this.user).subscribe(comments => {
+        this.comments = comments;
+        this.dataSource.data = this.comments;   
+        let index = this.displayedColumns.findIndex(str => str == "teacherName");
         if(index>-1){
           this.displayedColumns.splice(index, 1);
-        } 
+        }    
+      }));
     }
   }
 
   onEdit() {
-    let formative = this.selection.selected[0];
-    const dialogRef = this.dialog.open(EditFormativeComponent, {
+    let comment = this.selection.selected[0];
+    const dialogRef = this.dialog.open(EditCommentComponent, {
       data: {
-        formative:formative,
+        comment:comment,
         organisation: this.organisation
       },
       width: '350px'
@@ -148,7 +148,7 @@ export class ExistingFormativesComponent implements OnInit, AfterViewInit, OnDes
   }
 
   onRemove() {
-    const dialogRef = this.dialog.open(RemoveFormativesComponent, {
+    const dialogRef = this.dialog.open(RemoveCommentsComponent, {
       data: {
         selectedItems: this.selection.selected.length 
       }
@@ -156,7 +156,7 @@ export class ExistingFormativesComponent implements OnInit, AfterViewInit, OnDes
 
     dialogRef.afterClosed().subscribe(result => {
       if(result){
-        this.formativeService.removeFormatives(this.selection.selected);
+        this.commentService.removeComments(this.selection.selected);
         this.selection.clear();
       }
     });

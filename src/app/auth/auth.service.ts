@@ -343,13 +343,17 @@ export class AuthService {
 		});
 	}
 
-	fetchUsers(organisationId: string, userType: string) : Observable<User[]> {
-		this.store.dispatch(new UI.StartLoading());
+	fetchUsers(organisationId: string, userType: string, disableLoading?: boolean) : Observable<User[]> {
+		if(!disableLoading){
+			this.store.dispatch(new UI.StartLoading());	
+		}
 		var queryStr = (ref => ref.where('organisationId', '==', organisationId).where('role', '==', userType));
 		return this.afs.collection('users', queryStr)
 			.snapshotChanges().pipe(
 			map(docArray => {
-				this.store.dispatch(new UI.StopLoading());
+				if(!disableLoading){
+					this.store.dispatch(new UI.StopLoading());	
+				}
 				return docArray.map(doc => {
 						const data = doc.payload.doc.data() as User;
 						const id = doc.payload.doc.id;

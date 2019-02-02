@@ -98,7 +98,6 @@
 		<mat-card-header>
 		    <mat-card-title>Lesgroep</mat-card-title>
 		    <mat-card-subtitle>Rapport van lesgroep (in aanbouw)</mat-card-subtitle>
-		    <img mat-card-avatar src="https://cdn.pixabay.com/photo/2013/07/12/14/06/construction-work-147759_960_720.png">
 		</mat-card-header>
 		<form (ngSubmit)="onSubmitClassroomReport()" [formGroup]="selectClassroomReportForm">
 			<mat-card-content>
@@ -106,7 +105,8 @@
 				<app-course-select [user]="user" (selectedCourse)="onSelectedCourseReport($event)"></app-course-select>
 			</mat-card-content>
 			<mat-card-actions>
-				<button type="submit" mat-raised-button color="accent" [disabled]="selectClassroomReportForm.invalid">Selecteren</button>
+				<button type="submit" mat-raised-button color="accent" 
+					disabled>Selecteren</button>
 			</mat-card-actions>	
 		</form>
 	</mat-card>

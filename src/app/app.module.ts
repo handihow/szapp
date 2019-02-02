@@ -22,6 +22,7 @@ import { EvaluationService } from './evaluations/evaluation.service';
 import { SkillService } from './skills/skill.service';
 import { CourseService } from './courses/course.service';
 import { FormativeService } from './formatives/formative.service';
+import { CommentService } from './comments/comment.service';
 import { environment } from '../environments/environment';
 
 import { AppRoutingModule } from './app-routing.module';
@@ -63,6 +64,7 @@ import { ServiceWorkerModule } from '@angular/service-worker';
     SkillService,
     CourseService,
     FormativeService,
+    CommentService,
     UIService
   ],
   bootstrap: [AppComponent]

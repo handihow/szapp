@@ -8,6 +8,7 @@ const routes: Routes = [
 	{ path: 'programs', loadChildren: './programs/program.module#ProgramModule' },
 	{ path: 'courses', loadChildren: './courses/course.module#CourseModule' },
 	{ path: 'formatives', loadChildren: './formatives/formative.module#FormativeModule' },
+	{ path: 'comments', loadChildren: './comments/comment.module#CommentModule' },
 	{ path: 'evaluations', loadChildren: './evaluations/evaluation.module#EvaluationModule' },
 	{ path: 'assessments', loadChildren: './assessments/assessment.module#AssessmentModule' },
 	{ path: 'overviews', loadChildren: './overviews/overviews.module#OverviewsModule' }

@@ -15,6 +15,12 @@
 			<li *ngIf="isTeacher$ | async">
 				<a routerLink="/assessments" routerLinkActive="active">Beoordeling</a>
 			</li>
+			<li *ngIf="isTeacher$ | async">
+				<a routerLink="/comments" routerLinkActive="active">Commentaar</a>
+			</li>
+			<li *ngIf="(isAuth$ | async) && !(isTeacher$ | async)">
+				<a routerLink="/comments/student" routerLinkActive="active">Commentaar</a>
+			</li>
 			<li *ngIf="isAuth$ | async">
 				<a routerLink="/evaluations" routerLinkActive="active">Evaluatie</a>
 			</li>

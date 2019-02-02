@@ -13,6 +13,7 @@
 
 .mat-column-date {
   flex: 2;
+  min-width:60px;
 }
 
 .mat-column-classes {
@@ -28,5 +29,9 @@
 }
 
 .mat-column-url {
+	flex: 4;
+}
+
+.mat-column.teacherName {
 	flex: 4;
 }

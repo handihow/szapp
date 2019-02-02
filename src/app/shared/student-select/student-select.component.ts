@@ -18,6 +18,7 @@ import { AuthService } from '../../auth/auth.service';
 })
 export class StudentSelectComponent implements OnInit, OnDestroy {
   
+  @Input() resetTrigger: boolean;
   @Input() organisation: Organisation;
   studentControl = new FormControl();
   students: User[];
@@ -25,6 +26,7 @@ export class StudentSelectComponent implements OnInit, OnDestroy {
   filteredStudents: User[];
   @Output() selectedStudent = new EventEmitter<User>();
   sub: Subscription;
+  officialClass: string;
   student: User;
   screenType$: Observable<string>;
 
@@ -36,9 +38,14 @@ export class StudentSelectComponent implements OnInit, OnDestroy {
    }
 
    ngOnChanges(){
+     if(this.resetTrigger){
+        this.studentControl = new FormControl(null);
+        this.officialClass = null;
+        this.student = null;
+     }
      if(this.organisation){
        //fetch users
-        this.sub = this.authService.fetchUsers(this.organisation.id, "Leerling").subscribe(students => {
+        this.sub = this.authService.fetchUsers(this.organisation.id, "Leerling", true).subscribe(students => {
             this.students = students.sort(this.sortStudents); 
             //filter students in the autocomplete form
         this.filteredStudents$ = this.studentControl.valueChanges
@@ -55,7 +62,9 @@ export class StudentSelectComponent implements OnInit, OnDestroy {
    }
 
    ngOnDestroy(){
-   	this.sub.unsubscribe();
+     if(this.sub){
+       this.sub.unsubscribe();
+     }
    }
 
    onSelectClass(officialClass: string){

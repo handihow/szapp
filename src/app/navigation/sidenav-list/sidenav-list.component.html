@@ -53,6 +53,18 @@
 		<mat-icon>assignment</mat-icon>
 		<span class="nav-caption">Evaluatie</span>
 	</a>
+	<a mat-list-item routerLink="/comments" 
+		(click)="onClose()"
+		*ngIf="isTeacher$  | async">
+		<mat-icon>comment</mat-icon>
+		<span class="nav-caption">Commentaar</span>
+	</a>
+	<a mat-list-item routerLink="/comments/student" 
+		(click)="onClose()"
+		*ngIf="(isAuth$ | async) && !(isTeacher$  | async)">
+		<mat-icon>comment</mat-icon>
+		<span class="nav-caption">Commentaar</span>
+	</a>
 	<a mat-list-item routerLink="/assessments" 
 		(click)="onClose()"
 		*ngIf="isTeacher$  | async">

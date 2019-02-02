@@ -1,5 +1,5 @@
 <div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="20px"
-		fxLayout.lt-md="column" fxLayoutAlign.lt-md="center stretch" fxLayoutGap.lt-md="10px" class="existing-formatives">
+		fxLayout.lt-md="column" fxLayoutAlign.lt-md="center stretch" fxLayoutGap.lt-md="10px" class="existing-comments">
 	<mat-form-field fxFlex.gt-sm="40%" *ngIf="!(isLoading$ | async)">
 		<input matInput type="text" (keyup)="doFilter($event.target.value)" placeholder="Filter">
 	</mat-form-field>
@@ -8,7 +8,7 @@
 				[(ngModel)]="allOrganisation" 
 				*ngIf="user?.isAdmin" 
 				(ngModelChange)="onChange()">
-        Alle formatieven
+        Alle commentaar
     </mat-slide-toggle>
 	<div>
 		<button type="button" mat-button
@@ -18,7 +18,7 @@
 	</div>
 	<mat-spinner *ngIf="isLoading$ | async"></mat-spinner>		
 </div>
-<mat-table [dataSource]="dataSource" matSort matSortActive="date" matSortDirection="desc">
+<mat-table [dataSource]="dataSource" matSort matSortActive="created" matSortDirection="desc">
 
 	<ng-container matColumnDef="select">
 	  <mat-header-cell *matHeaderCellDef>
@@ -35,34 +35,38 @@
 	  </mat-cell>
 	</ng-container>
 
-	<ng-container matColumnDef="date">
-		<mat-header-cell *matHeaderCellDef mat-sort-header>Datum formatief</mat-header-cell>
-		<mat-cell *matCellDef="let element">{{ element.date.toDate() | date : 'dd-MM-yyyy' }}</mat-cell>
+	<ng-container matColumnDef="created">
+		<mat-header-cell *matHeaderCellDef mat-sort-header>Datum</mat-header-cell>
+		<mat-cell *matCellDef="let element">{{ element.created.toDate() | date : 'dd-MM-yyyy' }}</mat-cell>
 	</ng-container>
 
-	<ng-container matColumnDef="name">
-		<mat-header-cell *matHeaderCellDef mat-sort-header>Formatief</mat-header-cell>
-		<mat-cell *matCellDef="let element">{{ element.name }}</mat-cell>
+	<ng-container matColumnDef="comment">
+		<mat-header-cell *matHeaderCellDef mat-sort-header>Commentaar</mat-header-cell>
+		<mat-cell *matCellDef="let element">{{ element.comment }}</mat-cell>
 	</ng-container>
 
-	<ng-container matColumnDef="subjects">
-		<mat-header-cell *matHeaderCellDef mat-sort-header>Vak</mat-header-cell>
-		<mat-cell *matCellDef="let element">{{ element.subjects }}</mat-cell>
+	<ng-container matColumnDef="studentName">
+		<mat-header-cell *matHeaderCellDef mat-sort-header>Leerling</mat-header-cell>
+		<mat-cell *matCellDef="let element">{{ element.studentName }}</mat-cell>
 	</ng-container>
 
-	<ng-container matColumnDef="classes">
+	<ng-container matColumnDef="className">
 		<mat-header-cell *matHeaderCellDef mat-sort-header>Klas</mat-header-cell>
-		<mat-cell *matCellDef="let element">{{ element.classes }}</mat-cell>
+		<mat-cell *matCellDef="let element">{{ element.className }}</mat-cell>
 	</ng-container>
 
-	<ng-container matColumnDef="tags">
-		<mat-header-cell *matHeaderCellDef mat-sort-header>Tags</mat-header-cell>
-		<mat-cell *matCellDef="let element">{{ element.tags }}</mat-cell>
+	<ng-container matColumnDef="read">
+		<mat-header-cell *matHeaderCellDef mat-sort-header>Gelezen</mat-header-cell>
+		<mat-cell *matCellDef="let element">
+			<mat-icon *ngIf="element.isReadByStudent">check</mat-icon>
+		</mat-cell>
 	</ng-container>
 
-	<ng-container matColumnDef="url">
-		<mat-header-cell *matHeaderCellDef mat-sort-header>Link</mat-header-cell>
-		<mat-cell *matCellDef="let element">{{ element.formativeUrl }}</mat-cell>
+	<ng-container matColumnDef="reported">
+		<mat-header-cell *matHeaderCellDef mat-sort-header>Gerapporteerd</mat-header-cell>
+		<mat-cell *matCellDef="let element">
+			<mat-icon *ngIf="element.isReported">check</mat-icon>
+		</mat-cell>
 	</ng-container>
 
 	<ng-container matColumnDef="teacherName">

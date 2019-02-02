@@ -1,0 +1,17 @@
+<h1 mat-dialog-title>Formatief Bewerken</h1>
+<form [formGroup]="commentForm" (ngSubmit)="onSubmit()">
+	<mat-dialog-content>
+		<mat-form-field class="full-width">
+			<input matInput placeholder="Commentaar" formControlName="comment" required>
+			<mat-error>Geef commentaar</mat-error>
+		</mat-form-field>
+	</mat-dialog-content>	
+
+	<mat-dialog-actions>
+		<button type="submit" mat-raised-button color="primary" 
+				[disabled]="commentForm.invalid">
+			Bewaar
+		</button>
+		<button type="button" mat-raised-button color="accent" [mat-dialog-close]="false">Terug</button>
+	</mat-dialog-actions>
+</form>

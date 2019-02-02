@@ -1,0 +1,29 @@
+.existing-comments {
+	margin-left: 10px;
+	margin-right: 10px;
+}
+
+.mat-column-select {
+  flex: 1;
+}
+
+.mat-column-comment {
+  flex: 8;
+}
+
+.mat-column-created {
+  flex: 2;
+  min-width: 60px;
+}
+
+.mat-column-className {
+  flex: 2;
+}
+
+.mat-column-studentName {
+  flex: 4;
+}
+
+.mat-column-teacherName {
+  flex: 4;
+}

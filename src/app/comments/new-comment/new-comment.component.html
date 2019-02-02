@@ -1,0 +1,24 @@
+<section class="new-comment" fxLayout fxLayoutAlign="center">
+	<form [formGroup]="commentForm" (ngSubmit)="onSubmit()">
+		<mat-card fxFlex.xs="100%" fxFlex="400px">
+			<mat-card-title fxLayoutAlign="center">
+				Geef commentaar
+			</mat-card-title>
+			<mat-card-content fxLayout="column" fxLayoutAlign="center stretch" *ngIf="!(isLoading$ | async)">
+				<mat-form-field class="full-width">
+				   <input matInput placeholder="Commentaar" formControlName="comment" required>
+				   <mat-error>Geef commentaar</mat-error>
+				</mat-form-field>
+				<input type="hidden" formControlName="student">
+				<app-student-select [organisation]="organisation" [resetTrigger]="resetStudent"
+								(selectedStudent)="onSelectedStudent($event)"></app-student-select>
+			</mat-card-content>
+			<mat-spinner *ngIf="isLoading$ | async"></mat-spinner>	
+			<mat-card-actions fxLayoutAlign="center">
+				<button type="submit" mat-raised-button color="primary" [disabled]="commentForm.invalid">
+					Bewaar
+				</button>
+			</mat-card-actions>
+		</mat-card>	
+	</form>
+</section>

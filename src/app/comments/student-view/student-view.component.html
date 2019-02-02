@@ -1,0 +1,22 @@
+<mat-card>
+	<mat-card-header>
+		<mat-card-title>
+			Commentaar
+		</mat-card-title>
+		<mat-card-subtitle>
+			Bekijk hier de opmerkingen van je docenten
+		</mat-card-subtitle>
+	</mat-card-header>
+	<mat-card-content>
+		<mat-list>
+			<mat-list-item *ngFor="let comment of comments$ | async">
+				<mat-icon matListIcon *ngIf="!comment.isReadByStudent">mail</mat-icon>
+				<mat-icon matListIcon *ngIf="comment.isReadByStudent">drafts</mat-icon>
+				<h3 matLine>{{comment?.teacherName}}</h3>
+				<p matLine>{{comment?.created.toDate() | date:"dd-MM-yyyy"}} -- {{comment?.comment}}</p>
+				<button mat-button *ngIf="!comment.isReadByStudent" (click)="onRead(comment)">Gelezen</button>
+			</mat-list-item>
+		</mat-list>
+	</mat-card-content>
+</mat-card>
+
