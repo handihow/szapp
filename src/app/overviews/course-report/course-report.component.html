@@ -1,0 +1,77 @@
+<section fxLayout.gt-sm="row" fxLayoutAlign.gt-sm="space-evenly center"
+         fxLayout.lt-md="column" fxLayoutAlign.lt-md="center center" fxLayoutGap.lt-md="10px">
+	<h3>{{course?.name}}</h3>
+	<button type="button" mat-raised-button color="accent" (click)="onReturnToOverview()">Terug</button>
+</section>
+
+
+<mat-horizontal-stepper linear #stepper>
+  <mat-step [stepControl]="selectDateRangeForm">
+    <form [formGroup]="selectDateRangeForm" (ngSubmit)="onSubmitDateRange()">
+      <ng-template matStepLabel>Selecteer datum</ng-template>
+      <mat-form-field>
+		  <input matInput [matDatepicker]="picker1" placeholder="Datum van" formControlName="fromDate">
+		  <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+		  <mat-datepicker #picker1></mat-datepicker>
+	  </mat-form-field>
+
+	  <mat-form-field>
+		  <input matInput [matDatepicker]="picker2" placeholder="Datum tot"
+		         formControlName="toDate">
+		  <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+		  <mat-datepicker #picker2></mat-datepicker>
+	  </mat-form-field>
+      <div>
+        <button mat-button matStepperNext>Volgende</button>
+      </div>
+    </form>
+  </mat-step>
+
+  <mat-step>
+      <ng-template matStepLabel>Controleer het rapport</ng-template>
+	  <div class="student-name" fxLayout="row" fxLayoutAlign="space-between center">
+		  <button mat-icon-button (click)="onPrevious()"><mat-icon>keyboard_arrow_left</mat-icon></button>
+		  <h3>{{selectedStudent?.displayName}}</h3>
+		  <button mat-icon-button (click)="onNext()"><mat-icon>keyboard_arrow_right</mat-icon></button>
+	  </div>
+	  <div fxLayout="row wrap" fxLayoutAlign="space-between stretch">
+	  	<mat-card fxFlex="69" fxFlex.lt-sm="95">
+	  		<mat-card-header>
+	  			<mat-card-title>
+	  				Overzicht leerplannen
+	  			</mat-card-title>
+	  		</mat-card-header>
+	  		<mat-card-content>
+	  			<app-user-graph *ngIf="selectedStudent" [student]="selectedStudent" [organisation]="organisation">
+	  				</app-user-graph>
+	  		</mat-card-content>
+	  	</mat-card>
+	  	<mat-card fxFlex="29" fxFlex.lt-sm="95">
+	  		<mat-card-header>
+	  			<mat-card-title>
+	  				Commentaar
+	  			</mat-card-title>
+	  			<mat-card-subtitle>
+	  				{{fromDate?.toLocaleDateString()}} - {{toDate?.toLocaleDateString()}}
+	  			</mat-card-subtitle>
+	  		</mat-card-header>
+	  		<mat-card-content>
+	  			<app-user-comments [student]="selectedStudent" [fromDate]="fromDate" [toDate]="toDate"></app-user-comments>
+	  		</mat-card-content>
+	  	</mat-card>	
+	  </div>
+      <div>
+        <button mat-button matStepperPrevious>Terug</button>
+        <button mat-button matStepperNext>Volgende</button>
+      </div>
+  </mat-step>
+  <mat-step>
+    <ng-template matStepLabel>Download rapporten</ng-template>
+    Download nu de rapporten
+    <div>
+      <button mat-button matStepperPrevious>Terug</button>
+      <button mat-button (click)="stepper.reset()">Reset</button>
+    </div>
+  </mat-step>
+</mat-horizontal-stepper>
+

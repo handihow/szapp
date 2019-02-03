@@ -102,13 +102,25 @@ export class OverviewsComponent implements OnInit, OnDestroy  {
     this.router.navigate(['/overviews/project']);
   }
 
+  onSubmitClassroomForm(){
+    this.store.dispatch(new OverviewAction.SelectProgram(this.selectClassroomForm.value.program));
+    this.store.dispatch(new OverviewAction.StartCourse(this.selectClassroomForm.value.course));
+    this.router.navigate(['/overviews/course']);
+  }
+
+  onSubmitProgram(){
+    this.store.dispatch(new OverviewAction.SelectProgram(this.selectProgramForm.value.program));
+    this.router.navigate(['/overviews/program']);
+  }
+
   onSubmitFormative(){
     this.store.dispatch(new OverviewAction.SelectFormative(this.selectFormativeForm.value.formative));
     this.router.navigate(['/overviews/formative'])
   }
 
   onSubmitClassroomReport(){
-    console.log(this.selectClassroomReportForm.value.course);
+    this.store.dispatch(new OverviewAction.StartCourse(this.selectClassroomReportForm.value.course));
+    this.router.navigate(['/overviews/course-report']);
   }
 
   onSelectedProject(project){
@@ -139,15 +151,6 @@ export class OverviewsComponent implements OnInit, OnDestroy  {
     this.selectStudentForm.get('student').setValue(student);
   }
 
-  onSubmitProgram(){
-    this.store.dispatch(new OverviewAction.SelectProgram(this.selectProgramForm.value.program));
-    this.router.navigate(['/overviews/program']);
-  }
-
-  onSelectClassroomForm(){
-    this.store.dispatch(new OverviewAction.SelectProgram(this.selectClassroomForm.value.program));
-    this.store.dispatch(new OverviewAction.StartCourse(this.selectClassroomForm.value.course));
-    this.router.navigate(['/overviews/course']);
-  }
+  
 
 }

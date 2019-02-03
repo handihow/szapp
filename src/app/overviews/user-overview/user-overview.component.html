@@ -29,10 +29,4 @@
 
 </section>
 
-<div *ngIf="chart" class="chart">
-  <canvas id="user-chart">{{ chart }}</canvas>
-</div>
-<div fxLayout="column" fxLayoutAlign="center center" *ngIf="chart.length===0">
-	<p>Grafiek wordt berekend of is niet beschikbaar.</p>
-	<mat-progress-bar mode="buffer"></mat-progress-bar>
-</div>
+<app-user-graph [student]="student" [organisation]="organisation"></app-user-graph>

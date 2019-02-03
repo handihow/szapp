@@ -1,0 +1,10 @@
+<mat-list>
+	<mat-list-item *ngFor="let comment of comments$ | async">
+		<mat-icon matListIcon *ngIf="!comment.isReadByStudent">mail</mat-icon>
+		<mat-icon matListIcon *ngIf="comment.isReadByStudent">drafts</mat-icon>
+		<h3 matLine>{{comment?.teacherName}}</h3>
+		<p matLine>{{comment?.created.toDate() | date:"dd-MM-yyyy"}}</p>
+		<p matLine>{{comment?.comment}}</p>
+	</mat-list-item>
+</mat-list>
+

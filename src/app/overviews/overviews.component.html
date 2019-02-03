@@ -61,7 +61,7 @@
 		    <mat-card-title>Leerplan en lesgroep</mat-card-title>
 		    <mat-card-subtitle>Voortgang per leerplan en lesgroep</mat-card-subtitle>
 		</mat-card-header>
-		<form (ngSubmit)="onSelectClassroomForm()" [formGroup]="selectClassroomForm">
+		<form (ngSubmit)="onSubmitClassroomForm()" [formGroup]="selectClassroomForm">
 			<mat-card-content>
 				<input type="hidden" formControlName="program">
 				<app-program-select [user]="user" [organisation]="organisation" 
@@ -106,7 +106,7 @@
 			</mat-card-content>
 			<mat-card-actions>
 				<button type="submit" mat-raised-button color="accent" 
-					disabled>Selecteren</button>
+						[disabled]="selectClassroomReportForm.invalid">Selecteren</button>
 			</mat-card-actions>	
 		</form>
 	</mat-card>

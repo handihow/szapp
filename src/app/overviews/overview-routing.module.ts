@@ -10,6 +10,7 @@ import { ProgramOverviewComponent } from './program-overview/program-overview.co
 import { CourseOverviewComponent } from './course-overview/course-overview.component';
 import { ProgramReportComponent } from './program-report/program-report.component';
 import { FormativeOverviewComponent } from './formative-overview/formative-overview.component';
+import { CourseReportComponent } from './course-report/course-report.component';
 
 const routes: Routes = [
 	{ path: '', component: OverviewsComponent, canLoad: [AuthGuard], pathMatch: 'full' },
@@ -18,7 +19,8 @@ const routes: Routes = [
 	{ path: 'program', component: ProgramOverviewComponent, canLoad: [AuthGuard] },
 	{ path: 'course', component: CourseOverviewComponent, canLoad: [AuthGuard] },
 	{ path: 'report', component: ProgramReportComponent, canLoad: [AuthGuard] },
-	{ path: 'formative', component: FormativeOverviewComponent, canLoad: [AuthGuard] }
+	{ path: 'formative', component: FormativeOverviewComponent, canLoad: [AuthGuard] },
+	{ path: 'course-report', component: CourseReportComponent, canLoad: [AuthGuard] }
 ]
 
 @NgModule({

@@ -8,6 +8,9 @@ import { UIService } from '../shared/ui.service';
 import * as UI from '../shared/ui.actions';
 import * as fromUI from '../shared/ui.reducer';
 
+import {firestore} from 'firebase/app';
+import Timestamp = firestore.Timestamp;
+
 import { Comment } from './comment.model';
 import { User } from '../auth/user.model';
 import { Organisation } from '../auth/organisation.model';
@@ -66,7 +69,7 @@ export class CommentService {
 	fetchStudentComments(user: User): Observable<Comment[]> {
 		this.store.dispatch(new UI.StartLoading());
 		let queryStr = (ref => ref.where('student', '==', user.uid));
-			return this.db.collection('comments', queryStr)
+		return this.db.collection('comments', queryStr)
 			.snapshotChanges().pipe(
 			map(docArray => {
 				this.store.dispatch(new UI.StopLoading());
@@ -76,6 +79,22 @@ export class CommentService {
 						return { id, ...data };
 					}).sort((a,b) => b.created - a.created)
 			}))	
+	}
+
+	fetchCommentsStudentFromDateToDate(student: User, fromDate: Timestamp, toDate: Timestamp): Observable<Comment[]>{
+		this.store.dispatch(new UI.StartLoading());
+		let queryStr = (ref => ref.where('student', '==', student.uid)
+									.where('created', '>', fromDate).where('created', '<', toDate));
+		return this.db.collection('comments', queryStr)
+			.snapshotChanges().pipe(
+			map(docArray => {
+				this.store.dispatch(new UI.StopLoading());
+				return docArray.map(doc => {
+						const data = doc.payload.doc.data() as Comment;
+						const id = doc.payload.doc.id;
+						return { id, ...data };
+					}).sort((a,b) => b.created - a.created)
+			}))
 	}
 
 	removeComments(comments: Comment[]){
