@@ -4,6 +4,7 @@ import { Observable, Subscription } from 'rxjs';
 import { Store } from '@ngrx/store';
 import * as fromRoot from '../../app.reducer'; 
 
+import { AuthService } from '../../auth/auth.service';
 import { ProgramService } from '../../programs/program.service';
 import { Program } from '../../programs/program.model';
 import { User } from '../../auth/user.model';
@@ -26,7 +27,9 @@ export class ProgramSelectComponent implements OnInit {
   @Output() selectedProgram = new EventEmitter<Program>();
   subs: Subscription[] = [];
 
-  constructor(private programService: ProgramService, private store: Store<fromRoot.State>) { }
+  constructor(private programService: ProgramService, 
+              private store: Store<fromRoot.State>,
+              private authService: AuthService) { }
 
   ngOnInit() {
   	//fetch the screen size 
@@ -38,13 +41,20 @@ export class ProgramSelectComponent implements OnInit {
       //fetch the programs
       this.subs.push(this.programService.fetchExistingPrograms(this.organisation, true, null, null, true).subscribe(programs => {
         if(this.relevantProgramsOnly){
-          var filteredPrograms = [];
-          programs.forEach(program => {
-            if(this.user.programs && Object.keys(this.user.programs).includes(program.id)){
-              filteredPrograms.push(program);
+          this.subs.push(this.authService.fetchUserResults(this.user).subscribe(results => {
+          let indexOfProgramResults = results.findIndex(o => o.id ==="program");
+            if(indexOfProgramResults > -1) {
+              this.user.programs = results[indexOfProgramResults];
+              var filteredPrograms = [];
+              programs.forEach(program => {
+                // console.log(Object.keys(this.user.programs));
+                if(this.user.programs && Object.keys(this.user.programs).includes(program.id)){
+                  filteredPrograms.push(program);
+                }
+              })
+              this.programs = filteredPrograms;
             }
-          })
-          this.programs = filteredPrograms;
+          }));
         } else {
           this.programs = programs;  
         }
@@ -52,6 +62,8 @@ export class ProgramSelectComponent implements OnInit {
       this.starredPrograms$ = this.programService.fetchExistingPrograms(this.organisation, false, this.user, true, true);
     }  
   }
+
+  
 
   selectProgram(programId){
     let program = this.programs.find(program => program.id === programId);
