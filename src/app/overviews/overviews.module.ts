@@ -16,6 +16,7 @@ import { FormativeOverviewComponent } from './formative-overview/formative-overv
 import { CourseReportComponent } from './course-report/course-report.component';
 import { UserGraphComponent } from './user-graph/user-graph.component';
 import { UserCommentsComponent } from './user-comments/user-comments.component';
+import { CourseReportDownloadComponent } from './course-report-download/course-report-download.component';
 
 @NgModule({
   imports: [
@@ -25,6 +26,6 @@ import { UserCommentsComponent } from './user-comments/user-comments.component';
     StoreModule.forFeature('overview', overviewReducer)
   ],
   declarations: [OverviewsComponent,ProjectOverviewComponent, UserOverviewComponent, ProgramReportComponent, 
-              ProgramOverviewComponent, CourseOverviewComponent, FormativeOverviewComponent, CourseReportComponent, UserGraphComponent, UserCommentsComponent]
+              ProgramOverviewComponent, CourseOverviewComponent, FormativeOverviewComponent, CourseReportComponent, UserGraphComponent, UserCommentsComponent, CourseReportDownloadComponent]
 })
 export class OverviewsModule { }

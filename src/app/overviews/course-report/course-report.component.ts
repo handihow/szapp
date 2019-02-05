@@ -45,6 +45,7 @@ export class CourseReportComponent implements OnInit {
 
   fromDate: Timestamp;
   toDate: Timestamp;
+  downloadStart: boolean;
 
   subs: Subscription[] = [];
 
@@ -128,69 +129,8 @@ export class CourseReportComponent implements OnInit {
    }
 
    onDownloadPDF(){
-    // Default export is a4 paper, portrait, using milimeters for units
-    var doc = new jsPDF('l', 'pt');
-    this.students.forEach(student => {
-      this.createHeader(doc, student);
-      this.createChart(doc, student);
-      this.createCommentsTable(doc, student);
-      doc.addPage();
-    })
-    let currentDate = new Date().toLocaleDateString();
-    //save the document
-    doc.save(this.course.name + '_' + currentDate + '.pdf');
-  }
-
-  private createHeader(doc, student: User){
-    //add titles to the document (name of program and name of the student)
-    doc.setFontSize(20);
-    doc.text(student.displayName, 40, 50);
-    doc.setFontSize(14);
-    doc.text(student.classes ? student.classes : '-', 40, 70);
-    doc.setFontSize(10);
-    doc.text(student.organisation, 40, 90);
-    //add the date of the report
-    doc.setFontSize(10);
-    let currentDate = new Date().toLocaleDateString();
-    doc.text('Rapport gemaakt op: ' + currentDate, 40, 110);
-  }
-
-  private createChart(doc, student: User){
-    console.log(doc);
-    console.log(student);
-  }
-
-  private async createCommentsTable(doc, student: User){
-    var columns = [["Leraar", "Datum", "Commentaar"]];
-    var rows = [];
-    let studentComments : Comment[] = await this.commentService.fetchCommentsStudentFromDateToDate(student, 
-       this.fromDate, this.toDate).toPromise();
-    studentComments.forEach(comment=>{
-          var teacherEvaluatedDate = "-";
-          if(comment.created instanceof Timestamp){
-            var teacherEvaluated : Timestamp = comment.created;
-            teacherEvaluatedDate = teacherEvaluated.toDate().toLocaleDateString();
-          }
-          var newTableRow = [];
-          newTableRow.push(comment.teacherName);
-          newTableRow.push(comment.created);
-          newTableRow.push(comment.comment);
-          rows.push(newTableRow);
-        });
-
-    //add the table with results
-    doc.autoTable({
-      head: columns,
-      body: rows,
-      startY: 130,
-      margin: {top: 50},
-      styles: {
-        overflow: 'linebreak',
-        cellWidth: 'auto',
-        minCellWidth: 60
-      }
-    });
-    
-  }
+     this.downloadStart = true;
+   }
+  
 
 }

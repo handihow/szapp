@@ -1,0 +1,6 @@
+<h4>Download nu de rapporten</h4>
+<div *ngIf="downloadStart" class="progress">
+	<mat-progress-bar mode="determinate" [value]="counter"></mat-progress-bar>
+</div>
+<app-user-graph *ngIf="selectedStudent && counter<100" [student]="selectedStudent" [organisation]="organisation">
+	  				</app-user-graph>

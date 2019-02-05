@@ -67,7 +67,9 @@
   </mat-step>
   <mat-step>
     <ng-template matStepLabel>Download rapporten</ng-template>
-    <h4>Download nu de rapporten</h4>
+    <app-course-report-download [course]="course" [students]="students"
+    							[fromDate]="fromDate" [toDate]="toDate" 
+    							[downloadStart]="downloadStart" [organisation]="organisation"></app-course-report-download>
     <div>
       <button mat-button matStepperPrevious>Terug</button>
       <button mat-raised-button color="accent" (click)="onDownloadPDF()">Download PDF</button>
