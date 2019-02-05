@@ -15,8 +15,8 @@ import { User } from '../../auth/user.model';
 })
 export class UserCommentsComponent implements OnInit {
   
-  @Input() fromDate: Date;
-  @Input() toDate: Date;
+  @Input() fromDate: Timestamp;
+  @Input() toDate: Timestamp;
   @Input() student: User;
   comments$: Observable<Comment[]>;
 
@@ -27,10 +27,8 @@ export class UserCommentsComponent implements OnInit {
 
   ngOnChanges() {
    	if(this.fromDate && this.toDate){
-      let fromTimestamp = Timestamp.fromDate(this.fromDate);
-      let toTimestamp = Timestamp.fromDate(this.toDate);
    		this.comments$ = this.commentService.fetchCommentsStudentFromDateToDate(this.student, 
-                                 fromTimestamp, toTimestamp);
+                                 this.fromDate, this.toDate);
    	}
   }
 

@@ -52,7 +52,7 @@
 	  				Commentaar
 	  			</mat-card-title>
 	  			<mat-card-subtitle>
-	  				{{fromDate?.toLocaleDateString()}} - {{toDate?.toLocaleDateString()}}
+	  				{{fromDate?.toDate().toLocaleDateString()}} - {{toDate?.toDate().toLocaleDateString()}}
 	  			</mat-card-subtitle>
 	  		</mat-card-header>
 	  		<mat-card-content>
@@ -67,10 +67,10 @@
   </mat-step>
   <mat-step>
     <ng-template matStepLabel>Download rapporten</ng-template>
-    Download nu de rapporten
+    <h4>Download nu de rapporten</h4>
     <div>
       <button mat-button matStepperPrevious>Terug</button>
-      <button mat-button (click)="stepper.reset()">Reset</button>
+      <button mat-raised-button color="accent" (click)="onDownloadPDF()">Download PDF</button>
     </div>
   </mat-step>
 </mat-horizontal-stepper>

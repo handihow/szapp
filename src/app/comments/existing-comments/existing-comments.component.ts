@@ -116,7 +116,9 @@ export class ExistingCommentsComponent implements OnInit, AfterViewInit, OnDestr
       this.subs.push(this.commentService.fetchExistingComments(this.organisation, null).subscribe(comments => {
         this.comments = comments;
         this.dataSource.data = this.comments;
-        this.displayedColumns.push('teacherName');        
+        if(!this.displayedColumns.includes("teacherName")){
+          this.displayedColumns.push('teacherName');    
+        } 
       }));
     } else {
       this.subs.push(this.commentService.fetchExistingComments(null, this.user).subscribe(comments => {
