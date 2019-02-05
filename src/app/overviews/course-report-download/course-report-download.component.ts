@@ -52,7 +52,7 @@ export class CourseReportDownloadComponent implements OnInit {
 
   async onDownloadPDF(){
     // Default export is a4 paper, portrait, using milimeters for units
-    var doc = new jsPDF('l', 'pt');
+    var doc = new jsPDF('p', 'pt', [ 595.28,  841.89]);
     await this.asyncForEach(this.students, async (student, index) => {
       this.createHeader(doc, student);
       await this.createChart(doc, student);
@@ -97,13 +97,15 @@ export class CourseReportDownloadComponent implements OnInit {
   private createChart(doc, student: User){
     return new Promise<boolean>(async (resolve, reject) => {
     	this.selectedStudent = student;
-    	//wait 2 seconds for the screen to update
-    	await new Promise(resolve => setTimeout(resolve, 2000));
-    	let newCanvas = <HTMLCanvasElement>document.getElementById(student.uid);
-		let newCanvasImage = newCanvas.toDataURL("image/png", 1.0);
-		doc.addImage(newCanvasImage, 'PNG', 100, 130, 600, 300);
-    	resolve(true);
-    })
+      // wait 1 second for the graph
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      let newCanvas = <HTMLCanvasElement>document.getElementById(student.uid);
+    	//wait 1 seconds for the screen to update
+    	await new Promise(resolve => setTimeout(resolve, 1000));
+  		let newCanvasImage = newCanvas.toDataURL("image/png", 1.0);
+  		doc.addImage(newCanvasImage, 'PNG', 40, 130, 520, 300);
+      	resolve(true);
+      })
   }
 
   private createCommentsTable(doc, student: User): Promise<boolean>{

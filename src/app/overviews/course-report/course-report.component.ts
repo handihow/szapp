@@ -108,10 +108,12 @@ export class CourseReportComponent implements OnInit {
    }
 
    onSubmitDateRange(){
-   	this.fromDate = Timestamp.fromDate(this.selectDateRangeForm.value.fromDate.toDate());
-   	this.toDate = Timestamp.fromDate(this.selectDateRangeForm.value.toDate.toDate());
-   	this.studentIndex = 0;
-   	this.selectedStudent = this.students[0]
+     try{
+       this.fromDate = Timestamp.fromDate(this.selectDateRangeForm.value.fromDate.toDate());
+       this.toDate = Timestamp.fromDate(this.selectDateRangeForm.value.toDate.toDate());
+     } catch(e) {
+       console.log(e);
+     }
    }
 
    onNext(){
@@ -130,6 +132,16 @@ export class CourseReportComponent implements OnInit {
 
    onDownloadPDF(){
      this.downloadStart = true;
+   }
+
+   onStepChanged(step){
+     if(step.selectedIndex===1){
+       this.studentIndex = 0;
+       this.selectedStudent = this.students[0]
+     }
+     if(step.selectedIndex===2){
+       this.selectedStudent = null;
+     }
    }
   
 

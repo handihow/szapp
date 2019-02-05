@@ -62,13 +62,15 @@ export class UserGraphComponent implements OnInit, OnDestroy {
 
   ngOnChanges(){
     //fetch the evaluations belonging to the project
-    this.subs.push(this.authService.fetchUserResults(this.student).subscribe(results => {
-      let indexOfProgramResults = results.findIndex(o => o.id ==="program");
-      if(indexOfProgramResults > -1) {
-        this.student.programs = results[indexOfProgramResults];
-        this.fetchPrograms();
-      }
-    }));
+    if(this.student){
+      this.subs.push(this.authService.fetchUserResults(this.student).subscribe(results => {
+        let indexOfProgramResults = results.findIndex(o => o.id ==="program");
+        if(indexOfProgramResults > -1) {
+          this.student.programs = results[indexOfProgramResults];
+          this.fetchPrograms();
+        }
+      }));
+    }
   }
 
   fetchPrograms() {

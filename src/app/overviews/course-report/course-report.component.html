@@ -5,7 +5,7 @@
 </section>
 
 
-<mat-horizontal-stepper linear #stepper>
+<mat-horizontal-stepper linear #stepper (selectionChange)="onStepChanged($event)">
   <mat-step [stepControl]="selectDateRangeForm">
     <form [formGroup]="selectDateRangeForm" (ngSubmit)="onSubmitDateRange()">
       <ng-template matStepLabel>Selecteer datum</ng-template>

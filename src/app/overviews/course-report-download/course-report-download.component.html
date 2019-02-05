@@ -2,5 +2,8 @@
 <div *ngIf="downloadStart" class="progress">
 	<mat-progress-bar mode="determinate" [value]="counter"></mat-progress-bar>
 </div>
-<app-user-graph *ngIf="selectedStudent && counter<100" [student]="selectedStudent" [organisation]="organisation">
+<div *ngIf="selectedStudent && counter<100">
+	<h3>{{selectedStudent.displayName}}</h3>
+	<app-user-graph  [student]="selectedStudent" [organisation]="organisation">
 	  				</app-user-graph>
+</div>

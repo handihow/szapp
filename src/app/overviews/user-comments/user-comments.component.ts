@@ -26,7 +26,7 @@ export class UserCommentsComponent implements OnInit {
   }
 
   ngOnChanges() {
-   	if(this.fromDate && this.toDate){
+   	if(this.student && this.fromDate && this.toDate){
    		this.comments$ = this.commentService.fetchCommentsStudentFromDateToDate(this.student, 
                                  this.fromDate, this.toDate);
    	}
