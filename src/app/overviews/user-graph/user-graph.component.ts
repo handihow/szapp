@@ -120,7 +120,7 @@ export class UserGraphComponent implements OnInit, OnDestroy {
           }
           //get the average of the class
           let averages = await this.programService.getAverageProgramResults(program);
-          let average = averages[this.student.classes[0]] ? Math.round(averages[this.student.classes[0]] / programToBeAdded.countSkills * 100): 0;
+          let average = averages[this.student.classes[0]] ? Math.round(averages['average'] / programToBeAdded.countSkills * 100): 0;
           var newProgressResult = {
             program: program,
             programName: programToBeAdded.name,
