@@ -11,5 +11,6 @@ export interface Course {
 	organisation?: string;
 	user?: string;
 	isGoogleClassroom?: boolean;
+	isOfficialClassroom?: boolean;
 	googleClassroomInfo?: any;
 }

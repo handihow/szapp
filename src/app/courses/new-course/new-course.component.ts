@@ -46,7 +46,8 @@ export class NewCourseComponent implements OnInit {
     //create the course form
     this.courseForm = new FormGroup({
       name: new FormControl(null, Validators.required),
-      code: new FormControl(null, Validators.required)
+      code: new FormControl(null, Validators.required),
+      isOfficial: new FormControl("0", Validators.required)
     });
   }
 
@@ -55,7 +56,8 @@ export class NewCourseComponent implements OnInit {
       name: this.courseForm.value.name,
       code: this.courseForm.value.code,
       organisation: this.organisation.id,
-      user: this.user.uid
+      user: this.user.uid,
+      isOfficialClassroom: this.courseForm.value.isOfficial == "0" ? false : true
     }
     this.courseService.startCourse(newCourse)
   }

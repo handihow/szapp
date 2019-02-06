@@ -21,7 +21,10 @@
 
 	<ng-container matColumnDef="icon">
 		<mat-header-cell *matHeaderCellDef mat-sort-header>Icon</mat-header-cell>
-		<mat-cell *matCellDef="let element"><fa name="google" *ngIf="element.isGoogleClassroom"></fa></mat-cell>
+		<mat-cell *matCellDef="let element">
+			<fa name="google" *ngIf="element.isGoogleClassroom"></fa>
+			<mat-icon *ngIf="element.isOfficialClassroom">star</mat-icon>
+		</mat-cell>
 	</ng-container>
 
 	<ng-container matColumnDef="name">

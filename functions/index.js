@@ -364,3 +364,40 @@ exports.calculateClassroomAveragesForPrograms = functions.pubsub
 	  });
 	});
 });
+
+exports.correctEvaluationRecords = functions.pubsub
+.topic('correction')
+.onPublish(async (message, context) => {
+	//first get all green evaluations from the database
+	const evaluationQry = db.collection('evaluations');
+	const allEvaluationSnapshots = await evaluationQry.get();
+	var allEvaluationIds = [];
+	var allEvaluationData = [];
+	allEvaluationSnapshots.forEach((snap) => {
+		allEvaluationIds.push(snap.id);
+		allEvaluationData.push(snap.data());
+	})
+	const userQry = db.collection('users');
+	const allUserSnapshots = await userQry.get();
+	var allUserIds = [];
+	var allUserData = [];
+	allUserSnapshots.forEach((snap) => {
+		allUserIds.push(snap.id);
+		allUserData.push(snap.data());
+	})
+	return allEvaluationIds.forEach((evaluationId, index) => {
+		let evaluation = allEvaluationData[index];
+		const evalRef = db.collection('evaluations').doc(evaluationId);
+		if(!evaluation.class){
+			var studentIndex = allUserIds.findIndex(userId => userId === evaluation.user);
+			if(studentIndex > -1){
+				var student = allUserData[studentIndex];
+				if(student.classes && student.classes[0]){
+					var classroom = student.classes[0];
+					evaluation.class = classroom;
+					return evalRef.set(evaluation, {merge: true});
+				}
+			}
+		}
+	})
+});

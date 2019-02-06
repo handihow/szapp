@@ -133,7 +133,7 @@ export class CourseService {
 			.then(doc => {
 				addedCourse.id = doc.id;
 				this.store.dispatch(new CourseAction.StartCourse(addedCourse));
-				this.uiService.showSnackbar("Leerplan is succesvol bewaard.", null, 3000);
+				this.uiService.showSnackbar("Lesgroep is succesvol bewaard.", null, 3000);
 			})
 			.catch(error => {
 				this.uiService.showSnackbar(error.message, null, 3000);

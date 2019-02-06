@@ -15,6 +15,10 @@
 				   <mat-hint>Geef de lesgroep een code</mat-hint>
 				   <mat-error>Vul de lesgroep code in</mat-error>
 				</mat-form-field>
+				<mat-radio-group  formControlName="isOfficial">
+				  <mat-radio-button value="1">Officiële klas</mat-radio-button>
+				  <mat-radio-button  value="0">Extra lesgroep</mat-radio-button>
+				</mat-radio-group>
 			</mat-card-content>
 			<mat-spinner *ngIf="isLoading$ | async"></mat-spinner>	
 			<mat-card-actions fxLayoutAlign="center">
