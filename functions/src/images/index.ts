@@ -1,7 +1,12 @@
 import * as admin from 'firebase-admin';
 import * as functions from 'firebase-functions';
 
-const gcs = require('@google-cloud/storage');
+const {Storage} = require('@google-cloud/storage');
+// Creates a client
+const gcs = new Storage({
+	projectId: process.env.GCP_PROJECT
+});
+
 const spawn = require('child-process-promise').spawn;
 const path = require('path');
 const os = require('os');

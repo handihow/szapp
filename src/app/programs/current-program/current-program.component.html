@@ -26,19 +26,23 @@
 				Definieer de competenties
 			</mat-card-title>
 			<mat-card-content fxLayout="column" fxLayoutAlign="center center">
-				<mat-form-field class="full-width">
-				   <textarea matInput placeholder="Competentie" formControlName="competency" required></textarea>
-				   <mat-hint>Omschrijf de competentie</mat-hint>
-				   <mat-error>Competentie is verplicht</mat-error>
-				</mat-form-field>
 				<div fxLayout="row" fxLayoutAlign="center" fxLayout.lt-md="column" 
-								fxLayoutAlign.lt-md="center center" fxLayoutGap="20px" class="full-width">
-					<mat-form-field fxFlex="100" fxFlex.gt-md="30" class="full-width">
-					   <input matInput placeholder="Volgnummer" formControlName="order" required>
-					   <mat-hint>Het volgnummer waarop competenties worden gesorteerd</mat-hint>
-					   <mat-error>Het volgnummer is verplicht</mat-error>
+								fxLayoutAlign.lt-md="center center" fxLayoutGap="2px" class="full-width">
+					<mat-form-field fxFlex="25" class="full-width">
+						   <input matInput placeholder="Volgnummer" formControlName="order" required>
+						   <mat-hint>Het volgnummer waarop competenties worden gesorteerd</mat-hint>
+						   <mat-error>Het volgnummer is verplicht</mat-error>
 					</mat-form-field>
-					<mat-form-field fxFlex="100" fxFlex.gt-md="70" class="full-width">
+					<mat-form-field fxFlex="75" class="full-width">
+					   <textarea matInput placeholder="Competentie" formControlName="competency" required></textarea>
+					   <mat-hint>Omschrijf de competentie</mat-hint>
+					   <mat-error>Competentie is verplicht</mat-error>
+					</mat-form-field>
+				</div>
+				<div fxLayout="row" fxLayoutAlign="center" fxLayout.lt-md="column" 
+								fxLayoutAlign.lt-md="center center" fxLayoutGap="2px" class="full-width">
+					
+					<mat-form-field fxFlex="40" class="full-width">
 					   <input matInput placeholder="Onderwerp" formControlName="topic" required [matAutocomplete]="auto">
 					   <mat-hint>Het onderwerp waarbij de competentie hoort</mat-hint>
 					   <mat-error>Het onderwerp is verplicht</mat-error>
@@ -48,10 +52,14 @@
 						    {{ topic }}
 						  </mat-option>
 					</mat-autocomplete>
-					<mat-form-field fxFlex="100" fxFlex.gt-md="30" class="full-width">
+					<mat-form-field fxFlex="30" class="full-width">
 					   <input matInput placeholder="Link" formControlName="link" pattern="https?://.+" type="text">
 					   <mat-hint>Voeg een link (url) toe</mat-hint>
 					   <mat-error>Dit is geen geldige url</mat-error>
+					</mat-form-field>
+					<mat-form-field fxFlex="30" class="full-width">
+					   <input matInput placeholder="Tekst bij link" formControlName="linkText" type="text">
+					   <mat-hint>De tekst weergegeven bij een link</mat-hint>
 					</mat-form-field>
 				</div>
 			</mat-card-content>
@@ -128,7 +136,7 @@
 		<ng-container matColumnDef="link">
 			<mat-header-cell *matHeaderCellDef mat-sort-header>Link</mat-header-cell>
 			<mat-cell *matCellDef="let element">
-				<a href="{{element?.link}}" target="_blank">{{ element.link }}</a>
+				<a href="{{element?.link}}" target="_blank">{{ element.linkText ? element.linkText : element.link }}</a>
           	</mat-cell>
 		</ng-container>
 

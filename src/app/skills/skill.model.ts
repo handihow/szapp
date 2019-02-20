@@ -9,6 +9,7 @@ export interface Skill {
 	competency?: string;
 	topic?: string;
 	link?: string;
+	linkText?: string;
 	hasAttachments?: boolean;
 
 	//database references

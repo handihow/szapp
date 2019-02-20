@@ -68,7 +68,8 @@
 			</select>
 		</mat-form-field>
 
-	<input #fileInput type="file" (change)="startUpload($event.target.files)" style="display:none;" />	      
+	<input #fileInput type="file" (click)="setAdditionalValidators()" 
+						(change)="startUpload($event.target.files)" style="display:none;" />	      
 	<div *ngIf="percentage | async as pct">
 		<!-- <mat-progress-bar mode="determinate" value="pct"></mat-progress-bar> -->
 		{{ pct | number: '1.0-0' }}%

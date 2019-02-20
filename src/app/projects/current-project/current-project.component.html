@@ -133,7 +133,7 @@
 		<ng-container matColumnDef="link">
 			<mat-header-cell *matHeaderCellDef mat-sort-header>Link</mat-header-cell>
 			<mat-cell *matCellDef="let element">
-				<a href="{{element?.link}}" target="_blank">{{ element.link }}</a>
+				<a href="{{element?.link}}" target="_blank">{{ element.linkText ? element.linkText : element.link }}</a>
           	</mat-cell>
 		</ng-container>
 

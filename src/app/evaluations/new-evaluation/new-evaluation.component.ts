@@ -233,4 +233,9 @@ export class NewEvaluationComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.teacherSub.unsubscribe();
   }
+
+  setAdditionalValidators(){
+    this.evaluationForm.get('imageUrl').setValidators(Validators.required);
+    this.evaluationForm.get('imageUrl').updateValueAndValidity();
+  }
 }

@@ -113,7 +113,8 @@ export class CurrentProgramComponent implements OnInit, OnDestroy {
       order: new FormControl(null, Validators.required),
       competency: new FormControl(null, Validators.required),
       topic: new FormControl(null, Validators.required),
-      link: new FormControl(null)
+      link: new FormControl(null),
+      linkText: new FormControl(null)
     });
     //listen for valuechanges on the topic to filter the content of the autocomplete
     this.filteredTopics = this.skillsForm.get('topic').valueChanges
@@ -186,6 +187,7 @@ export class CurrentProgramComponent implements OnInit, OnDestroy {
       this.skill.order = skillsForm.value.order;
       this.skill.topic = skillsForm.value.topic;
       this.skill.link = skillsForm.value.link ? skillsForm.value.link : null;
+      this.skill.linkText = skillsForm.value.linkText ? skillsForm.value.linkText : null;
       this.skill.program = this.program.id;
       //update the skill in the database
       this.skillService.updateSkillToDatabase(this.skill);
@@ -205,6 +207,7 @@ export class CurrentProgramComponent implements OnInit, OnDestroy {
         order: orderNumber,
         topic: skillsForm.value.topic,
         link: skillsForm.value.link ? skillsForm.value.link : null,
+        linkText: skillsForm.value.linkText ? skillsForm.value.linkText : null,
         program: this.program.id
       }
       //save the skill to the database
@@ -235,6 +238,8 @@ export class CurrentProgramComponent implements OnInit, OnDestroy {
     this.skillsForm.get('competency').setValue(this.skill.competency);
     this.skillsForm.get('order').setValue(this.skill.order);
     this.skillsForm.get('topic').setValue(this.skill.topic);
+    this.skillsForm.get('link').setValue(this.skill.link);
+    this.skillsForm.get('linkText').setValue(this.skill.linkText);
   }
 
   onEditProgram() {
