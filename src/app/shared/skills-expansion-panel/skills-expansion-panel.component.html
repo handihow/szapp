@@ -20,12 +20,8 @@
     <div fxLayout="row" fxLayoutAlign="space-between center">
       <span fxHide.gt-sm class="grey-topic">{{skill.topic}}</span>
       <div>
-        <a     
-              mat-button 
-              color="accent" 
-              href="{{skill?.link}}"
-              target="_blank"
-              [disabled]="!skill?.link">Meer informatie</a>
+        <a    href="{{skill?.link}}"
+              target="_blank">{{ skill?.linkText ? skill?.linkText : skill?.link }}</a>
         <button 
               mat-button 
               color="primary" 
