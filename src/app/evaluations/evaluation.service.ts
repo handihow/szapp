@@ -285,6 +285,7 @@ export class EvaluationService {
 	    updatedEvaluation.iconTeacher = result.color.icon;
 	    updatedEvaluation.ratingTeacher = result.color.rating;
 	    updatedEvaluation.colorTeacher = result.color.color;
+	    updatedEvaluation.status = 'Beoordeeld';
 	    if(formative){
 	        updatedEvaluation.formative = formative.id;
 	        updatedEvaluation.formativeName = formative.name;
