@@ -61,7 +61,7 @@ export class CourseReportDownloadComponent implements OnInit {
       if(index === this.students.length - 1){
       	this.counter = 100;
       } else {
-      	this.counter += Math.round(100 / this.students.length);
+      	this.counter += Math.floor(100 / this.students.length);
       }
     })
     let currentDate = new Date().toLocaleDateString();
@@ -85,7 +85,7 @@ export class CourseReportDownloadComponent implements OnInit {
     doc.setFontSize(20);
     doc.text(student.displayName, 40, 50);
     doc.setFontSize(14);
-    doc.text(student.classes ? student.classes : '-', 40, 70);
+    doc.text(student.classes ? student.classes[0] : '-', 40, 70);
     doc.setFontSize(10);
     doc.text(student.organisation, 40, 90);
     //add the date of the report
@@ -97,15 +97,20 @@ export class CourseReportDownloadComponent implements OnInit {
   private createChart(doc, student: User){
     return new Promise<boolean>(async (resolve, reject) => {
     	this.selectedStudent = student;
-      // wait 1 second for the graph
+      // wait 2 seconds for the graph
       await new Promise(resolve => setTimeout(resolve, 1000));
       let newCanvas = <HTMLCanvasElement>document.getElementById(student.uid);
-    	//wait 1 seconds for the screen to update
+    	//wait 2 seconds for the screen to update
     	await new Promise(resolve => setTimeout(resolve, 1000));
-  		let newCanvasImage = newCanvas.toDataURL("image/png", 1.0);
-  		doc.addImage(newCanvasImage, 'PNG', 40, 130, 520, 300);
-      	resolve(true);
-      })
+  		try {
+        let newCanvasImage = newCanvas.toDataURL("image/png", 1.0);
+        doc.addImage(newCanvasImage, 'PNG', 40, 130, 520, 300);
+      } catch(err){
+        console.log(err);
+      }
+      resolve(true);
+    });
+      
   }
 
   private createCommentsTable(doc, student: User): Promise<boolean>{
