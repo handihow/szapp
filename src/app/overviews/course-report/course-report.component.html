@@ -30,9 +30,13 @@
   <mat-step>
       <ng-template matStepLabel>Controleer het rapport</ng-template>
 	  <div class="student-name" fxLayout="row" fxLayoutAlign="space-between center">
-		  <button mat-icon-button (click)="onPrevious()"><mat-icon>keyboard_arrow_left</mat-icon></button>
+		  <button mat-icon-button (click)="onPrevious()" [disabled]="studentIndex===0">
+		  	<mat-icon>keyboard_arrow_left</mat-icon>
+		  </button>
 		  <h3>{{selectedStudent?.displayName}}</h3>
-		  <button mat-icon-button (click)="onNext()"><mat-icon>keyboard_arrow_right</mat-icon></button>
+		  <button mat-icon-button (click)="onNext()" [disabled]="!students || studentIndex===students.length-1">
+		  	<mat-icon>keyboard_arrow_right</mat-icon>
+		  </button>
 	  </div>
 	  <div fxLayout="row wrap" fxLayoutAlign="space-between stretch">
 	  	<mat-card fxFlex="69" fxFlex.lt-sm="95">

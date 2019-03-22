@@ -120,14 +120,21 @@ export class CourseReportComponent implements OnInit {
    	if(this.studentIndex < this.students.length - 1){
    		this.studentIndex += 1;
    	}
-   	this.selectedStudent = this.students[this.studentIndex];
+    this.selectedStudent = null;
+    setTimeout(() => {
+      this.selectedStudent = this.students[this.studentIndex];
+    }, 50);
+   	
    }
 
    onPrevious(){
    	if(this.studentIndex > 0){
    		this.studentIndex -= 1;
    	}
-   	this.selectedStudent = this.students[this.studentIndex];
+    this.selectedStudent = null;
+    setTimeout(() => {
+      this.selectedStudent = this.students[this.studentIndex];
+    }, 50); 
    }
 
    onDownloadPDF(){
