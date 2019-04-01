@@ -22,6 +22,15 @@
 		    	<a href="{{evaluation?.urlStudent}}" target="_blank">Link </a> (opent in nieuw scherm)
 		    </p>
 	  </mat-list-item>
+	  <mat-list-item *ngIf="evaluation?.status==='Niet beoordeeld'">
+	    	<mat-icon>
+	    		assignment_late
+	    	</mat-icon>
+		    <h3 matLine> {{(teacher$ | async)?.displayName}}</h3>
+		    <p matLine>
+		      Nog niet beoordeeld
+		    </p>
+	  </mat-list-item>
 	  <mat-list-item *ngIf="evaluation?.status==='Beoordeeld'">
 	    	<mat-icon [ngStyle]="{'color': evaluation?.colorTeacher}" >
 	    		{{evaluation?.iconTeacher}}

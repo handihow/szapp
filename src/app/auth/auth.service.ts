@@ -376,5 +376,9 @@ export class AuthService {
 			}))
 	}
 
+	fetchUserDisplayName(userId: string) : Observable<User> {
+		return this.afs.collection('users').doc(userId).valueChanges();
+	}
+
 }
 

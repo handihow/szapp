@@ -116,7 +116,7 @@ export class UserGraphComponent implements OnInit, OnDestroy {
             Math.round(this.student.programs[program].Geel / programToBeAdded.countSkills * 100) : 0;
             redResult = this.student.programs[program].Rood ? 
             Math.round(this.student.programs[program].Rood / programToBeAdded.countSkills * 100) : 0;
-            remainingResult = Math.round((programToBeAdded.countSkills - this.student.programs[program].total) / programToBeAdded.countSkills * 100);
+            remainingResult = 100 - greenResult - lightGreenResult - yellowResult - redResult;
           }
           //get the average of the class
           let averages = await this.programService.getAverageProgramResults(program);

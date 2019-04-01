@@ -10,6 +10,7 @@ import * as fromEvaluation from '../../evaluations/evaluation.reducer';
 import * as EvaluationAction from '../../evaluations/evaluation.actions';
 
 import { EvaluationService } from '../../evaluations/evaluation.service';
+import { AuthService } from '../../auth/auth.service';
 
 import { AngularFireStorage } from 'angularfire2/storage';
 
@@ -33,18 +34,22 @@ export class EvaluationCardComponent implements OnInit {
   showRelatedEvaluations: boolean;
   @Input() isAssessment: boolean;
   @Input() user: User;
+  teacher$: Observable<User>;
 
   constructor(	private store: Store<fromAssessment.State>,
                 private storage: AngularFireStorage,
                 private dialog: MatDialog,
-                private evaluationService: EvaluationService) { }
+                private evaluationService: EvaluationService,
+                private authService: AuthService) { }
 
   ngOnInit() {
     if(this.evaluation.thumbnailURL){
         const refTN = this.storage.ref(this.evaluation.thumbnailURL);
         this.thumbnail$ = refTN.getDownloadURL();
-      }
-    console.log(this.evaluation);
+    }
+    if(this.evaluation.status == 'Niet beoordeeld'){
+      this.teacher$ = this.authService.fetchUserDisplayName(this.evaluation.teacher);
+    }
   }
 
   onCancel(){
