@@ -1,4 +1,3 @@
-import * as admin from 'firebase-admin';
 import * as functions from 'firebase-functions';
 
 const {Storage} = require('@google-cloud/storage');
@@ -7,54 +6,70 @@ const gcs = new Storage({
 	projectId: process.env.GCP_PROJECT
 });
 
-const spawn = require('child-process-promise').spawn;
-const path = require('path');
-const os = require('os');
-const fs = require('fs');
+
+import { tmpdir } from 'os';
+import { join, dirname } from 'path';
+
+import * as sharp from 'sharp';
+import * as fs from 'fs-extra';
 
 //creates a resized image when an images is uploaded
-export const onFileChange = functions.storage.object().onFinalize((object) => {
-  	const fileBucket = object.bucket; // The Storage bucket that contains the file.
-	const filePath = object.name; // File path in the bucket.
-	const contentType = object.contentType; // File content type.
-	const metageneration = object.metageneration; // Number of times metadata has been generated. New objects have a value of 1.
+export const onFileChange = functions.storage.object().onFinalize(async object => {
+  	const bucket = gcs.bucket(object.bucket);
+	const filePath = object.name || ''; // File path in the bucket.
+	const contentType = object.contentType || '';
+	const metaData = object.metadata;
+ 	const fileName = filePath.split('/').pop() || '';
+ 	const bucketDir = dirname(filePath);
 
 	// Exit if this is triggered on a file that is not an image.
 	if (!contentType.startsWith('image/')) {
 		console.log('This is not an image.');
 		return null;
 	}
-
-	// Get the file name.
-	const fileName = path.basename(filePath);
 	// Exit if the image is already a thumbnail.
 	if (fileName.startsWith('resized-')) {
 		console.log('We already renamed that file!');
 		return null;
 	}
-  	// Download file from bucket.
-  	const bucket = gcs.bucket(fileBucket);
-  	const tempFilePath = path.join(os.tmpdir(), fileName);
-  	const metadata = {
-  		contentType: contentType,
-  	};
-  	return bucket.file(filePath).download({
-  		destination: tempFilePath,
-  	}).then(() => {
-  		console.log('Image downloaded locally to', tempFilePath);
-	  // Generate a resized image using ImageMagick.
-	  return spawn('convert', [tempFilePath, '-resize', '500x500', tempFilePath]);
-	}).then(() => {
-		console.log('Resized image created at', tempFilePath);
-	  // We add a 'resized-' prefix to resized file name. That's where we'll upload the resized image.
-	  const thumbFileName = `resized-${fileName}`;
-	  const thumbFilePath = path.join(path.dirname(filePath), thumbFileName);
-	  // Uploading the thumbnail.
-	  return bucket.upload(tempFilePath, {
-	  	destination: thumbFilePath,
-	  	metadata: metadata,
-	  });
-	  // Once the thumbnail has been uploaded delete the local file to free up disk space.
-	}).then(() => fs.unlinkSync(tempFilePath));
+
+
+	const workingDir = join(tmpdir(), 'thumbs');
+	const tmpFilePath = join(workingDir, fileName);
+	// ensure thumbnair dir exists
+	await fs.ensureDir(workingDir);
+
+	// download source file
+	await bucket.file(filePath).download({
+		destination: tmpFilePath
+	});
+
+
+	// resize images and define array of upload promises
+	const sizes = [512];
+
+	const filePaths: string[] = [];
+	const uploadPromises = sizes.map(async size => {
+		const thumbName = `resized-${fileName}`;
+		const thumbPath = join(workingDir, thumbName);
+		filePaths.push(join(bucketDir, thumbName));
+
+		// resize source image
+		await sharp(tmpFilePath, {failOnError: false})
+			.rotate()
+			.resize(size, size)
+			.toFile(thumbPath);
+
+		// upload to GCS
+		return bucket.upload(thumbPath, {
+			destination: join(bucketDir, thumbName), metadata: metaData
+		});
+	});
+
+	// run the upload operations
+	await Promise.all(uploadPromises);
+	// cleanup remove the tmp/thumbs from the filesystem
+	return fs.remove(workingDir);
+
 
 });

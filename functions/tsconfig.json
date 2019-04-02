@@ -1,16 +1,17 @@
 {
-	"compilerOptions": {
-		"target": "es6",
-		"module": "commonjs",
-		"outDir": "/",
-		"noImplicitAny": true,
-		"strictNullChecks": false,
-		"allowJs": true
-	},
-	"include": [
-		"src/**/*.ts"
-	],
-	"exclude": [
-		"node_modules"
-	]
+  "compilerOptions": {
+    "module": "commonjs",
+    "noImplicitReturns": true,
+    "noUnusedLocals": true,
+    "outDir": "lib",
+    "sourceMap": true,
+    "strictNullChecks": false,
+    "strict": true,
+    "target": "es2015",
+    "noImplicitAny": false,
+  },
+  "compileOnSave": true,
+  "include": [
+    "src"
+  ]
 }

@@ -34,7 +34,10 @@
     <div fxLayout="row" fxLayoutAlign="start center" *ngIf="skill.evaluation">
       <span fxFlex.gt-sm="10" fxFlex.lt-md="30"> {{skill.evaluation.created.toDate() | date : 'dd-MM-yyyy' }}</span>
       <span fxFlex.gt-sm="35" fxHide.lt-md> {{skill.evaluation.commentStudent}}</span>
-      <span fxFlex.gt-sm="35" fxHide.lt-md> {{skill.evaluation.commentTeacher}} </span>
+      <span fxFlex.gt-sm="35" fxHide.lt-md *ngIf="skill.evaluation.status == 'Beoordeeld'"> 
+          {{skill.evaluation.commentTeacher}} </span>
+      <span fxFlex.gt-sm="35" fxHide.lt-md *ngIf="skill.evaluation.status == 'Niet beoordeeld'"> 
+          Verstuurd naar {{(teacher$ | async)?.displayName}} </span>
       <span fxFlex.gt-sm="10" fxFlex.lt-md="30">
         <mat-icon [ngStyle]="{'color': skill.evaluation.colorStudent ? skill.evaluation.colorStudent: 'grey'}" >
           {{skill.evaluation.iconStudent ? skill.evaluation.iconStudent : "account_circle"}}

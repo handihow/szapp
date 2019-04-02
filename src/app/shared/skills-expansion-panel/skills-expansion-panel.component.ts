@@ -7,6 +7,7 @@ import { Observable, of } from 'rxjs';
 import { SkillService } from '../../skills/skill.service';
 import { MatDialog } from '@angular/material';
 import { ShowAttachmentsComponent } from './show-attachments.component';
+import { AuthService } from '../../auth/auth.service';
 
 @Component({
   selector: 'app-skills-expansion-panel',
@@ -21,27 +22,40 @@ export class SkillsExpansionPanelComponent implements OnInit {
   @Input() user: User;
   step: number;
   relatedEvaluations$: Observable<Evaluation[]>;
+  teacher$: Observable<User>;
 
   constructor(private evaluationService: EvaluationService, 
               private skillService: SkillService,
-              private dialog: MatDialog) { }
+              private dialog: MatDialog,
+              private authService: AuthService) { }
 
   ngOnInit() {
+  }
+
+  setTeacher(index: number){
+    if(this.skills[index].evaluation.status == 'Niet beoordeeld'){
+      this.teacher$ = this.authService.fetchUserDisplayName(this.skills[index].evaluation.teacher);
+    } else {
+      this.teacher$ = of(null);
+    }
   }
 
   setStep(index: number) {
     this.step = index;
     this.relatedEvaluations$ = of(null);
+    this.setTeacher(this.step);
   }
 
   nextStep() {
     this.step++;
     this.relatedEvaluations$ = of(null);
+    this.setTeacher(this.step);
   }
 
   prevStep() {
     this.step--;
     this.relatedEvaluations$ = of(null);
+    this.setTeacher(this.step);
   }
 
   onSelectedEvaluation(evaluation: Evaluation){
