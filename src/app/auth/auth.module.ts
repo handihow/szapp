@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { AngularFireAuthModule } from 'angularfire2/auth';
+import { AngularFireAuthModule } from '@angular/fire/auth';
 import { SharedModule } from '../shared/shared.module';
 import { AuthRoutingModule } from './auth-routing.module';
 import { HttpClientModule } from '@angular/common/http';

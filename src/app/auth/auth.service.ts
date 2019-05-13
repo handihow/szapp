@@ -4,9 +4,9 @@ import {of,  Observable, Subscription } from 'rxjs';
 import {switchMap, map,  take } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { AngularFireAuth } from 'angularfire2/auth';
+import { AngularFireAuth } from '@angular/fire/auth';
 import * as firebase from 'firebase/app';
-import { AngularFirestore, AngularFirestoreDocument } from 'angularfire2/firestore';
+import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/firestore';
 
 import { UIService } from '../shared/ui.service';
 import { Store } from '@ngrx/store';

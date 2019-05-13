@@ -6,9 +6,10 @@ import { RouterModule, Routes } from '@angular/router';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import {MAT_MOMENT_DATE_FORMATS, MomentDateAdapter} from '@angular/material-moment-adapter';
 import {DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE} from '@angular/material/core';
-import { AngularFireModule } from 'angularfire2'; 
-import { AngularFirestoreModule } from 'angularfire2/firestore';
-import { AngularFireStorageModule } from 'angularfire2/storage';
+import { AngularFireModule } from '@angular/fire';
+import { AngularFirePerformanceModule } from '@angular/fire/performance';
+import { AngularFirestoreModule } from '@angular/fire/firestore';
+import { AngularFireStorageModule } from '@angular/fire/storage';
 import { StoreModule } from '@ngrx/store';
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -47,6 +48,7 @@ import { ServiceWorkerModule } from '@angular/service-worker';
     FlexLayoutModule,
     CommonModule,
     AngularFireModule.initializeApp(environment.firebase),
+    AngularFirePerformanceModule,
     AuthModule,
     AngularFirestoreModule,
     AngularFireStorageModule,

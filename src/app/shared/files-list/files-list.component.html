@@ -13,8 +13,6 @@
 
 <div *ngIf="hasImages">
   <h5>Foto's</h5>
-  <ngx-image-gallery 
-  	[images]="images" 
-  	[conf]="conf"></ngx-image-gallery>
+  <ngx-gallery [options]="galleryOptions" [images]="galleryImages"></ngx-gallery>
 </div>
 

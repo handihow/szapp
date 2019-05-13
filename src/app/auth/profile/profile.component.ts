@@ -5,7 +5,7 @@ import { Observable, Subscription } from 'rxjs';
 
 import { FormControl, FormGroup } from '@angular/forms';
 import { AuthService } from '../auth.service';
-import { AngularFireStorage, AngularFireUploadTask } from 'angularfire2/storage';
+import { AngularFireStorage, AngularFireUploadTask } from '@angular/fire/storage';
 import { UIService } from '../../shared/ui.service';
 import { take, map, startWith, finalize } from 'rxjs/operators';
 

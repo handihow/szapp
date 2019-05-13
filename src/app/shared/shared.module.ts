@@ -8,7 +8,7 @@ import { MaterialModule } from '../material.module';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { ShowFullImageComponent } from './show-full-image';
 
-import { NgxImageGalleryModule } from 'ngx-image-gallery';
+import { NgxGalleryModule } from 'ngx-gallery';
 
 import { DropZoneDirective } from './drop-zone.directive';
 import { FileSizePipe } from './file-size.pipe';
@@ -57,7 +57,7 @@ import { FormativeSelectComponent } from './formative-select/formative-select.co
 		FlexLayoutModule,
 		Angular2CsvModule,
 		RouterModule,
-		NgxImageGalleryModule,
+		NgxGalleryModule,
     	AngularFontAwesomeModule
 	],
 	exports: [

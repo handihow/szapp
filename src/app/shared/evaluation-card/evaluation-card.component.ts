@@ -12,7 +12,7 @@ import * as EvaluationAction from '../../evaluations/evaluation.actions';
 import { EvaluationService } from '../../evaluations/evaluation.service';
 import { AuthService } from '../../auth/auth.service';
 
-import { AngularFireStorage } from 'angularfire2/storage';
+import { AngularFireStorage } from '@angular/fire/storage';
 
 import { Evaluation } from '../../evaluations/evaluation.model';
 import { ShowFullImageComponent } from '../../shared/show-full-image';

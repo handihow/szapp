@@ -1,7 +1,7 @@
 
 import {map,  take } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
-import { AngularFirestore, AngularFirestoreDocument } from 'angularfire2/firestore';
+import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/firestore';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs'; 
 
@@ -23,8 +23,8 @@ import { Progress } from '../auth/user.model';
 import { Result } from '../assessments/result.model';
 import { Formative } from '../formatives/formative.model';
 
-import {firestore} from 'firebase/app';
-import Timestamp = firestore.Timestamp;
+import * as firebase from 'firebase/app'; 
+import 'firebase/firestore';
 
 @Injectable()
 export class EvaluationService {
@@ -234,11 +234,10 @@ export class EvaluationService {
 	}
 
 	private onNewAssessment(result: Result, formative?: Formative): Evaluation {
-	    let timestamp = Timestamp.now();
 	    let newEvaluation : Evaluation = {
 	        id: result.student.uid + '_' + result.skill.id,
-	        created: timestamp,
-	        evaluated: timestamp,
+	        created: firebase.firestore.FieldValue.serverTimestamp(),
+	        evaluated: firebase.firestore.FieldValue.serverTimestamp(),
 	        user: result.student.uid,
 	        studentName: result.student.displayName,
 	        organisation: result.student.organisation,
@@ -277,8 +276,7 @@ export class EvaluationService {
 
 	private onUpdateAssessment(result: Result, formative?: Formative): Evaluation {
 		let updatedEvaluation: Evaluation = result.evaluation;
-		let timestamp = Timestamp.now();
-		updatedEvaluation.evaluated = timestamp;
+		updatedEvaluation.evaluated = firebase.firestore.FieldValue.serverTimestamp();
 		updatedEvaluation.teacher = result.teacher.uid;
 	    updatedEvaluation.commentTeacher = 'Alleen kleurbeoordeling';
 	    updatedEvaluation.colorLabelTeacher = result.color.colorLabel;

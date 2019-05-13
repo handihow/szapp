@@ -2,8 +2,8 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Subscription, Observable } from 'rxjs';
 import { take, map, startWith, finalize } from 'rxjs/operators';
 import * as firebase from 'firebase/app';
-import { AngularFireStorage, AngularFireUploadTask } from 'angularfire2/storage';
-import { AngularFirestore } from 'angularfire2/firestore';
+import { AngularFireStorage, AngularFireUploadTask } from '@angular/fire/storage';
+import { AngularFirestore } from '@angular/fire/firestore';
 
 import { UIService } from '../../shared/ui.service';
 

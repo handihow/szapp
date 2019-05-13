@@ -33,7 +33,7 @@ export class SkillsExpansionPanelComponent implements OnInit {
   }
 
   setTeacher(index: number){
-    if(this.skills[index].evaluation.status == 'Niet beoordeeld'){
+    if(this.skills[index].evaluation && this.skills[index].evaluation.status == 'Niet beoordeeld'){
       this.teacher$ = this.authService.fetchUserDisplayName(this.skills[index].evaluation.teacher);
     } else {
       this.teacher$ = of(null);

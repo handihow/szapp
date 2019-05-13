@@ -6,7 +6,7 @@ import * as fromEvaluation from '../evaluation.reducer';
 import * as EvaluationAction from '../evaluation.actions';
 
 import * as firebase from 'firebase/app';
-import { AngularFireStorage, AngularFireUploadTask } from 'angularfire2/storage';
+import { AngularFireStorage, AngularFireUploadTask } from '@angular/fire/storage';
 
 import { Subscription, Observable } from 'rxjs';
 import { take, map, startWith, finalize } from 'rxjs/operators';

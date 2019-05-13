@@ -1,7 +1,7 @@
 
 import {map,  take } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
-import { AngularFirestore } from 'angularfire2/firestore';
+import { AngularFirestore } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
 import { Store } from '@ngrx/store';
 

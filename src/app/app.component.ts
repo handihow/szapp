@@ -26,10 +26,6 @@ export class AppComponent implements OnInit {
               private updates: SwUpdate,
               private authService: AuthService,
                private store: Store<fromUI.State>) {
-  	//eliminate firebase timestamp error
-  	const firestore = firebase.firestore();
-	  const settings = {timestampsInSnapshots: true};
-	  firestore.settings(settings);
     //let the service worker check for app updates
     updates.available.subscribe(event => {
       //in the production environment, check for updates for the app

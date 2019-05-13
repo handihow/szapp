@@ -1,10 +1,10 @@
 import { Component, OnInit, Input, ViewChild } from '@angular/core';
-import { AngularFireStorage } from 'angularfire2/storage';
-import { AngularFirestore } from 'angularfire2/firestore';
+import { AngularFireStorage } from '@angular/fire/storage';
+import { AngularFirestore } from '@angular/fire/firestore';
 
 import { UIService } from '../../shared/ui.service';
 
-import { NgxImageGalleryComponent, GALLERY_IMAGE, GALLERY_CONF } from "ngx-image-gallery";
+import { NgxGalleryOptions, NgxGalleryImage, NgxGalleryAnimation } from 'ngx-gallery';
 
 @Component({
   selector: 'app-files-list',
@@ -16,21 +16,11 @@ export class FilesListComponent implements OnInit {
   @Input() userRole: string;
   @Input() attachments: any[];
 
-  @ViewChild(NgxImageGalleryComponent) ngxImageGallery: NgxImageGalleryComponent;
+  galleryOptions: NgxGalleryOptions[] = [];
+  galleryImages: NgxGalleryImage[] = [];
 
-  // gallery configuration
-  conf: GALLERY_CONF = {
-    imageOffset: '0px',
-    showDeleteControl: false,
-    showImageTitle: false,
-    inline: true, // make gallery inline (default false)
-    backdropColor: "rgba(0,0,0,0)", // gallery backdrop (background) color (default rgba(13,13,14,0.85))
-    showExtUrlControl: false, // show image external url icon (default true)
-    showCloseControl: false, // show gallery close icon (default true)
-  };
     
   // gallery images
-  images: GALLERY_IMAGE[];
   hasImages: boolean;
 
   constructor(private db: AngularFirestore, 
@@ -41,7 +31,7 @@ export class FilesListComponent implements OnInit {
   }
 
   ngOnChanges() {
-    this.images = [];
+    this.galleryImages = [];
     this.getImages();
   }
 
@@ -52,7 +42,11 @@ export class FilesListComponent implements OnInit {
           const ref = this.storage.ref(attachment.path);
           const downloadUrl = ref.getDownloadURL().subscribe(url => {
             this.hasImages = true;
-            this.images.push({url: url});
+            this.galleryImages.push({
+              small: url,
+              medium: url,
+              big: url
+            });
           })
         }
       })
