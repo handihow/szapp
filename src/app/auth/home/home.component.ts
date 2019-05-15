@@ -19,7 +19,7 @@ export class LoginComponent implements OnInit {
   isIEOrEdge: boolean;
 
   constructor(  private authService: AuthService,
-  				private store: Store<fromRoot.State> ) { }
+  				      private store: Store<fromRoot.State> ) { }
 
   ngOnInit() {
     this.isAuth$ = this.store.select(fromRoot.getIsAuth);
@@ -27,15 +27,18 @@ export class LoginComponent implements OnInit {
     this.isIEOrEdge = /msie\s|trident\/|edge\//i.test(window.navigator.userAgent);
   }
 
-  onSubmit(form: NgForm){  
-    this.authService.login({
+  onSubmit(form: NgForm){
+   
+   this.authService.login({
       email: form.value.email,
       password: form.value.password
     });
+
   }
 
   onGoogleLogin() {
-    this.authService.signInWithGoogle();
+   this.authService.signInWithGoogle();
+
   }
 
   toggleLoginWithEmail(){

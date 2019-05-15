@@ -2,6 +2,7 @@
 import {map,  take } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
 import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/firestore';
+import { AngularFirePerformance } from '@angular/fire/performance';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs'; 
 
@@ -29,7 +30,8 @@ import 'firebase/firestore';
 @Injectable()
 export class EvaluationService {
    
-	constructor( private db: AngularFirestore,
+	constructor( private afp: AngularFirePerformance,
+				 private db: AngularFirestore,
 				 private uiService: UIService,
 				 private store: Store<fromEvaluation.State>){}
 
@@ -73,6 +75,7 @@ export class EvaluationService {
 		}
 		return this.db.collection('evaluations', queryStr)
 			.snapshotChanges().pipe(
+				this.afp.trace('getEvaluations'),
 			map(docArray => {
 				this.store.dispatch(new UI.StopLoading());
 				return docArray.map(doc => {

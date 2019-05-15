@@ -7,6 +7,7 @@ import { Router } from '@angular/router';
 import { AngularFireAuth } from '@angular/fire/auth';
 import * as firebase from 'firebase/app';
 import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/firestore';
+import { AngularFirePerformance } from '@angular/fire/performance';
 
 import { UIService } from '../shared/ui.service';
 import { Store } from '@ngrx/store';
@@ -28,7 +29,9 @@ export class AuthService {
 	user$: Observable<User>;
 	public static SESSION_STORAGE_KEY: string = 'accessToken';
 
-	constructor(	private router: Router, 
+	constructor(	
+		private afp: AngularFirePerformance,
+		private router: Router, 
 		private afAuth: AngularFireAuth,
 		private afs: AngularFirestore,
 		private uiService: UIService,
@@ -38,6 +41,7 @@ export class AuthService {
 		//listen to value changes in the authentication state from angularfire
 		//return the custom user from the firebase User collection
 		this.user$ = this.afAuth.authState.pipe(
+			this.afp.trace('userLogin'),
 		switchMap(user => {
 			if (user) {
 				if(user.providerData[0].providerId==="google.com"){

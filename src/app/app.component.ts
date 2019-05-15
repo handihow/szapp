@@ -1,5 +1,4 @@
 import { Component, OnInit, HostListener } from '@angular/core';
-import * as firebase from 'firebase/app';
 import { SwUpdate } from '@angular/service-worker';
 import { environment } from '../environments/environment';
 

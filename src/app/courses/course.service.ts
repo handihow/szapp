@@ -2,6 +2,7 @@
 import {map,  take } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
 import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/firestore';
+import { AngularFirePerformance } from '@angular/fire/performance';
 import { Observable, of } from 'rxjs';
 import { Store } from '@ngrx/store';
 import {HttpClient, HttpHeaders} from "@angular/common/http";
@@ -23,7 +24,8 @@ export class CourseService {
 
     private readonly API_URL: string = 'https://classroom.googleapis.com/v1/courses';
 
-	constructor( private db: AngularFirestore,
+	constructor( private afp: AngularFirePerformance,
+				 private db: AngularFirestore,
 			     private httpClient: HttpClient,
 				 private uiService: UIService,
                  private authService: AuthService,
@@ -60,6 +62,7 @@ export class CourseService {
 		}
 		return this.db.collection('courses', queryStr)
 			.snapshotChanges().pipe(
+				this.afp.trace('getCourses'),
 			map(docArray => {
 				this.store.dispatch(new UI.StopLoading());
 				return docArray.map(doc => {
