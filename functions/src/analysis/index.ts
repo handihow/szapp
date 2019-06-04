@@ -4,7 +4,7 @@ import { Program } from '../../../src/app/programs/program.model';
 import { User } from '../../../src/app/auth/user.model';
 import { Evaluation } from '../../../src/app/evaluations/evaluation.model';
 
-var db = admin.firestore();
+const db = admin.firestore();
 
 export const calculateClassroomAveragesForPrograms = functions.pubsub
 .topic('averages')
@@ -13,7 +13,7 @@ export const calculateClassroomAveragesForPrograms = functions.pubsub
 	//first get all green evaluations from the database
 	const evaluationQry = db.collection('evaluations').where("ratingTeacher", "<", 2);
 	const greenEvaluationSnapshots = await evaluationQry.get();
-	var greenEvaluations : Evaluation[] = [];
+	const greenEvaluations : Evaluation[] = [];
 	greenEvaluationSnapshots.forEach((snap) => {
 		const id = snap.id;
 	    const data = snap.data() as Evaluation;
@@ -23,7 +23,7 @@ export const calculateClassroomAveragesForPrograms = functions.pubsub
 	// get all active programs and start looping through them
 	const programQry = db.collection('programs').where("status", "==", "Actief");
 	const programSnapshots = await  programQry.get();
-	let activePrograms : Program[] = [];
+	const activePrograms : Program[] = [];
 	programSnapshots.forEach((snap) => {
 		//get the data from the program and set the result document reference
 	    const id= snap.id;
@@ -31,11 +31,11 @@ export const calculateClassroomAveragesForPrograms = functions.pubsub
 	    activePrograms.push({id,...data});
 	});
 	activePrograms.forEach(async program => {    
-	      let resultRef = db.collection('results').doc(program.id);
+	      const resultRef = db.collection('results').doc(program.id);
 	      //get the total greens from the evaluations
-	      let programEvaluations = greenEvaluations.filter(evaluation => evaluation.program === program.id);
+	      const programEvaluations = greenEvaluations.filter(evaluation => evaluation.program === program.id);
 	      let average = 0;
-	      let results: {[key: string]: any} = {
+	      const results: {[key: string]: any} = {
 	      	"programName": program.name,
 	      	"lastUpdate": new Date(),
 	      	"isValid": true
@@ -51,7 +51,7 @@ export const calculateClassroomAveragesForPrograms = functions.pubsub
 	      			results.isValid = false;
 	      		} else {
 	      			const filteredProgramEvaluations = programEvaluations.filter(e => e.class === classroom);
-		      		var classroomAverage = 0;
+		      		let classroomAverage = 0;
 		      		if(filteredProgramEvaluations && filteredProgramEvaluations.length>0){
 		      			const classroomtotal = filteredProgramEvaluations.length;
 		      			const classroomstudents = [...new Set(filteredProgramEvaluations.map(e => e.user))].length;
@@ -72,7 +72,7 @@ export const correctEvaluationRecords = functions.runWith({timeoutSeconds: 300, 
 	//first get all green evaluations from the database
 	const evaluationQry = db.collection('evaluations');
 	const allEvaluationSnapshots = await evaluationQry.get();
-	var allEvaluations : Evaluation[] = [];
+	const allEvaluations : Evaluation[] = [];
 	allEvaluationSnapshots.forEach((snap) => {
 		const data = snap.data() as Evaluation;
 		const id = snap.id;
@@ -80,7 +80,7 @@ export const correctEvaluationRecords = functions.runWith({timeoutSeconds: 300, 
 	})
 	const userQry = db.collection('users');
 	const allUserSnapshots = await userQry.get();
-	var allUsers : User[] = [];
+	const allUsers : User[] = [];
 	allUserSnapshots.forEach((snap) => {
 		const data = snap.data() as User;
 		const uid = snap.id;
@@ -89,9 +89,9 @@ export const correctEvaluationRecords = functions.runWith({timeoutSeconds: 300, 
 	allEvaluations.forEach(async evaluation => {
 		const evalRef = db.collection('evaluations').doc(evaluation.id);
 		if(!evaluation.class){
-			var student = allUsers.find(user => user.uid === evaluation.user);
+			const student = allUsers.find(user => user.uid === evaluation.user);
 			if(student.classes && student.classes[0]){
-				var classroom = student.classes[0];
+				const classroom = student.classes[0];
 				evaluation.class = classroom;
 			}
 		}

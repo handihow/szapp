@@ -1,7 +1,7 @@
 import * as admin from 'firebase-admin';
 import * as functions from 'firebase-functions';
 
-var db = admin.firestore();
+const db = admin.firestore();
 
 //function updates the progress results of the user 
 export const onNewProgress = functions.firestore
@@ -17,7 +17,7 @@ export const onNewProgress = functions.firestore
 		const progressRef = admin.firestore().collection('users').doc(evaluation.user).collection('results').doc('progress');	
 		return progressRef.get()
 		.then(progress => {
-			var progressToBeUpdated = progress.data();
+			let progressToBeUpdated = progress.data();
 			//if the user does not have any progress property (first time user)
 			if(!progressToBeUpdated){
 				progressToBeUpdated = {};
@@ -35,11 +35,11 @@ export const onNewProgress = functions.firestore
 				}
 				//user already has progress on this project, check if the progress needs to be updated
 			} else if(evaluation.ratingTeacher < 3){
-				let updatedScore = progressToBeUpdated[evaluation.project] + 1;
+				const updatedScore = progressToBeUpdated[evaluation.project] + 1;
 				progressToBeUpdated[evaluation.project] = updatedScore;
 				//when the rating of teacher was previous good, but now red (3) you lose a point
 			} else if(evaluation.ratingTeacher === 3){
-				let updatedScore2 = progressToBeUpdated[evaluation.project] - 1;
+				const updatedScore2 = progressToBeUpdated[evaluation.project] - 1;
 				progressToBeUpdated[evaluation.project] = updatedScore2;
 			}
 				//update the progress results
@@ -63,7 +63,7 @@ export const onUpdateProgress = functions.firestore
 		const progressRef = admin.firestore().collection('users').doc(evaluation.user).collection('results').doc('progress');	
 		return progressRef.get()
 		.then(progress => {
-			var progressToBeUpdated = progress.data();
+			let progressToBeUpdated = progress.data();
 				//if the user does not have any progress property (first time user)
 				if(!progressToBeUpdated){
 					progressToBeUpdated = {};
@@ -82,11 +82,11 @@ export const onUpdateProgress = functions.firestore
 				//user already has progress on this project, check if the progress needs to be updated
 			} else if((!previousEvaluation.colorLabelTeacher || previousEvaluation.ratingTeacher===3) 
 				&& evaluation.ratingTeacher < 3){
-				let updatedScore = progressToBeUpdated[evaluation.project] + 1;
+				const updatedScore = progressToBeUpdated[evaluation.project] + 1;
 				progressToBeUpdated[evaluation.project] = updatedScore;
 				//when the rating of teacher was previous good, but now red (3) you lose a point
 			} else if(previousEvaluation.ratingTeacher < 3 && evaluation.ratingTeacher === 3){
-				let updatedScore2 = progressToBeUpdated[evaluation.project] - 1;
+				const updatedScore2 = progressToBeUpdated[evaluation.project] - 1;
 				progressToBeUpdated[evaluation.project] = updatedScore2;
 			}
 				//update the progress results
@@ -109,7 +109,7 @@ export const onNewProgramProgress = functions.firestore
 		const programProgressRef = db.collection('users').doc(evaluation.user).collection('results').doc('program');	
 		return programProgressRef.get()
 		.then(programProgress => {
-			var programProgressToBeUpdated = programProgress.data();
+			let programProgressToBeUpdated = programProgress.data();
 			//if the user does not have any programs property (first time user)
 			if(!programProgressToBeUpdated){
 				programProgressToBeUpdated = {};
@@ -133,13 +133,13 @@ export const onNewProgramProgress = functions.firestore
 			} else {
 				//first start updating the total score on this program
 				if(evaluation.ratingTeacher < 3){
-						let updatedProgramScore = programProgressToBeUpdated[evaluation.program].total + 1;
+						const updatedProgramScore = programProgressToBeUpdated[evaluation.program].total + 1;
 					programProgressToBeUpdated[evaluation.program].total = updatedProgramScore;
 				} else {
-					let updatedProgramScore2 = programProgressToBeUpdated[evaluation.program].total - 1;
+					const updatedProgramScore2 = programProgressToBeUpdated[evaluation.program].total - 1;
 					programProgressToBeUpdated[evaluation.program].total = updatedProgramScore2;
 				}
-				let updatedProgramScore3 = programProgressToBeUpdated[evaluation.program][evaluation.colorLabelTeacher] ?
+				const updatedProgramScore3 = programProgressToBeUpdated[evaluation.program][evaluation.colorLabelTeacher] ?
 				programProgressToBeUpdated[evaluation.program][evaluation.colorLabelTeacher] + 1 : 1;
 				programProgressToBeUpdated[evaluation.program][evaluation.colorLabelTeacher] = updatedProgramScore3;
 			}
@@ -164,7 +164,7 @@ export const onUpdateProgramProgress = functions.firestore
 		const programProgressRef = db.collection('users').doc(evaluation.user).collection('results').doc('program');	
 		return programProgressRef.get()
 		.then(programProgress => {
-			var programProgressToBeUpdated = programProgress.data();
+			let programProgressToBeUpdated = programProgress.data();
 				//if the user does not have any programs property (first time user)
 				if(!programProgressToBeUpdated){
 					programProgressToBeUpdated = {};
@@ -189,18 +189,18 @@ export const onUpdateProgramProgress = functions.firestore
 					//first start updating the total score on this program
 					if((!previousEvaluation.colorLabelTeacher || previousEvaluation.ratingTeacher===3) 
 						&& evaluation.ratingTeacher < 3){
-						let updatedProgramScore = programProgressToBeUpdated[evaluation.program].total + 1;
+						const updatedProgramScore = programProgressToBeUpdated[evaluation.program].total + 1;
 					programProgressToBeUpdated[evaluation.program].total = updatedProgramScore;
 				} else if (previousEvaluation.ratingTeacher < 3 && evaluation.ratingTeacher === 3){
-					let updatedProgramScore2 = programProgressToBeUpdated[evaluation.program].total - 1;
+					const updatedProgramScore2 = programProgressToBeUpdated[evaluation.program].total - 1;
 					programProgressToBeUpdated[evaluation.program].total = updatedProgramScore2;
 				}
 					//if there is a previous evaluation from the teacher, first subtract 1 from the previously evaluated color
 					if(previousEvaluation.colorLabelTeacher){
-						let updatedProgramScore3 = programProgressToBeUpdated[evaluation.program][previousEvaluation.colorLabelTeacher] - 1;
+						const updatedProgramScore3 = programProgressToBeUpdated[evaluation.program][previousEvaluation.colorLabelTeacher] - 1;
 						programProgressToBeUpdated[evaluation.program][previousEvaluation.colorLabelTeacher] = updatedProgramScore3;
 					}
-					let updatedProgramScore4 = programProgressToBeUpdated[evaluation.program][evaluation.colorLabelTeacher] ?
+					const updatedProgramScore4 = programProgressToBeUpdated[evaluation.program][evaluation.colorLabelTeacher] ?
 					programProgressToBeUpdated[evaluation.program][evaluation.colorLabelTeacher] + 1 : 1;
 					programProgressToBeUpdated[evaluation.program][evaluation.colorLabelTeacher] = updatedProgramScore4;
 				}
@@ -224,7 +224,7 @@ export const onDeleteEvaluationUpdateProgress = functions.firestore
 		const progressRef = db.collection('users').doc(deletedValue.user).collection('results').doc('progress');	
 		return progressRef.get()
 		.then(progress => {
-			var progressToBeUpdated = progress.data();
+			const progressToBeUpdated = progress.data();
 			if(deletedValue.ratingTeacher < 3){
 				progressToBeUpdated[deletedValue.project] -= 1;
 			} 
@@ -248,7 +248,7 @@ export const onDeleteEvaluationUpdateProgramProgress = functions.firestore
 		const programProgressRef = db.collection('users').doc(deletedValue.user).collection('results').doc('program');	
 		return programProgressRef.get()
 		.then(programProgress => {
-			var programProgressToBeUpdated = programProgress.data();
+			const programProgressToBeUpdated = programProgress.data();
 			//subtract 1 from the previously evaluated color
 			programProgressToBeUpdated[deletedValue.program][deletedValue.colorLabelTeacher] -= 1;
 			if(deletedValue.ratingTeacher < 3){

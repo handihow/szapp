@@ -37,6 +37,8 @@
 		  <button mat-menu-item routerLink="/projects">Projecten</button>
 		  <button mat-menu-item routerLink="/courses">Lesgroepen</button>
 		  <button mat-menu-item routerLink="/formatives">Formatieven</button>
+		  <button mat-menu-item routerLink="/admin" *ngIf="(user$ | async)?.roles?.admin">Admin</button>
+		  <button mat-menu-item routerLink="/admin/downloads" *ngIf="(user$ | async)?.roles?.downloader">Downloads</button>
 		</mat-menu>
 		<!-- Profile button -->
 		<button mat-mini-fab [matMenuTriggerFor]="profile" *ngIf="isAuth$ | async">

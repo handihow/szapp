@@ -29,7 +29,8 @@ import {
 	MatExpansionModule,
 	MatSlideToggleModule,
 	MatButtonToggleModule,
-	MatTooltipModule
+	MatTooltipModule,
+	MatSliderModule
 } from '@angular/material';
 import { MatMomentDateModule } from '@angular/material-moment-adapter';
 
@@ -64,7 +65,8 @@ import { MatMomentDateModule } from '@angular/material-moment-adapter';
 		MatExpansionModule,
 		MatSlideToggleModule,
 		MatButtonToggleModule,
-		MatTooltipModule],
+		MatTooltipModule,
+		MatSliderModule],
 	exports: [
 		MatButtonModule, 
 		MatIconModule, 
@@ -95,7 +97,8 @@ import { MatMomentDateModule } from '@angular/material-moment-adapter';
 		MatExpansionModule,
 		MatSlideToggleModule,
 		MatButtonToggleModule,
-		MatTooltipModule]
+		MatTooltipModule,
+		MatSliderModule]
 })
 
 export class MaterialModule{}

@@ -1,45 +1,67 @@
 "use strict";
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 const functions = require("firebase-functions");
 const admin = require("firebase-admin");
-const { Storage } = require('@google-cloud/storage');
-// Creates a client
-const gcs = new Storage({
-    projectId: process.env.GCP_PROJECT
-});
-const path_1 = require("path");
-const json2csv = require("json2csv").parse;
-exports.csvJsonReport = functions
-    .runWith({ timeoutSeconds: 300, memory: "2GB" })
-    .pubsub
-    .topic('reports')
-    .onPublish((message, context) => __awaiter(this, void 0, void 0, function* () {
-    const bucket = gcs.bucket('gs://szapp-c42bb.appspot.com');
-    const fileName = new Date().getUTCMilliseconds() + '.csv';
-    const bucketDir = 'reports/';
+exports.jsonDownload = functions.runWith({
+    timeoutSeconds: 300,
+    memory: '1GB'
+}).https.onCall((data, context) => {
+    if (context && context.auth && context.auth.token && context.auth.token.downloader !== true) {
+        return {
+            error: "Request not authorized. User must be a downloader to fulfill request."
+        };
+    }
     const db = admin.firestore();
     const evaluationsRef = db.collection('evaluations');
-    return evaluationsRef.get()
+    const limit = parseInt(data.limit);
+    return evaluationsRef.orderBy('created', 'desc').limit(limit).get()
         .then((querySnapshot) => {
         const evaluations = [];
         querySnapshot.forEach(doc => {
-            const evaluation = doc.data();
+            const evaluationData = doc.data();
+            const evaluation = {
+                created: evaluationData.created ? evaluationData.created.toDate().toLocaleDateString() : '-',
+                evaluated: evaluationData.evaluated ? evaluationData.evaluated.toDate().toLocaleDateString() : '-',
+                class: evaluationData.class ? evaluationData.class[0] : '-',
+                colorLabelStudent: sanitizeString(evaluationData.colorLabelStudent),
+                colorLabelTeacher: sanitizeString(evaluationData.colorLabelTeacher),
+                commentStudent: sanitizeString(evaluationData.commentStudent),
+                commentTeacher: sanitizeString(evaluationData.commentTeacher),
+                projectCode: sanitizeString(evaluationData.projectCode),
+                projectName: sanitizeString(evaluationData.projectName),
+                skillCompetency: sanitizeString(evaluationData.skillCompetency),
+                skillOrder: sanitizeString(evaluationData.skillOrder),
+                skillTopic: sanitizeString(evaluationData.skillTopic),
+                status: sanitizeString(evaluationData.status),
+                studentName: sanitizeString(evaluationData.studentName),
+                teacherName: sanitizeString(evaluationData.teacherName)
+            };
             evaluations.push(evaluation);
         });
-        const csv = json2csv(evaluations);
-        return bucket.upload(csv, {
-            destination: path_1.join(bucketDir, fileName)
-        });
-    }).catch((err) => {
-        console.log(err);
+        return {
+            result: 'Succesfully downloaded the information',
+            evaluations: evaluations
+        };
+    })
+        .catch(err => {
+        return {
+            error: "Error in request :" + err.message
+        };
     });
-}));
+});
+function sanitizeString(desc) {
+    let itemDesc;
+    if (desc) {
+        itemDesc = desc.replace(/(\r\n|\n|\r|\s+|\t|&nbsp;)/gm, ' ');
+        itemDesc = itemDesc.replace(/,/g, ' ');
+        itemDesc = itemDesc.replace(/;/g, ' ');
+        itemDesc = itemDesc.replace(/"/g, ' ');
+        itemDesc = itemDesc.replace(/'/g, ' ');
+        itemDesc = itemDesc.replace(/ +(?= )/g, ' ');
+    }
+    else {
+        itemDesc = '-';
+    }
+    return itemDesc;
+}
 //# sourceMappingURL=index.js.map
