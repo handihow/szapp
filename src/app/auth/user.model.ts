@@ -10,6 +10,7 @@ organisationId?: string;
 role?: string;
 isAdmin?: boolean;
 classes?: string[];
+classNumber?: number;
 subjects?: string[];
 imageURL?: string;
 thumbnailURL?: string;

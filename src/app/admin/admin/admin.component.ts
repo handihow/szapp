@@ -17,7 +17,6 @@ export class AdminComponent implements OnInit {
   }
 
   setModerator(){
-    console.log(this.email);
   	const callable = this.fns.httpsCallable('addDownloader');
     this.result$ = callable({ email: this.email });
   }
@@ -25,5 +24,10 @@ export class AdminComponent implements OnInit {
   removeModerator(){
     const callable = this.fns.httpsCallable('removeDownloader');
     this.result$ = callable({ email: this.email });
+  }
+
+  setClassNumbers(){
+    const callable = this.fns.httpsCallable('setClassNumbers');
+    this.result$ = callable({});
   }
 }

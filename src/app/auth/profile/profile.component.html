@@ -54,7 +54,8 @@
 			<mat-card-content>
 				<!-- show fields if user is not editing the profile -->
 				<div *ngIf="!isEditing">
-					<div>Klas(sen): {{user?.classes}}</div>
+					<div *ngIf="!isTeacher">Klasnummer: {{user?.classNumber}}</div>
+					<div>Klas<span *ngIf="isTeacher">(sen)</span>: {{user?.classes}}</div>
 					<div>Vak(ken): </div>
 					<div *ngFor="let course of user?.subjects">
 						{{course}}
@@ -66,11 +67,14 @@
 				</div>
 				<!-- show the form if the user is editing the profile -->
 				<div *ngIf="isEditing" fxLayout="column" fxLayoutAlign="center center">
+					<mat-form-field class="full-width" *ngIf="!isTeacher">
+						<input matInput type="number" placeholder="Klasnummer" formControlName="classNumber">
+					</mat-form-field>
 					<mat-form-field class="full-width">  
 					  <mat-select 
 					  		placeholder="Selecteer klas" 
 					  		formControlName="classes"
-					  		multiple>
+					  		[multiple]="isTeacher">
 					    <mat-option *ngFor="let class of (organisation$ | async)?.classes" [value]="class">
 					      {{class}}
 					    </mat-option>

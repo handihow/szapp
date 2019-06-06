@@ -25,6 +25,7 @@ export class UserProfileComponent implements OnInit, OnDestroy {
   organisation$: Observable<Organisation>;
 
   isEditing: boolean;
+  isTeacher: boolean;
 
   profileForm: FormGroup;
   userId: string;
@@ -54,19 +55,26 @@ export class UserProfileComponent implements OnInit, OnDestroy {
       classes: new FormControl(null),
       subjects: new FormControl(null),
       imageUrl: new FormControl(null),
-      thumbnailUrl: new FormControl(null)
+      thumbnailUrl: new FormControl(null),
+      classNumber: new FormControl(null)
     });
     //get the user, loading and organisation from the root app state management
     this.userSubs = this.store.select(fromRoot.getCurrentUser).subscribe(user => {
       if(user){
         this.user = user;
         this.userId = user.uid;
-        this.profileForm.get("classes").setValue(user.classes);
         this.profileForm.get("subjects").setValue(user.subjects);
         if(user.thumbnailURL){
           const refTN = this.storage.ref(user.thumbnailURL);
           this.thumbnail$ = refTN.getDownloadURL();
         }
+        if(user.role === 'Leraar'){
+          this.isTeacher = true;
+          this.profileForm.get("classes").setValue(user.classes);
+        } else if(user.classes) {
+          this.profileForm.get('classes').setValue(user.classes[0]);
+        }
+        this.profileForm.get("classNumber").setValue(user.classNumber);
       }
     })
   	this.isLoading$ = this.store.select(fromRoot.getIsLoading);
@@ -77,10 +85,11 @@ export class UserProfileComponent implements OnInit, OnDestroy {
     this.isEditing = false;
     this.authService.updateUserProfile({
       uid: this.userId,
-      classes: this.profileForm.value.classes,
+      classes: this.isTeacher ? this.profileForm.value.classes : [this.profileForm.value.classes],
       subjects: this.profileForm.value.subjects,
       imageURL: this.profileForm.value.imageUrl,
-      thumbnailURL: this.profileForm.value.thumbnailUrl
+      thumbnailURL: this.profileForm.value.thumbnailUrl,
+      classNumber: this.profileForm.value.classNumber
     });
   }
 

@@ -94,7 +94,7 @@ export class EvaluationService {
 
 	//method retrieves related evaluations of a certain user and skill (database ids not included)
 	fetchRelatedEvaluations(userId: string, skillId: string) : Observable<Evaluation[]> {
-		var queryStr = (ref => ref.where('user', '==', userId));
+		var queryStr = (ref => ref.where('user', '==', userId).orderBy('created', 'desc'));
 		return this.db.collection('evaluations').doc(userId + '_' + skillId).collection('history', queryStr)
 			.snapshotChanges().pipe(
 			map(docArray => {

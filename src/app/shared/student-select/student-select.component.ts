@@ -26,7 +26,7 @@ export class StudentSelectComponent implements OnInit, OnDestroy {
   filteredStudents: User[];
   @Output() selectedStudent = new EventEmitter<User>();
   sub: Subscription;
-  officialClass: string;
+  selectedClass: string;
   student: User;
   screenType$: Observable<string>;
 
@@ -40,13 +40,14 @@ export class StudentSelectComponent implements OnInit, OnDestroy {
    ngOnChanges(){
      if(this.resetTrigger){
         this.studentControl = new FormControl(null);
-        this.officialClass = null;
+        this.selectedClass = null;
         this.student = null;
      }
      if(this.organisation){
        //fetch users
-        this.sub = this.authService.fetchUsers(this.organisation.id, "Leerling", true).subscribe(students => {
-            this.students = students.sort(this.sortStudents); 
+        this.sub = this.authService.fetchUsers(this.organisation.id, "Leerling", true, true).subscribe(students => {
+            console.log(students);
+            this.students = students; 
             //filter students in the autocomplete form
         this.filteredStudents$ = this.studentControl.valueChanges
             .pipe(
@@ -67,8 +68,8 @@ export class StudentSelectComponent implements OnInit, OnDestroy {
      }
    }
 
-   onSelectClass(officialClass: string){
-   	this.filteredStudents = this.students.filter(student => (student.classes && student.classes.includes(officialClass)));
+   onSelectClass(selectedClass: string){
+   	this.filteredStudents = this.students.filter(student => (student.classes && student.classes.includes(selectedClass)));
    }
 
    onSelectStudent(studentId){
@@ -88,16 +89,16 @@ export class StudentSelectComponent implements OnInit, OnDestroy {
     return user ? user.displayName : undefined;
    }
 
-   private sortStudents(A,B) {
-    if(!A.classes || !A.classes[0]){
-      return 1
-    } else if(!B.classes || !B.classes[0]){
-      return -1
-    } else if (A.classes[0] == B.classes[0]){
-      return (A.displayName > B.displayName) ? 1 : ((B.displayName > A.displayName) ? -1 : 0);
-    } else {
-      return (A.classes[0] > B.classes[0]) ? 1 : ((B.classes[0] > A.classes[0]) ? -1 : 0);  
-    }
-  }
+  //  private sortStudents(A,B) {
+  //   if(!A.classes || !A.classes[0]){
+  //     return 1
+  //   } else if(!B.classes || !B.classes[0]){
+  //     return -1
+  //   } else if (A.classes[0] == B.classes[0]){
+  //     return (A.displayName > B.displayName) ? 1 : ((B.displayName > A.displayName) ? -1 : 0);
+  //   } else {
+  //     return (A.classes[0] > B.classes[0]) ? 1 : ((B.classes[0] > A.classes[0]) ? -1 : 0);  
+  //   }
+  // }
 
 }

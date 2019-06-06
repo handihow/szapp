@@ -11,6 +11,7 @@ import * as images from './images';
 import * as progress from './progress';
 import * as data from './data-export';
 import * as roles from './roles';
+import * as corrections from './corrections';
 
 export const calculateClassroomAveragesForPrograms = analysis.calculateClassroomAveragesForPrograms;
 export const correctEvaluationRecords = analysis.correctEvaluationRecords;
@@ -29,3 +30,5 @@ export const jsonDownload = data.jsonDownload;
 export const addAdmin = roles.addAdmin;
 export const addDownloader = roles.addDownloader;
 export const removeDownloader = roles.removeDownloader;
+
+export const setClassNumbers = corrections.setClassNumbers;

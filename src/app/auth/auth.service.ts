@@ -321,7 +321,8 @@ export class AuthService {
 
 	    var data: User = {
 	      	classes: profileUpdate.classes ? profileUpdate.classes : null,
-	      	subjects: profileUpdate.subjects ? profileUpdate.subjects : null
+	      	subjects: profileUpdate.subjects ? profileUpdate.subjects : null,
+	      	classNumber: profileUpdate.classNumber ? profileUpdate.classNumber : 99
 	    }
 
 	    if(profileUpdate.imageURL){
@@ -347,11 +348,21 @@ export class AuthService {
 		});
 	}
 
-	fetchUsers(organisationId: string, userType: string, disableLoading?: boolean) : Observable<User[]> {
+	fetchUsers(organisationId: string, userType: string, disableLoading?: boolean, orderByClassNumber?: boolean) : Observable<User[]> {
 		if(!disableLoading){
 			this.store.dispatch(new UI.StartLoading());	
 		}
-		var queryStr = (ref => ref.where('organisationId', '==', organisationId).where('role', '==', userType));
+		var queryStr = (ref => ref
+								.where('organisationId', '==', organisationId)
+								.where('role', '==', userType)
+								.orderBy('displayName', 'asc'));
+		if(orderByClassNumber){
+			queryStr = (ref => ref
+								.where('organisationId', '==', organisationId)
+								.where('role', '==', userType)
+								.orderBy('classNumber', 'asc')
+								.orderBy('displayName', 'asc'));
+		}
 		return this.afs.collection('users', queryStr)
 			.snapshotChanges().pipe(
 			map(docArray => {
@@ -362,8 +373,8 @@ export class AuthService {
 						const data = doc.payload.doc.data() as User;
 						const id = doc.payload.doc.id;
 						return { id, ...data };
-					}).sort((a,b) => {return (a.displayName > b.displayName) ? 1 : ((b.displayName > a.displayName) ? -1 : 0);})
-			}))
+					});
+			}));
 	}
 
 	fetchUserResults(user: User) {
