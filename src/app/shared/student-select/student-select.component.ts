@@ -46,7 +46,6 @@ export class StudentSelectComponent implements OnInit, OnDestroy {
      if(this.organisation){
        //fetch users
         this.sub = this.authService.fetchUsers(this.organisation.id, "Leerling", true, true).subscribe(students => {
-            console.log(students);
             this.students = students; 
             //filter students in the autocomplete form
         this.filteredStudents$ = this.studentControl.valueChanges
