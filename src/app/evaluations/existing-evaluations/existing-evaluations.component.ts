@@ -22,14 +22,13 @@ import * as EvaluationAction from '../evaluation.actions';
 export class ExistingEvaluationsComponent implements OnInit, OnDestroy {
   
   skills: Skill[];
-  evaluations: Evaluation[];
   project: Project;
   hasProjectTask: boolean;
   isLoading$: Observable<boolean>;
   student: User;
   currentUser$: Observable<User>;
   newEvaluationsAllowed = true;
-  detailViewAllowed = true;
+  showEvaluationsAllowed = true;
   subs: Subscription[] = [];
 
   constructor( private evaluationService: EvaluationService,
@@ -51,33 +50,9 @@ export class ExistingEvaluationsComponent implements OnInit, OnDestroy {
           this.hasProjectTask=true;
         }
     });
-    //fetch the evaluations of the user and current project
-    this.subs.push(this.evaluationService.fetchExistingEvaluations(this.student, null, this.project).subscribe(evaluations => {
-      if(evaluations){
-        this.evaluations = evaluations;
-        this.calculateEvaluations();
-      }
-    }));
-  }
 
-  calculateEvaluations() {
     this.subs.push(this.skillService.fetchSkills(null, this.project.id).subscribe(skills => {
       this.skills = skills.sort(this.sortSkills);
-      this.skills.forEach((skill) =>{
-        let evaluation = this.evaluations.find((evaluation: Evaluation) => evaluation.skill === skill.id);
-        if(evaluation){
-          skill.studentColor = evaluation.colorStudent;
-          skill.teacherColor = evaluation.status==="Beoordeeld" ? evaluation.colorTeacher : 'grey';
-          skill.studentIcon = evaluation.iconStudent;
-          skill.teacherIcon = evaluation.status==="Beoordeeld" ? evaluation.iconTeacher: "supervised_user_circle";
-          skill.evaluation = evaluation;
-        } else {
-          skill.studentColor = "grey";
-          skill.teacherColor = "grey";
-          skill.studentIcon = "account_circle";
-          skill.teacherIcon = "supervised_user_circle";
-        }
-      })
     }));
   }
 

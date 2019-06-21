@@ -1,0 +1,86 @@
+<mat-expansion-panel 
+    [expanded]="currentTile === indexOfTile"
+    (opened)="setStep()">
+    <mat-expansion-panel-header collapsedHeight="auto" expandedHeight="auto">
+      <mat-panel-title>
+        <span>{{skill.order}} - {{skill.competency}}</span>
+      </mat-panel-title>
+      <mat-panel-description>
+        <span fxHide.lt-md>{{skill.topic}}</span>
+        <span fxHide.lt-md id="icon-block">
+          <mat-icon 
+          			[ngStyle]="{'color': actualEvaluation?.colorStudent ? actualEvaluation?.colorStudent: 'grey'}">{{actualEvaluation?.iconStudent ? actualEvaluation?.iconStudent : "account_circle"}}
+          </mat-icon>
+          <mat-icon [ngStyle]="{'color': actualEvaluation?.colorTeacher ? actualEvaluation?.colorTeacher : 'grey'}" >
+          			{{actualEvaluation?.iconTeacher ? actualEvaluation?.iconTeacher : "supervised_user_circle"}}
+          </mat-icon> 
+        </span>
+        <mat-icon [ngStyle]="{'color': actualEvaluation?.colorStudent ? actualEvaluation?.colorStudent: 'grey'}" fxHide.gt-sm >
+        			{{actualEvaluation?.iconStudent ? actualEvaluation?.iconStudent : "account_circle"}}
+        </mat-icon>
+        <mat-icon [ngStyle]="{'color': actualEvaluation?.colorTeacher ? actualEvaluation?.colorTeacher : 'grey'}" fxHide.gt-sm >
+        			{{actualEvaluation?.iconTeacher ? actualEvaluation?.iconTeacher : "supervised_user_circle"}}
+        </mat-icon> 
+      </mat-panel-description>
+    </mat-expansion-panel-header>
+    <div fxLayout="row" fxLayoutAlign="space-between center">
+      <span fxHide.gt-sm class="grey-topic">{{skill.topic}}</span>
+      <div>
+        <a    href="{{skill?.link}}"
+              target="_blank">{{ skill?.linkText ? skill?.linkText : skill?.link }}</a>
+        <button 
+              mat-button 
+              color="primary" 
+              (click)="showAttachment(skill.id)" 
+              [disabled]="!skill?.hasAttachments">Bijlagen</button>
+      </div>
+
+    </div>
+    <!-- show the actual evaluation belonging to this skill -->
+    <div fxLayout="row" fxLayoutAlign="start center" *ngIf="actualEvaluation">
+      <span fxFlex.gt-sm="10" fxFlex.lt-md="30"> {{actualEvaluation?.created.toDate() | date : 'dd-MM-yyyy' }}</span>
+      <span fxFlex.gt-sm="35" fxHide.lt-md> {{actualEvaluation?.commentStudent}}</span>
+      <span fxFlex.gt-sm="35" fxHide.lt-md *ngIf="actualEvaluation?.status == 'Beoordeeld'"> 
+          {{actualEvaluation?.commentTeacher}} </span>
+      <span fxFlex.gt-sm="35" fxHide.lt-md *ngIf="actualEvaluation?.status == 'Niet beoordeeld'"> 
+          Verstuurd naar {{(teacher$ | async)?.displayName}} </span>
+      <span fxFlex.gt-sm="10" fxFlex.lt-md="30">
+        <mat-icon [ngStyle]="{'color': actualEvaluation?.colorStudent ? actualEvaluation?.colorStudent: 'grey'}" >
+          {{actualEvaluation?.iconStudent ? actualEvaluation?.iconStudent : "account_circle"}}
+        </mat-icon>  
+        <mat-icon [ngStyle]="{'color': actualEvaluation?.colorTeacher ? actualEvaluation?.colorTeacher : 'grey'}" >
+          {{actualEvaluation?.iconTeacher ? actualEvaluation?.iconTeacher : "supervised_user_circle"}}
+        </mat-icon> 
+      </span>
+      <button   mat-button fxFlex.gt-sm="10" fxFlex.lt-md="40" 
+                (click)="onSelectedEvaluation(actualEvaluation)"
+                *ngIf="showEvaluationsAllowed">Bekijk</button>
+    </div>
+    <!-- related evaluations are shown below -->
+    <button *ngIf="!(relatedEvaluations$ | async) && actualEvaluation" mat-button (click)="onViewHistory(skill)">
+    	Geschiedenis
+    </button>
+    <h4 *ngIf="relatedEvaluations$ | async">Geschiedenis van beoordeelde evaluaties</h4>
+    <div *ngFor="let evaluation of relatedEvaluations$ | async" fxLayout="row" fxLayoutAlign="start center">
+      <span fxFlex.gt-sm="10" fxFlex.lt-md="30"> {{evaluation.created.toDate() | date : 'dd-MM-yyyy' }}</span>
+      <span fxFlex.gt-sm="35" fxHide.lt-md> {{evaluation.commentStudent}}</span>
+      <span fxFlex.gt-sm="35" fxHide.lt-md> {{evaluation.commentTeacher}} </span>
+      <span fxFlex.gt-sm="10" fxFlex.lt-md="30">
+        <mat-icon [ngStyle]="{'color': evaluation.colorStudent ? evaluation.colorStudent: 'grey'}" >
+          {{evaluation.iconStudent ? evaluation.iconStudent : "account_circle"}}
+        </mat-icon>  
+        <mat-icon [ngStyle]="{'color': evaluation.colorTeacher ? evaluation.colorTeacher : 'grey'}" >
+          {{evaluation.iconTeacher ? evaluation.iconTeacher : "supervised_user_circle"}}
+        </mat-icon> 
+      </span>
+      <button   mat-button fxFlex.gt-sm="10" fxFlex.lt-md="40" 
+                (click)="onSelectedEvaluation(evaluation)"
+                *ngIf="showEvaluationsAllowed">Bekijk</button>
+    </div>
+    <mat-action-row>
+      <a mat-button (click)="onSelectedSkill(skill)" *ngIf="newEvaluationsAllowed">Nieuw</a>
+      <button mat-button color="warn" (click)="previousStep()" *ngIf="indexOfTile!==0">Vorige</button>
+      <button mat-button color="primary" (click)="nextStep()" *ngIf="indexOfTile<lastTileIndex">Volgende</button>
+      <button mat-button color="primary" (click)="nextStep()" *ngIf="indexOfTile===lastTileIndex">Einde</button>
+    </mat-action-row>
+  </mat-expansion-panel>

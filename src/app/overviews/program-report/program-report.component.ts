@@ -37,7 +37,7 @@ export class ProgramReportComponent implements OnInit, OnDestroy {
   student: User;
   currentUser$: Observable<User>;
   newEvaluationsAllowed = false;
-  detailViewAllowed = false;
+  showEvaluationsAllowed = false;
 
   subs: Subscription[] = [];
 

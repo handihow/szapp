@@ -51,15 +51,15 @@ export class ProgramOverviewComponent implements OnInit {
     	if(organisation){
         this.organisation = organisation;
   			this.subs.push(this.projectService.fetchExistingProjects(organisation, false).subscribe(projects => {
-  	              this.subs.push(this.store.select(fromOverview.getSelectedProgram).subscribe(program => {
+  	        this.subs.push(this.store.select(fromOverview.getSelectedProgram).subscribe(program => {
   				        if(program){
   				          this.program = program;
   				          this.subs.push(this.skillService.fetchSkills(program.id).subscribe(skills => {
   				              this.addProjectsToSkills(projects, skills);
   				          }));
   				        }
-  				  }))
-  	        }));
+  				  }));
+  	    }));
     	}
     }))
 
