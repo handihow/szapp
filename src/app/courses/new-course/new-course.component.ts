@@ -5,7 +5,7 @@ import * as fromRoot from '../../app.reducer';
 import { Subscription, Observable } from 'rxjs';
 import { take } from 'rxjs/operators';
 
-import { MatDialog } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
 
 import { CourseService } from '../course.service';
 import { Course } from '../course.model';

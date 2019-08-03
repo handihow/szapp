@@ -4,7 +4,7 @@ import { Store } from '@ngrx/store';
 import * as fromRoot from '../../app.reducer';
 import * as fromEvaluation from '../evaluation.reducer';
 import * as EvaluationAction from '../evaluation.actions';
-import { MatDialog } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
 
 import { Subscription, Observable } from 'rxjs';
 import { take, map, startWith } from 'rxjs/operators';

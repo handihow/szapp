@@ -11,7 +11,7 @@ import { AuthService } from '../../../auth/auth.service';
 
 import { SkillService } from '../../../skills/skill.service';
 
-import { MatDialog } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
 import { ShowAttachmentsComponent } from '../show-attachments.component';
 
 @Component({

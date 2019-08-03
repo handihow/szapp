@@ -4,19 +4,17 @@ import { Routes, RouterModule } from '@angular/router';
 import { AuthGuard } from './auth/auth.guard';
 
 const routes: Routes = [
-	{
-	  path: 'admin',
-	  loadChildren: './admin/admin.module#AdminModule'
-	},
-	{ path: 'projects', loadChildren: './projects/project.module#ProjectModule' },
-	{ path: 'programs', loadChildren: './programs/program.module#ProgramModule' },
-	{ path: 'courses', loadChildren: './courses/course.module#CourseModule' },
-	{ path: 'formatives', loadChildren: './formatives/formative.module#FormativeModule' },
-	{ path: 'comments', loadChildren: './comments/comment.module#CommentModule' },
-	{ path: 'evaluations', loadChildren: './evaluations/evaluation.module#EvaluationModule' },
-	{ path: 'assessments', loadChildren: './assessments/assessment.module#AssessmentModule' },
-	{ path: 'overviews', loadChildren: './overviews/overviews.module#OverviewsModule' }
+	{ path: 'admin', loadChildren: () => import('./admin/admin.module').then(m => m.AdminModule) },
+	{ path: 'projects', loadChildren: () => import( './projects/project.module').then(m => m.ProjectModule) },
+	{ path: 'programs', loadChildren: () => import( './programs/program.module').then(m => m.ProgramModule) },
+	{ path: 'courses', loadChildren: () => import( './courses/course.module').then(m => m.CourseModule) },
+	{ path: 'formatives', loadChildren: () => import( './formatives/formative.module').then(m => m.FormativeModule) },
+	{ path: 'comments', loadChildren: () => import( './comments/comment.module').then(m => m.CommentModule) },
+	{ path: 'evaluations', loadChildren: () => import( './evaluations/evaluation.module').then(m => m.EvaluationModule) },
+	{ path: 'assessments', loadChildren: () => import( './assessments/assessment.module').then(m => m.AssessmentModule) },
+	{ path: 'overviews', loadChildren: () => import( './overviews/overviews.module').then(m => m.OverviewsModule) }
 ];
+
 
 @NgModule({
 	imports: [RouterModule.forRoot(routes)],

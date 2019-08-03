@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
-import { MatTableDataSource } from '@angular/material';
+import { MatTableDataSource } from '@angular/material/table';
 
 import { Evaluation } from '../../evaluations/evaluation.model';
 import { Formative } from '../../formatives/formative.model';
