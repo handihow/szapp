@@ -17,7 +17,7 @@ export class DownloadsComponent implements OnInit {
   isLoading: boolean = false;
   value = 1000;
 
-  @ViewChild(Angular2CsvComponent) csvComponent: Angular2CsvComponent;
+  @ViewChild(Angular2CsvComponent, { static: true }) csvComponent: Angular2CsvComponent;
 
   constructor(private fns: AngularFireFunctions) { }
 

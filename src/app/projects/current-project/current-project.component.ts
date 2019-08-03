@@ -63,10 +63,10 @@ export class CurrentProjectComponent implements OnInit, OnDestroy {
   isFavorite: boolean;
   isLocked: boolean;
 
-  @ViewChild(MatSort) sort: MatSort;
-  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatSort, { static: true }) sort: MatSort;
+  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
 
-  @ViewChild(Angular2CsvComponent) csvComponent: Angular2CsvComponent;
+  @ViewChild(Angular2CsvComponent, { static: true }) csvComponent: Angular2CsvComponent;
 
   selection = new SelectionModel<Skill>(true, null);
 

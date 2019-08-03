@@ -36,10 +36,10 @@ export class ExistingProgramsComponent implements OnInit, AfterViewInit, OnDestr
   programs: Program[];
   sub: Subscription;
 
-  @ViewChild(MatSort) sort: MatSort;
-  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatSort, { static: true }) sort: MatSort;
+  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
 
-  @ViewChild(Angular2CsvComponent) csvComponent: Angular2CsvComponent;
+  @ViewChild(Angular2CsvComponent, { static: true }) csvComponent: Angular2CsvComponent;
 
   constructor( private programService: ProgramService,
                 private store: Store<fromProgram.State> ) { }

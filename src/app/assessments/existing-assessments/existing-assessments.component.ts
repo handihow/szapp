@@ -35,8 +35,8 @@ export class ExistingAssessmentsComponent implements OnInit, AfterViewInit, OnDe
   //All evaluations (including the ones that have already been assessed) are shown?
   allEvaluationsDisplayed: boolean;
 
-  @ViewChild(MatSort) sort: MatSort;
-  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatSort, { static: true }) sort: MatSort;
+  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
 
   constructor(  private evaluationService: EvaluationService,
                 private store: Store<fromAssessment.State> ) { }

@@ -36,8 +36,8 @@ export class ExistingFormativesComponent implements OnInit, AfterViewInit, OnDes
   formatives: Formative[];
   subs: Subscription[] = [];
 
-  @ViewChild(MatSort) sort: MatSort;
-  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatSort, { static: true }) sort: MatSort;
+  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
 
   constructor(  private dialog: MatDialog,
                 private formativeService: FormativeService,
