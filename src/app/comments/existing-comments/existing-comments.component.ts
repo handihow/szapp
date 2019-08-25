@@ -39,6 +39,8 @@ export class ExistingCommentsComponent implements OnInit, AfterViewInit, OnDestr
   comments: Comment[];
   subs: Subscription[] = [];
 
+  hasPermission: boolean;
+
   @ViewChild(MatSort, { static: true }) sort: MatSort;
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
 
@@ -69,7 +71,12 @@ export class ExistingCommentsComponent implements OnInit, AfterViewInit, OnDestr
       if(organisation){
         this.organisation = organisation;
       };
-    })    
+    });
+    this.store.select(fromRoot.getPermissions).subscribe(value => {
+      if(value.includes('all:comments')){
+        this.hasPermission = true;
+      }
+    });     
   }
 
   ngOnDestroy() {

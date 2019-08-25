@@ -6,7 +6,7 @@
 	<mat-slide-toggle 
 				color="primary" 
 				[(ngModel)]="allOrganisation" 
-				*ngIf="user?.isAdmin" 
+				*ngIf="hasPermission" 
 				(ngModelChange)="onChange()">
         Alle formatieven
     </mat-slide-toggle>

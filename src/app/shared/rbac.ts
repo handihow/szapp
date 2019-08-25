@@ -26,6 +26,8 @@ export class RBAC {
 			schooladmin: [
 				'download:data',
 				'upload:skills',
+				'all:formatives',
+				'all:comments'
 			],
 			// trajectorycounselor: [],
 			// companyadmin: [],

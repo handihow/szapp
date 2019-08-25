@@ -91,7 +91,11 @@ export class AuthService {
 			if(value.claims){
 				Object.keys(RBAC.permissions).forEach(role => {
 					if(value.claims[role]){
-						permissions = [...new Set([...permissions ,...RBAC.permissions[role]])]
+						RBAC.permissions[role].forEach(permission => {
+							if(!permissions.includes(permission)){
+								permissions.push(permission);
+							}
+						});
 					}
 				})
 			}
