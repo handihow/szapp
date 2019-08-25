@@ -1,0 +1,57 @@
+<h1 mat-dialog-title>Gebruikers toevoegen</h1>
+<form [formGroup]="form" (submit)="onSubmit()" *ngIf="!isWaiting && !isDone">
+	<mat-dialog-content>
+		<mat-form-field>
+			<mat-select
+			  	placeholder="Selecteer organisatie"
+				formControlName="organisation"
+				required>
+		  		<mat-option>None</mat-option>
+			    <mat-option *ngFor="let organisation of organisations" [value]="organisation">
+			      {{organisation.name}}
+			    </mat-option>
+			</mat-select>
+		</mat-form-field>
+		<div formArrayName="users">
+			<div *ngFor="let user of userFormGroup.controls; let i = index;">
+				<mat-divider></mat-divider>
+                <div [formGroupName]="i">
+                	<div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="5px">
+	                	<mat-form-field>
+						   <input matInput placeholder="Email" formControlName="email" required>
+						</mat-form-field>
+						<mat-form-field>
+						   <input matInput placeholder="Volledige naam" formControlName="displayName" required>
+						</mat-form-field>
+						<button mat-button type="button" color="warn" (click)="removeUser(i)">Verwijderen</button>
+					</div>
+					<div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="10px">
+						<mat-checkbox formControlName="student">Leerling</mat-checkbox>
+						<mat-checkbox formControlName="teacher">Leraar</mat-checkbox>
+						<mat-checkbox formControlName="schooladmin">School admin</mat-checkbox>
+						<mat-checkbox formControlName="admin">Master admin</mat-checkbox>
+					</div>
+                </div>
+            </div>
+		</div>
+	</mat-dialog-content>
+	<mat-dialog-actions>
+		<button type="button" mat-raised-button color="warn" [mat-dialog-close]="false" >Annuleren</button>
+		<button mat-raised-button type="button" (click)="addUser()" color="accent">Nieuwe rij</button>
+		<button type="submit" mat-raised-button color="primary" [disabled]="form.invalid">Gebruikers maken</button>
+	</mat-dialog-actions>
+</form>
+
+<mat-dialog-content *ngIf="isWaiting">
+	<div fxFlex fxLayout="column" fxLayoutAlign="center center">
+		<p><mat-spinner></mat-spinner></p>
+		<p>Even geduld aub...</p>
+	</div>
+</mat-dialog-content>
+<mat-dialog-content *ngIf="isDone">
+	<p>{{this.success}}</p>
+	<p>{{this.error}}</p>
+</mat-dialog-content>
+<mat-dialog-actions *ngIf="isDone">
+	<button type="button" mat-raised-button color="primary" [mat-dialog-close]="false" >Klaar</button>
+</mat-dialog-actions>

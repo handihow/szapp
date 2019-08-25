@@ -6,18 +6,28 @@ import { SharedModule } from '../shared/shared.module';
 import { AdminComponent } from './admin/admin.component';
 import { AdminRoutingModule } from './admin-routing.module';
 import { DownloadsComponent } from './downloads/downloads.component';
-
+import { EditRolesComponent } from './admin/edit-roles.component';
+import { AddUsersComponent } from './admin/add-users.component';
+import { RemoveUserComponent } from './admin/remove-user.component';
 
 @NgModule({
   declarations: [
     AdminComponent,
-    DownloadsComponent
+    DownloadsComponent,
+    EditRolesComponent,
+    AddUsersComponent,
+    RemoveUserComponent
   ],
   imports: [
     CommonModule,
     AdminRoutingModule,
     SharedModule,
     AngularFireFunctionsModule
+  ],
+  entryComponents: [
+    EditRolesComponent,
+    AddUsersComponent,
+    RemoveUserComponent
   ]
 })
 export class AdminModule { }

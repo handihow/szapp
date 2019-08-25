@@ -1,4 +1,81 @@
-<mat-card>
+<mat-toolbar color="primary" class="mat-elevation-z3">
+	<mat-icon class="toolbar-icon">people</mat-icon>
+	Gebruikers
+</mat-toolbar>
+
+<div fxLayout="row" fxLayoutAlign="center center" fxLayoutGap="20px"
+		fxLayout.lt-sm="column" fxLayoutAlign.lt-sm="center stretch" fxLayoutGap.lt-sm="10px" class="manage-users">
+		
+	<app-organisation-select (selectedOrganisation)="filterOrganisation($event)"></app-organisation-select>
+
+	<mat-form-field fxFlex.gt-sm="40%" *ngIf="!(isLoading$ | async)">
+		<input matInput type="text" [(ngModel)]="filterValue" (keyup)="doFilter($event.target.value)" placeholder="Filter">
+	</mat-form-field>
+
+	<button mat-raised-button color="primary" (click)="addUsers()">Gebruikers toevoegen</button>
+
+	<mat-spinner *ngIf="isLoading$ | async"></mat-spinner>		
+</div>
+
+<div *ngIf="!users || users.length==0" fxLayout="column" fxLayoutAlign="center center" class="placeholder">
+	Geen gebruikers
+</div>
+<div [hidden]="!users || users.length==0">
+	<mat-table [dataSource]="dataSource" matSort>
+
+		<ng-container matColumnDef="email">
+			<mat-header-cell *matHeaderCellDef mat-sort-header>Email</mat-header-cell>
+			<mat-cell *matCellDef="let element">
+				{{ element.email }}
+			</mat-cell>
+		</ng-container>
+
+		<ng-container matColumnDef="displayName">
+			<mat-header-cell *matHeaderCellDef>Naam</mat-header-cell>
+			<mat-cell *matCellDef="let element">
+		    	{{element?.displayName}}
+			</mat-cell>
+		</ng-container>
+
+		<ng-container matColumnDef="organisation">
+			<mat-header-cell *matHeaderCellDef mat-sort-header>Organisatie</mat-header-cell>
+			<mat-cell *matCellDef="let element">{{ element.organisation }}</mat-cell>
+		</ng-container>
+
+		<ng-container matColumnDef="role">
+			<mat-header-cell *matHeaderCellDef mat-sort-header>Rechten</mat-header-cell>
+			<mat-cell *matCellDef="let element">
+				<span *ngIf="element.roles && element.roles.student" class="access-rights">Student</span>
+				<span *ngIf="element.roles && element.roles.teacher" class="access-rights">Leraar</span>
+				<span *ngIf="element.roles && element.roles.schooladmin" class="access-rights">School admin</span>
+				<span *ngIf="element.roles && element.roles.admin" class="access-rights">Master admin</span>
+			</mat-cell>
+		</ng-container>
+
+		<ng-container matColumnDef="manage">
+			<mat-header-cell *matHeaderCellDef mat-sort-header>Beheer</mat-header-cell>
+			<mat-cell *matCellDef="let element">
+				<button mat-icon-button [matMenuTriggerFor]="userMenu">
+				  <mat-icon>more_vert</mat-icon>
+				</button>
+				<mat-menu #userMenu="matMenu">
+				  <button mat-menu-item (click)="assignRoles(element)">Rechten toekennen</button>
+				  <button mat-menu-item (click)="requestPasswordReset(element)">Wachtwoord resetten</button>
+				  <button mat-menu-item (click)="deleteAccount(element)">Account verwijderen</button>
+				</mat-menu>
+			</mat-cell>
+		</ng-container>
+
+		<mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+		<mat-row *matRowDef="let row; columns: displayedColumns"></mat-row>
+	</mat-table>
+
+	<mat-paginator [length]="100" [pageSize]="25" [pageSizeOptions]="[5, 10, 25, 100]">
+	</mat-paginator>
+</div>
+
+
+<!-- <mat-card>
 	<mat-card-header>
 		<mat-card-title>
 			Set downloader
@@ -30,4 +107,4 @@
 	<mat-card-actions>
 		<button mat-button (click)="setClassNumbers()">SET CLASS NUMBERS</button>
 	</mat-card-actions>
-</mat-card>
+</mat-card> -->

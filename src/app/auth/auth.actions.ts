@@ -4,6 +4,7 @@ import { Organisation } from './organisation.model';
 
 export const SET_AUTHENTICATED = '[Auth] Set Authenticated';
 export const SET_UNAUTHENTICATED = '[Auth] Set Unauthenticated';
+export const SET_PERMISSIONS = '[Auth] Set Permissions';
 export const SET_ORGANISATION = '[Auth] Set Organisation';
 export const SET_ORGANISATIONS = '[Auth] Set Organisations';
 
@@ -15,6 +16,12 @@ export class SetAuthenticated implements Action {
 
 export class SetUnauthenticated implements Action {
 	readonly type = SET_UNAUTHENTICATED;
+}
+
+export class SetPermissions implements Action {
+	readonly type = SET_PERMISSIONS;
+
+	constructor(public payload: string[]){}
 }
 
 export class SetOrganisation implements Action {
@@ -30,5 +37,4 @@ export class SetOrganisations implements Action {
 }
 
 
-
-export type AuthActions = SetAuthenticated | SetUnauthenticated | SetOrganisation | SetOrganisations;
+export type AuthActions = SetAuthenticated | SetUnauthenticated | SetPermissions | SetOrganisation | SetOrganisations;

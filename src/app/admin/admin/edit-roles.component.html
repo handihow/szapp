@@ -1,0 +1,21 @@
+<h1 mat-dialog-title>Rechten Toekennen</h1>
+<mat-dialog-content>
+	<div fxFlex fxLayout="column" fxLayoutAlign="start start" *ngIf="!isWaiting && !isDone">
+		<p><mat-checkbox [(ngModel)]="student">Leerling</mat-checkbox></p>
+		<p><mat-checkbox [(ngModel)]="teacher">Leraar</mat-checkbox></p>
+		<p><mat-checkbox [(ngModel)]="schooladmin">School admin</mat-checkbox></p>
+		<p><mat-checkbox [(ngModel)]="admin">Master admin</mat-checkbox></p>
+	</div>
+	<div fxFlex fxLayout="column" fxLayoutAlign="center center" *ngIf="isWaiting">
+		<p><mat-spinner></mat-spinner></p>
+		<p>Even geduld aub...</p>
+	</div>
+	<div fxFlex fxLayout="column" fxLayoutAlign="start start">
+		<p>{{this.success}}</p>
+		<p>{{this.error}}</p>
+	</div>
+</mat-dialog-content>
+<mat-dialog-actions>
+	<button mat-raised-button [color]="isDone ? 'primary' : 'warn'" [mat-dialog-close]="false" *ngIf="!isWaiting">{{isDone ? 'Klaar' : 'Annuleren'}}</button>
+	<button mat-raised-button color="primary" (click)="onChangeRoles()" *ngIf="!isWaiting && !isDone">Rechten toekennen</button>
+</mat-dialog-actions>

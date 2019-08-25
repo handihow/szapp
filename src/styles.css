@@ -25,6 +25,11 @@ body {
 	font-size: 20px;
 }
 
+.toolbar-icon{
+  margin-left: 15px;
+  margin-right: 10px;
+}
+
 .main {
     -ms-flex: 1;
     -webkit-flex: 1;

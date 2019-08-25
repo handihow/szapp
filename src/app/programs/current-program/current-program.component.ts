@@ -44,7 +44,7 @@ export class CurrentProgramComponent implements OnInit, OnDestroy {
   orders: string[] = [];
   skills: Skill[] = [];
   skill: Skill; 
-  superUser: boolean;
+  canUploadCsv: boolean;
   sub: Subscription;
 
   options: any;
@@ -91,9 +91,11 @@ export class CurrentProgramComponent implements OnInit, OnDestroy {
               this.isFavorite = true;
             }
             //make the csv upload button only available to the superusers of the application
-            if(user.isAdmin){
-              this.superUser = true;
-            }
+            this.store.select(fromRoot.getPermissions).pipe(take(1)).subscribe(value => {
+              if(value.includes('upload:skills')){
+                this.canUploadCsv = true;
+              }
+            });
           }
         }); 
         this.sub = this.skillService.fetchSkills(this.program.id).subscribe(skills => {

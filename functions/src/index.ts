@@ -28,7 +28,8 @@ export const onUpdateProgress = progress.onUpdateProgress;
 export const jsonDownload = data.jsonDownload;
 
 export const addAdmin = roles.addAdmin;
-export const addDownloader = roles.addDownloader;
-export const removeDownloader = roles.removeDownloader;
+export const changeRoles = roles.changeRoles;
+export const createUsers = roles.createUsers;
+export const removeUser = roles.removeUser;
 
 export const setClassNumbers = corrections.setClassNumbers;

@@ -1,0 +1,24 @@
+<mat-form-field *ngIf="(screenType$ | async)!=='phone'" class="full-width">
+	<mat-select
+		[(ngModel)]="selectedOrganisationId"
+  		placeholder="Selecteer organisatie"
+  		(ngModelChange)="selectOrganisation($event)">
+  		<mat-option>None</mat-option>
+	    <mat-option *ngFor="let organisation of organisations" [value]="organisation.id">
+	      {{organisation.name}}
+	    </mat-option>
+	</mat-select>
+</mat-form-field>
+
+<mat-form-field *ngIf="(screenType$ | async)==='phone'" class="full-width">
+	<select
+		matNativeControl
+		[(ngModel)]="selectedOrganisationId"
+  		placeholder="Selecteer organisatie"
+  		(ngModelChange)="selectOrganisation($event)">
+  		<option value="">None</option>
+	    <option *ngFor="let organisation of organisations" [value]="organisation.id">
+	      {{organisation.name}}
+	    </option>
+	</select>
+</mat-form-field>

@@ -1,4 +1,9 @@
-<mat-tab-group *ngIf="!(currentProject$ | async)">
+<mat-toolbar color="primary" class="mat-elevation-z3">
+	<mat-icon class="toolbar-icon">work_outline</mat-icon>
+	Projecten
+</mat-toolbar>
+
+<mat-tab-group *ngIf="!(currentProject$ | async)" backgroundColor="primary">
   <mat-tab label="Projecten">
   	<app-existing-projects></app-existing-projects>
   </mat-tab>

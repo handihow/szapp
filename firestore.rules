@@ -1,0 +1,129 @@
+service cloud.firestore {
+  match /databases/{database}/documents {
+  	//organisations collection
+  	//
+    match /organisations/{organisation} {
+      //collection organisations is read-only
+      allow read;
+    }
+    
+    //users collection
+    //
+    match /users/{userId} {
+     //user profile can be created when the user is logged in for the first time
+      allow create, read: if request.auth.uid != null;
+      //users can only update their own record or user must be an admin
+    	allow update, delete: if request.auth.uid == userId || request.auth.token.admin;
+    }
+    
+    match /users/{userId}/results/{resultId} {
+    	//users can only read their own results or the user must be a teacher
+      allow read: if request.auth.uid == userId || request.auth.token.teacher;
+    }
+    
+    //evaluations collection
+    //
+    match /evaluations/{evaluationId} {
+    	//users can only read and update their own evaluations or the user must be a teacher
+      allow read, update: if resource.data.user == request.auth.uid || request.auth.token.teacher;
+      // Make sure a 'users' document exists for the requesting user before
+      // allowing any writes to the 'evaluations' collection
+      allow create: if exists(/databases/$(database)/documents/users/$(request.auth.uid));
+      //only teachers can delete evaluations
+      allow delete: if request.auth.token.teacher;
+    }
+    
+    //evaluations history collection
+    //
+    match /evaluations/{evaluationId}/history/{historyId} {
+    	//users can only read their own evaluations or the user must be a teacher
+      allow read: if resource.data.user == request.auth.uid || request.auth.token.teacher;
+      // Only teachers can create or delete history collection documents
+      allow create, delete: if request.auth.token.teacher;
+    }
+    
+    //programs collection
+    //
+    match /programs/{program} {
+    	//users must be logged in to allow programs to be read
+      allow read: if request.auth.uid != null
+
+      // Allow the user to write programs if the user is teacher
+      allow write: if request.auth.token.teacher;
+    }
+    
+    //files collection
+    match /files/{fileId} {
+      allow read, write: if request.auth.uid != null;
+    }
+    
+    //results collection
+    match /results/{resultId} {
+      allow read: if request.auth.uid != null;
+    }
+    
+    //courses collection
+    //
+    match /courses/{course} {
+    	//users must be logged in to allow programs to be read
+      allow read: if request.auth.uid != null
+
+      // Allow the user to write programs if the user is teacher
+      allow write: if request.auth.token.teacher;
+    }
+    
+    //skills collection
+    //
+    match /skills/{skill}{
+        allow read: if request.auth.uid != null;
+        allow write: if request.auth.token.teacher;
+    }
+    
+    //skills comments collection
+    //
+    match /skills/{skillId}/comments/{commentId}{
+        allow read, write: if request.auth.token.teacher;
+    }
+    
+    //projects collection
+    //
+    match /projects/{project} {
+    	//users must be logged in to allow projects to be read
+      allow read: if request.auth.uid != null;
+      // Allow the user to write projects if the user is teacher
+      allow write: if request.auth.token.teacher;
+    }
+    
+    //formatives collection
+    //
+    match /formatives/{formative} {
+    	//users must be logged in to allow formatives to be read
+      allow read: if request.auth.uid != null
+
+      // Allow the user to write formatives if the user is teacher
+      allow write: if request.auth.token.teacher;
+    }
+    
+    //formatives saved evaluations collection
+    //
+    match /formatives/{formative}/evaluations/{evaluation} {
+    	//users must be logged in to allow formatives to be read
+      allow read: if request.auth.uid != null
+
+      // Allow the user to write programs if the user is teacher
+      allow write: if request.auth.token.teacher;
+    }
+    
+     //comments collection
+    //
+    match /comments/{comment} {
+    	//users must be logged in to allow comments to be read or update them
+      allow read, update: if request.auth.uid != null
+
+      // Allow the user to create comments if their user document has the
+      // 'role' field set to 'Leraar'
+      allow create, delete: if request.auth.token.teacher;
+    }
+    
+  }
+}

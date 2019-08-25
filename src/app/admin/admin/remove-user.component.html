@@ -1,0 +1,22 @@
+<h1 mat-dialog-title>WAARSCHUWING</h1>
+<mat-dialog-content *ngIf="!isWaiting && !isDone">
+	Je wilt de gebruiker met de naam {{passedData.displayName}} en email adres {{passedData.email}} permanent verwijderen 
+</mat-dialog-content>
+<mat-dialog-actions *ngIf="!isWaiting && !isDone">
+	<button type="button" mat-raised-button color="accent" [mat-dialog-close]="false" >Annuleren</button>
+	<button type="submit" mat-raised-button color="warn" (click)="onConfirm()">Permanent verwijderen</button>
+</mat-dialog-actions>
+
+<mat-dialog-content *ngIf="isWaiting">
+	<div fxFlex fxLayout="column" fxLayoutAlign="center center">
+		<p><mat-spinner></mat-spinner></p>
+		<p>Even geduld aub...</p>
+	</div>
+</mat-dialog-content>
+<mat-dialog-content *ngIf="isDone">
+	<p>{{this.success}}</p>
+	<p>{{this.error}}</p>
+</mat-dialog-content>
+<mat-dialog-actions *ngIf="isDone">
+	<button type="button" mat-raised-button color="primary" [mat-dialog-close]="false" >Klaar</button>
+</mat-dialog-actions>

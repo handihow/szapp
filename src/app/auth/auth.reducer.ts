@@ -2,12 +2,13 @@ import { Action } from '@ngrx/store'
 import { User } from './user.model';
 import { Organisation } from './organisation.model';
 
-import { AuthActions, SET_AUTHENTICATED, SET_UNAUTHENTICATED, SET_ORGANISATION, SET_ORGANISATIONS } from './auth.actions';
+import { AuthActions, SET_AUTHENTICATED, SET_UNAUTHENTICATED, SET_PERMISSIONS, SET_ORGANISATION, SET_ORGANISATIONS } from './auth.actions';
 
 export interface State {
 	isAuthenticated: boolean;
 	isTeacher: boolean;
 	user: User;
+	permissions: string[];
 	organisation: Organisation;
 	organisations: Organisation[];
 }
@@ -16,6 +17,7 @@ const initialState: State = {
 	isAuthenticated: false,
 	isTeacher: false,
 	user: null,
+	permissions: [],
 	organisation: null,
 	organisations: []
 };
@@ -35,8 +37,14 @@ export function authReducer(state = initialState, action: AuthActions) {
 				isAuthenticated: false,
 				isTeacher: false,
 				user: null,
+				permissions: [],
 				organisation: null,
 				organisations: []
+			}
+		case SET_PERMISSIONS:
+			return {
+				...state,
+				permissions: action.payload
 			}
 		case SET_ORGANISATION: 
 			return {
@@ -59,3 +67,4 @@ export const getIsTeacher = (state: State) => state.isTeacher;
 export const getCurrentUser = (state: State ) => state.user;
 export const getCurrentOrganisation = (state: State) => state.organisation;
 export const getOrganisations = (state: State) => state.organisations;
+export const getPermissions = (state: State) => state.permissions;

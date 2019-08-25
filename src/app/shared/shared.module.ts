@@ -30,6 +30,7 @@ import { ProgramSelectComponent } from './program-select/program-select.componen
 import { StudentSelectComponent } from './student-select/student-select.component';
 import { FormativeSelectComponent } from './formative-select/formative-select.component';
 import { PanelTileComponent } from './skills-expansion-panel/panel-tile/panel-tile.component';
+import { OrganisationSelectComponent } from './organisation-select/organisation-select.component';
 
 @NgModule({
 	declarations: [
@@ -49,7 +50,8 @@ import { PanelTileComponent } from './skills-expansion-panel/panel-tile/panel-ti
 		ProgramSelectComponent,
 		StudentSelectComponent,
 		FormativeSelectComponent,
-		PanelTileComponent
+		PanelTileComponent,
+		OrganisationSelectComponent
 	],
 	imports: [
 		CommonModule,
@@ -83,7 +85,8 @@ import { PanelTileComponent } from './skills-expansion-panel/panel-tile/panel-ti
 		StudentSelectComponent,
     	AngularFontAwesomeModule,
     	FormativeSelectComponent,
-    	PanelTileComponent
+    	PanelTileComponent,
+    	OrganisationSelectComponent
 	],
 	entryComponents: [ShowFullImageComponent, ShowHistoryComponent, ShowAttachmentsComponent, RemoveEvaluationComponent]
 })

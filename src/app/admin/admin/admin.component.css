@@ -1,4 +1,38 @@
-mat-card {
+/*mat-card {
 	margin: 10px auto;
 	max-width: 500px;
+}*/
+
+.access-rights {
+  margin-right: 7px;
+}
+
+.manage-users {
+	margin-left: 10px;
+	margin-right: 10px;
+}
+
+.placeholder {
+	height: 300px;
+}
+
+.mat-column-email {
+  flex: 6;
+  /*min-width: 55px;*/
+}
+
+.mat-column-displayName {
+  flex: 4;
+}
+
+.mat-column-organisation {
+  flex: 4;
+}
+
+.mat-column-role {
+  flex: 4;
+}
+
+.mat-column-manage {
+  flex: 1;
 }

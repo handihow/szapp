@@ -23,7 +23,8 @@
     "fs-extra": "^7.0.1",
     "json2csv": "^4.5.1",
     "moment": "^2.24.0",
-    "sharp": "^0.22.0"
+    "sharp": "^0.23.0",
+    "uuid": "^3.3.2"
   },
   "devDependencies": {
     "tslint": "^5.12.0",

@@ -16,6 +16,7 @@ export class SidenavListComponent implements OnInit {
 
   isAuth$: Observable<boolean>;
   isTeacher$ : Observable<boolean>;
+  permissions: string[];
 
   constructor( private authService: AuthService,
               private store: Store<fromRoot.State> ) { }
@@ -23,6 +24,7 @@ export class SidenavListComponent implements OnInit {
   ngOnInit() {
     this.isAuth$ = this.store.select(fromRoot.getIsAuth);
     this.isTeacher$ = this.store.select(fromRoot.getIsTeacher);
+    this.store.select(fromRoot.getPermissions).subscribe(value => this.permissions = value);
   }
 
   onClose() {
@@ -34,5 +36,8 @@ export class SidenavListComponent implements OnInit {
     this.authService.logout();
   }
 
+  hasPermission(permission: string){
+    return this.permissions.includes(permission);
+  }
 
 }

@@ -1,4 +1,8 @@
-<mat-tab-group [(selectedIndex)]="index">
+<mat-toolbar color="primary" class="mat-elevation-z3">
+	<mat-icon class="toolbar-icon">comment</mat-icon>
+	Commentaar
+</mat-toolbar>
+<mat-tab-group [(selectedIndex)]="index" backgroundColor="primary">
   <mat-tab label="Commentaar">
   	<app-existing-comments></app-existing-comments>
   </mat-tab>

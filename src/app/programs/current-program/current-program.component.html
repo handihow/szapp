@@ -67,7 +67,7 @@
 				<button type="submit" mat-raised-button color="primary" [disabled]="skillsForm.invalid">
 					Bewaar
 				</button>
-				<button type="button" mat-raised-button color="accent" (click)="csvFileInput.click()" *ngIf="superUser">
+				<button type="button" mat-raised-button color="accent" (click)="csvFileInput.click()" *ngIf="canUploadCsv">
 					Upload csv
 				</button>
 				<input hidden type="file" #csvFileInput (change)="handleFileSelect($event)">

@@ -8,7 +8,7 @@ displayName?: string;
 organisation?: string;
 organisationId?: string;
 role?: string;
-isAdmin?: boolean;
+roles?: Roles;
 classes?: string[];
 classNumber?: number;
 subjects?: string[];
@@ -28,4 +28,14 @@ lightgreen?: number;
 yellow?: number;
 red?: number;
 remaining?: number;
+}
+
+export interface Roles {
+// parent: boolean;
+student: boolean;
+teacher: boolean;
+schooladmin: boolean;
+// trajectorycounselor: boolean;
+// companyadmin: boolean;
+admin: boolean;
 }

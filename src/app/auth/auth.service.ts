@@ -20,6 +20,7 @@ import * as UI from '../shared/ui.actions';
 import * as Auth from './auth.actions';
 
 import { environment } from '../../environments/environment';
+import { RBAC } from '../shared/rbac';
 
 declare var gapi;
 
@@ -44,6 +45,7 @@ export class AuthService {
 			this.afp.trace('userLogin'),
 		switchMap(user => {
 			if (user) {
+				this.setUserPermissions(user);
 				if(user.providerData[0].providerId==="google.com"){
 					//user is signing in with Google
 					this.updateUserWithGoogleAuth(user);
@@ -81,6 +83,20 @@ export class AuthService {
 	    		this.router.navigate(['/']);
 	    	}
 	    });
+	}
+
+	private setUserPermissions(user){
+		let permissions = [];
+		user.getIdTokenResult().then(value => {
+			if(value.claims){
+				Object.keys(RBAC.permissions).forEach(role => {
+					if(value.claims[role]){
+						permissions = [...new Set([...permissions ,...RBAC.permissions[role]])]
+					}
+				})
+			}
+			this.store.dispatch(new Auth.SetPermissions(permissions));
+		});
 	}
 
 	//sets organisation the user belongs to
@@ -336,13 +352,15 @@ export class AuthService {
 
 	}
 
-	sendPasswordResetEmail(emailAddress){
+	sendPasswordResetEmail(emailAddress, doNotNavigate?: boolean){
 		var auth = firebase.auth();
 		var uiService = this.uiService;
 		var router = this.router;
 		auth.sendPasswordResetEmail(emailAddress).then(function() {
-		  uiService.showSnackbar("Er is een email gestuurd. Controleer je emails.", null, 3000);
-		  router.navigate(['/']);
+		  uiService.showSnackbar("Er is een email gestuurd met instructies om het wachtwoord te resetten naar " + emailAddress + ". Check eventueel of de email in de spam inbox is beland.", null, 3000);
+		  if(!doNotNavigate){
+		  	router.navigate(['/']);	
+		  }
 		}).catch(function(error) {
 		  uiService.showSnackbar(error, null, 3000);
 		});

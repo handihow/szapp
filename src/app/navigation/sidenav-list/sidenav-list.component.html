@@ -19,31 +19,31 @@
 	</a>
 	<a mat-list-item routerLink="/programs" 
 		(click)="onClose()"
-		*ngIf="isTeacher$ | async">
+		*ngIf="hasPermission('manage:programs')">
 		<mat-icon>list</mat-icon>
 		<span class="nav-caption">Leerplannen</span>
 	</a>
 	<a mat-list-item routerLink="/projects" 
 		(click)="onClose()"
-		*ngIf="isTeacher$  | async">
+		*ngIf="hasPermission('manage:projects')">
 		<mat-icon>work_outline</mat-icon>
 		<span class="nav-caption">Projecten</span>
 	</a>
 	<a mat-list-item routerLink="/courses" 
 		(click)="onClose()"
-		*ngIf="isTeacher$  | async">
+		*ngIf="hasPermission('manage:courses')">
 		<mat-icon>school</mat-icon>
 		<span class="nav-caption">Lesgroepen</span>
 	</a>
 	<a mat-list-item routerLink="/formatives" 
 		(click)="onClose()"
-		*ngIf="isTeacher$  | async">
+		*ngIf="hasPermission('manage:formatives')">
 		<mat-icon>assignment_ind</mat-icon>
 		<span class="nav-caption">Formatieven</span>
 	</a>
 	<a mat-list-item routerLink="/overviews" 
 		(click)="onClose()"
-		*ngIf="isAuth$ | async">
+		*ngIf="hasPermission('read:overviews')">
 		<mat-icon>dashboard</mat-icon>
 		<span class="nav-caption">Overzicht</span>
 	</a>
@@ -55,21 +55,27 @@
 	</a>
 	<a mat-list-item routerLink="/comments" 
 		(click)="onClose()"
-		*ngIf="isTeacher$  | async">
+		*ngIf="hasPermission('write:comments')">
 		<mat-icon>comment</mat-icon>
 		<span class="nav-caption">Commentaar</span>
 	</a>
 	<a mat-list-item routerLink="/comments/student" 
 		(click)="onClose()"
-		*ngIf="(isAuth$ | async) && !(isTeacher$  | async)">
+		*ngIf="hasPermission('read:comments')">
 		<mat-icon>comment</mat-icon>
 		<span class="nav-caption">Commentaar</span>
 	</a>
 	<a mat-list-item routerLink="/assessments" 
 		(click)="onClose()"
-		*ngIf="isTeacher$  | async">
+		*ngIf="hasPermission('read:assessments')">
 		<mat-icon>assignment_turned_in</mat-icon>
 		<span class="nav-caption">Beoordeling</span>
+	</a>
+	<a mat-list-item routerLink="/admin" 
+		(click)="onClose()"
+		*ngIf="hasPermission('manage:users')">
+		<mat-icon>people</mat-icon>
+		<span class="nav-caption">Gebruikers</span>
 	</a>
 	<a mat-list-item 
 		(click)="onLogout()"
