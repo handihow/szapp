@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { AngularFireFunctionsModule } from '@angular/fire/functions';
 
 import { SharedModule } from '../shared/shared.module';
 import { AdminComponent } from './admin/admin.component';
@@ -22,7 +21,6 @@ import { RemoveUserComponent } from './admin/remove-user.component';
     CommonModule,
     AdminRoutingModule,
     SharedModule,
-    AngularFireFunctionsModule
   ],
   entryComponents: [
     EditRolesComponent,

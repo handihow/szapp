@@ -108,7 +108,7 @@ export const createUsers = functions.https.onCall(async (data, context) => {
       displayName: importedUser.displayName,
       organisation: organisationName,
       organisationId: organisation,
-      role: importedUser.student ? 'Student' : importedUser.teacher ? 'Leraar' : 'Admin',
+      role: importedUser.student ? 'Leerling' : importedUser.teacher ? 'Leraar' : 'Admin',
       roles: customClaims,
       photoURL: "https://ui-avatars.com/api/?background=03a9f4&color=F5F5F5&name=" + importedUser.displayName
     });
@@ -135,50 +135,68 @@ export const createUsers = functions.https.onCall(async (data, context) => {
       });
 });
 
-// export const editUser = functions.https.onCall((data, context) => {
-//   if(!context.auth || !context.auth.token || !context.auth.token.oadmin){
-//     return {
-//       error: "Verzoek afgewezen. Je hebt onvoldoende toegangsrechten."
-//     };
-//   }
-//   const email = data.email;
+export const addStudent = functions.https.onCall((data, context) => {
+  if(!context.auth || !context.auth.token || !context.auth.token.admin){
+    return {
+      error: "Verzoek afgewezen. Je hebt onvoldoende toegangsrechten."
+    };
+  }
 
-//   //define the role and organisation and possibly school
-//   const role : string = data.role;
-//   const accesslevel : number = userRoles[role].accesslevel;
-//   const organisation : string = data.organisation;
-//   const school : string = data.school ? data.school : null;
-//   //define the custom claims object for these new users
-//   const customClaims = {};
-//   customClaims[role] = true;
-//   customClaims['accesslevel'] = accesslevel;
-//   customClaims[organisation] = true;
-//   if(school){
-//     customClaims[school] = true;
-//   }
+  const organisation = data.organisation.id;
+  //define the custom claims object for these new users
+  const customClaims = {
+    // parent: false,
+      student: true,
+      teacher: false,
+      schooladmin: false,
+      // trajectorycounselor: false,
+      // companyadmin: false,
+      admin: false,
+      organisation: organisation
+  };
 
-//   return admin.auth().getUserByEmail(email)
-//   .then(user => {
-//     return admin.auth().setCustomUserClaims(user.uid,customClaims)
-//     .then(async () => {
-//       data.accesslevel = accesslevel;
-//       await db.collection('users').doc(user.uid).update(data);
-//       return {
-//         result: "Gebruiker " + email + " is bijgewerkt."
-//       }
-//     })
-//     .catch(error => {
-//       return {
-//         error: "Er ging iets mis.. " + error
-//       }
-//     });
-//   })
-//   .catch(error => {
-//     return {
-//       error: 'Probleem bij het vinden van de gebruiker.. ' + error
-//     };
-//   });
-// });
+  const newStudent = {
+    uid: UUID(),
+    email: data.email,
+    displayName: data.displayName,
+    photoURL: data.photoURL
+  }
+
+  return admin.auth().createUser(newStudent)
+  .then(userRecord => {
+    return admin.auth().setCustomUserClaims(newStudent.uid,customClaims)
+    .then( () => {
+      return db.collection('users').doc(newStudent.uid).create({
+        ...newStudent, 
+        organisationId: organisation,
+        organisation: data.organisation.name,
+        role: 'Leerling',
+        roles: customClaims,
+        hasGoogleForEducation: true
+      })
+      .then(writeResult => {
+        return {
+          result: newStudent
+        }
+      })
+      .catch(e => {
+        return {
+          error: "Er ging iets mis.. " + e
+        }
+      });
+    })
+    .catch(err => {
+      return {
+        error: "Er ging iets mis.. " + err
+      }
+    });
+  })
+  .catch(error => {
+    return {
+      error: 'Er ging iets mis met het maken van het account.. ' + error
+    };
+  });
+});
 
 
 export const removeUser = functions.https.onCall((data, context) => {

@@ -77,11 +77,11 @@ export class CurrentCourseComponent implements OnInit, OnDestroy {
     this.store.select(fromRoot.getCurrentOrganisation).pipe(take(1)).subscribe(org => {
       if(org){
         this.organisation = org;
-        this.subs.push(this.authService.fetchUsers(org.id, "Leraar").subscribe(teachers => {
+        this.subs.push(this.authService.fetchTeachers(org.id).subscribe(teachers => {
           this.teachers = teachers;
           this.filteredTeachers = teachers;
         }));
-        this.subs.push(this.authService.fetchUsers(org.id, "Leerling").subscribe(students => {
+        this.subs.push(this.authService.fetchStudents(org.id).subscribe(students => {
           this.students = students;
           this.filteredStudents = students;
         }));
@@ -222,7 +222,7 @@ export class CurrentCourseComponent implements OnInit, OnDestroy {
   }
 
   onSyncParticipants(){
-    this.courseService.addGoogleClassroomStudentsOrTeachers(this.course);
+    this.courseService.addGoogleClassroomStudentsOrTeachers(this.course, this.organisation);
   }
 
 

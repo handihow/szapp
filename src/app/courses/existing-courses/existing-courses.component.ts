@@ -75,7 +75,9 @@ export class ExistingCoursesComponent implements OnInit, AfterViewInit, OnDestro
   }
 
   ngOnDestroy() {
-    this.sub.unsubscribe();
+    if(this.sub){
+      this.sub.unsubscribe();  
+    }
   }
 
   //when view is loaded, initialize the sorting and paginator

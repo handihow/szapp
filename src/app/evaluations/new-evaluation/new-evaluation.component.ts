@@ -102,7 +102,7 @@ export class NewEvaluationComponent implements OnInit, OnDestroy {
         if(organisation){
           this.organisation = organisation;
           //get the list of teachers
-          this.teacherSub = this.authService.fetchUsers(organisation.id, "Leraar").subscribe(teachers => {
+          this.teacherSub = this.authService.fetchTeachers(organisation.id).subscribe(teachers => {
             if(teachers) {
               this.teachers = teachers;
               this.filteredTeachers = [];

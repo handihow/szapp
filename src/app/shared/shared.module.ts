@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { Angular2CsvModule } from 'angular2-csv';
+import { AngularFireFunctionsModule } from '@angular/fire/functions';
 
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MaterialModule } from '../material.module';
@@ -62,7 +63,8 @@ import { OrganisationSelectComponent } from './organisation-select/organisation-
 		Angular2CsvModule,
 		RouterModule,
 		NgxGalleryModule,
-    	AngularFontAwesomeModule
+    	AngularFontAwesomeModule,
+    	AngularFireFunctionsModule
 	],
 	exports: [
 		CommonModule,
@@ -71,6 +73,7 @@ import { OrganisationSelectComponent } from './organisation-select/organisation-
 		ReactiveFormsModule,
 		MaterialModule,
 		FlexLayoutModule,
+		AngularFireFunctionsModule,
 		ShowFullImageComponent,
 		DropZoneDirective,
 		FileSizePipe,

@@ -6,6 +6,7 @@ import { AngularFirePerformance } from '@angular/fire/performance';
 import { Observable, of } from 'rxjs';
 import { Store } from '@ngrx/store';
 import {HttpClient, HttpHeaders} from "@angular/common/http";
+import { AngularFireFunctions } from '@angular/fire/functions';
 
 import { UIService } from '../shared/ui.service';
 import * as UI from '../shared/ui.actions';
@@ -26,6 +27,7 @@ export class CourseService {
 
 	constructor( private afp: AngularFirePerformance,
 				 private db: AngularFirestore,
+				 private fns: AngularFireFunctions,
 			     private httpClient: HttpClient,
 				 private uiService: UIService,
                  private authService: AuthService,
@@ -150,10 +152,10 @@ export class CourseService {
 			})
 	}
 
-	addGoogleClassroomsToDatabase(googleClassrooms: Course[]){
+	addGoogleClassroomsToDatabase(googleClassrooms: Course[], organisation: Organisation){
 		var unsuccessfulUploads: Course[] = [];
 		googleClassrooms.forEach(async classroom => {
-			let success = await this.addGoogleClassroomToDatabase(classroom)
+			let success = await this.addGoogleClassroomToDatabase(classroom, organisation)
 			if(!success){
 				unsuccessfulUploads.push(classroom);
 			}
@@ -192,14 +194,14 @@ export class CourseService {
         });
     }
 
-    private addGoogleClassroomToDatabase(googleClassroom: Course) {
+    private addGoogleClassroomToDatabase(googleClassroom: Course, organisation: Organisation) {
 		return new Promise((resolve, reject) => {
 			this.store.dispatch(new UI.StartLoading());
 			const classroomRef: AngularFirestoreDocument<any> = this.db.doc(`courses/${googleClassroom.googleClassroomInfo.id}`);
 			classroomRef.set(googleClassroom, {merge: true})
 				.then( _ => {
 					this.store.dispatch(new UI.StopLoading());
-					this.addGoogleClassroomStudentsOrTeachers(googleClassroom);
+					this.addGoogleClassroomStudentsOrTeachers(googleClassroom, organisation);
 					resolve(true);
 				})
 				.catch(error => {
@@ -210,18 +212,45 @@ export class CourseService {
 		})	
 	}
 
-	addGoogleClassroomStudentsOrTeachers(googleClassroom: Course){
+	addGoogleClassroomStudentsOrTeachers(googleClassroom: Course, organisation: Organisation){
 		["students", "teachers"].forEach(async userType => {
 			let res = await this.listGoogleClassroomTeachersOrStudents(googleClassroom, userType);
 			if(res && res[userType]){
 				res[userType].forEach(async participant => {
 					let fetchedParticipants = await this.fetchUser(participant.profile.emailAddress);
-					if(fetchedParticipants){
-						this.manageCourseParticipants(fetchedParticipants,googleClassroom.googleClassroomInfo.id,true);
+					if(fetchedParticipants.length === 0){
+						//first add this user to the system;
+						let newStudent = await this.createStudent(participant, organisation);
+						if(newStudent){
+							fetchedParticipants.push(newStudent);
+						}
 					}
+					this.manageCourseParticipants(fetchedParticipants,googleClassroom.googleClassroomInfo.id,true);
 				})
 			}
-		})
+		});
+	}
+
+	private createStudent(participant: any, organisation: Organisation): Promise<any>{
+		return new Promise((resolve,reject) => {
+			const callable = this.fns.httpsCallable('addStudent');
+	        callable({ 
+	        	email: participant.profile.emailAddress,
+	        	displayName: participant.profile.name.fullName,
+	        	photoURL: "https://ui-avatars.com/api/?background=03a9f4&color=F5F5F5&name=" + encodeURI(participant.profile.name.fullName),
+	        	organisation: organisation
+	        })
+	        .subscribe(feedback => {
+	        	console.log(feedback);
+				if(feedback.result){
+					resolve(feedback.result);
+				} else if(feedback.error){
+					resolve(null);
+				}
+			}, error => {
+				resolve(null);
+			});
+		});
 	}
 
 	private fetchUser(email) : Promise<User[]> {

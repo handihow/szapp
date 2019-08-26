@@ -26,6 +26,7 @@ exports.jsonDownload = data.jsonDownload;
 exports.addAdmin = roles.addAdmin;
 exports.changeRoles = roles.changeRoles;
 exports.createUsers = roles.createUsers;
+exports.addStudent = roles.addStudent;
 exports.removeUser = roles.removeUser;
 exports.setClassNumbers = corrections.setClassNumbers;
 //# sourceMappingURL=index.js.map

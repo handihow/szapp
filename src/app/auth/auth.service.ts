@@ -46,10 +46,10 @@ export class AuthService {
 		switchMap(user => {
 			if (user) {
 				this.setUserPermissions(user);
-				if(user.providerData[0].providerId==="google.com"){
-					//user is signing in with Google
-					this.updateUserWithGoogleAuth(user);
-				}
+				// if(user.providerData[0].providerId==="google.com"){
+				// 	//user is signing in with Google
+				// 	this.updateUserWithGoogleAuth(user);
+				// }
 				return this.afs.doc<User>(`users/${user.uid}`).valueChanges()
 			} else {
 				this.store.dispatch(new Auth.SetUnauthenticated());
@@ -254,35 +254,35 @@ export class AuthService {
     }
 
 	//check what organisation the user belongs to
-	private  getOrganisation(user) {
-		var promise = new Promise<Organisation>((resolve, reject) => {
-			this.afs.collection('organisations')
-			.snapshotChanges().pipe(
-			map(docArray => {
-				return docArray.map(doc => {
-						const data = doc.payload.doc.data() as Organisation;
-						const id = doc.payload.doc.id;
-						return { id, ...data };
-					})
-			}))
-			.pipe(take(1))
-			.subscribe((organisations: Organisation[]) => {
-				var userOrganisation: Organisation = null;
-				organisations.map(o => o.emailEndsWith).forEach((domain, index) => {
-					if((user.email).endsWith(domain)){
-						//user organisation to be returned from the promise
-						userOrganisation = organisations[index];
-					}
-				});
-				//resolve the users organisation (can be null if user's email extension was not recognized)
-				resolve(userOrganisation);
-			}, error => {
-				reject(null);
-				this.uiService.showSnackbar(error.message, null, 3000);
-			});	
-		})
-		return promise;
-	}
+	// private  getOrganisation(user) {
+	// 	var promise = new Promise<Organisation>((resolve, reject) => {
+	// 		this.afs.collection('organisations')
+	// 		.snapshotChanges().pipe(
+	// 		map(docArray => {
+	// 			return docArray.map(doc => {
+	// 					const data = doc.payload.doc.data() as Organisation;
+	// 					const id = doc.payload.doc.id;
+	// 					return { id, ...data };
+	// 				})
+	// 		}))
+	// 		.pipe(take(1))
+	// 		.subscribe((organisations: Organisation[]) => {
+	// 			var userOrganisation: Organisation = null;
+	// 			organisations.map(o => o.emailEndsWith).forEach((domain, index) => {
+	// 				if((user.email).endsWith(domain)){
+	// 					//user organisation to be returned from the promise
+	// 					userOrganisation = organisations[index];
+	// 				}
+	// 			});
+	// 			//resolve the users organisation (can be null if user's email extension was not recognized)
+	// 			resolve(userOrganisation);
+	// 		}, error => {
+	// 			reject(null);
+	// 			this.uiService.showSnackbar(error.message, null, 3000);
+	// 		});	
+	// 	})
+	// 	return promise;
+	// }
 
 	//create custom user profile after signing up
 	private createUser(user: User, name: string, organisation: Organisation) {
@@ -302,38 +302,38 @@ export class AuthService {
 
 	//creates custom user profile after signing in for first time with Google account
 	//updates the profile when logging in again with Google account
-	private async updateUserWithGoogleAuth(user) {
-		this.store.dispatch(new UI.StartLoading());
-	    //retrieve the user's organisation
-		let organisation: Organisation = await this.getOrganisation(user);
-		if(!organisation){
-			this.logout();
-	    	return this.uiService.showSnackbar("Dit Google account is niet geautoriseerd om de app te gebruiken. Neem contact op met de beheerder", null, 3000);
-	    }
-	    // Sets user data to firestore
-	    const userRef: AngularFirestoreDocument<any> = this.afs.doc(`users/${user.uid}`);
+	// private async updateUserWithGoogleAuth(user) {
+	// 	this.store.dispatch(new UI.StartLoading());
+	//     //retrieve the user's organisation
+	// 	let organisation: Organisation = await this.getOrganisation(user);
+	// 	if(!organisation){
+	// 		this.logout();
+	//     	return this.uiService.showSnackbar("Dit Google account is niet geautoriseerd om de app te gebruiken. Neem contact op met de beheerder", null, 3000);
+	//     }
+	//     // Sets user data to firestore
+	//     const userRef: AngularFirestoreDocument<any> = this.afs.doc(`users/${user.uid}`);
 
-	    //creates the user object to be stored
-	    const data: User = {
-	    	uid: user.uid,
-	    	email: user.email,
-	    	displayName: user.displayName,
-	    	photoURL: user.photoURL,
-	    	organisation: organisation.name,
-	    	organisationId: organisation.id,
-	    	hasGoogleForEducation: true
-	    }
+	//     //creates the user object to be stored
+	//     const data: User = {
+	//     	uid: user.uid,
+	//     	email: user.email,
+	//     	displayName: user.displayName,
+	//     	photoURL: user.photoURL,
+	//     	organisation: organisation.name,
+	//     	organisationId: organisation.id,
+	//     	hasGoogleForEducation: true
+	//     }
 
-	    //if the whitelisted organisation has a role detection rule then assign automatically the user role
-	    //"Leraar" = "Teacher", "Leerling" = "Student"
-	    if(organisation.roleDetectionRule != undefined) {
-	    	var fn = Function("email", organisation.roleDetectionRule);
-	    	data.role = fn(user.email);
-	    }
+	//     //if the whitelisted organisation has a role detection rule then assign automatically the user role
+	//     //"Leraar" = "Teacher", "Leerling" = "Student"
+	//     if(organisation.roleDetectionRule != undefined) {
+	//     	var fn = Function("email", organisation.roleDetectionRule);
+	//     	data.role = fn(user.email);
+	//     }
 
-	    //now save the users data in the database and resolve true when the database update is finished
-	    userRef.set(data, { merge: true })
-	}
+	//     //now save the users data in the database and resolve true when the database update is finished
+	//     userRef.set(data, { merge: true })
+	// }
 
 	updateUserProfile(profileUpdate) {
 	    // Sets user data to firestore on login
@@ -370,21 +370,43 @@ export class AuthService {
 		});
 	}
 
-	fetchUsers(organisationId: string, userType: string, disableLoading?: boolean, orderByClassNumber?: boolean) : Observable<User[]> {
+	fetchStudents(organisationId: string, disableLoading?: boolean, orderByClassNumber?: boolean) : Observable<User[]> {
 		if(!disableLoading){
 			this.store.dispatch(new UI.StartLoading());	
 		}
 		var queryStr = (ref => ref
 								.where('organisationId', '==', organisationId)
-								.where('role', '==', userType)
+								.where('roles.student', '==', true)
 								.orderBy('displayName', 'asc'));
 		if(orderByClassNumber){
 			queryStr = (ref => ref
 								.where('organisationId', '==', organisationId)
-								.where('role', '==', userType)
+								.where('roles.student', '==', true)
 								.orderBy('classNumber', 'asc')
 								.orderBy('displayName', 'asc'));
 		}
+		return this.afs.collection('users', queryStr)
+			.snapshotChanges().pipe(
+			map(docArray => {
+				if(!disableLoading){
+					this.store.dispatch(new UI.StopLoading());	
+				}
+				return docArray.map(doc => {
+						const data = doc.payload.doc.data() as User;
+						const id = doc.payload.doc.id;
+						return { id, ...data };
+					});
+			}));
+	}
+
+	fetchTeachers(organisationId: string, disableLoading?: boolean) : Observable<User[]> {
+		if(!disableLoading){
+			this.store.dispatch(new UI.StartLoading());	
+		}
+		var queryStr = (ref => ref
+								.where('organisationId', '==', organisationId)
+								.where('roles.teacher', '==', true)
+								.orderBy('displayName', 'asc'));
 		return this.afs.collection('users', queryStr)
 			.snapshotChanges().pipe(
 			map(docArray => {

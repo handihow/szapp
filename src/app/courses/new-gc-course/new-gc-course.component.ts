@@ -80,7 +80,7 @@ export class NewGcCourseComponent implements OnInit {
   }
 
   async startImport(){
-  	this.isFinished = await this.courseService.addGoogleClassroomsToDatabase(this.selectedOptions);
+  	this.isFinished = await this.courseService.addGoogleClassroomsToDatabase(this.selectedOptions, this.organisation);
 
   }
 
