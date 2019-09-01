@@ -9,6 +9,7 @@ import { ProgramService } from '../../programs/program.service';
 import { Program } from '../../programs/program.model';
 import { User } from '../../auth/user.model';
 import { Organisation } from '../../auth/organisation.model';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-program-select',
@@ -26,6 +27,7 @@ export class ProgramSelectComponent implements OnInit {
   @Input() relevantProgramsOnly: boolean;
   @Output() selectedProgram = new EventEmitter<Program>();
   subs: Subscription[] = [];
+  titles = environment.titles;
 
   constructor(private programService: ProgramService, 
               private store: Store<fromRoot.State>,

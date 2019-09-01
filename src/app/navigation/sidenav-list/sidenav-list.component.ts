@@ -5,6 +5,8 @@ import * as fromRoot from '../../app.reducer';
 
 import { AuthService } from '../../auth/auth.service';
 
+import { environment } from '../../../environments/environment';
+
 @Component({
   selector: 'app-sidenav-list',
   templateUrl: './sidenav-list.component.html',
@@ -17,7 +19,8 @@ export class SidenavListComponent implements OnInit {
   isAuth$: Observable<boolean>;
   isTeacher$ : Observable<boolean>;
   permissions: string[];
-
+  titles: any = environment.titles;
+  
   constructor( private authService: AuthService,
               private store: Store<fromRoot.State> ) { }
 

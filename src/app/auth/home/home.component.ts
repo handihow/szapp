@@ -6,6 +6,8 @@ import { Observable } from 'rxjs';
 
 import { AuthService } from '../auth.service';
 
+import { environment } from '../../../environments/environment';
+
 @Component({
   selector: 'app-login',
   templateUrl: './home.component.html',
@@ -17,6 +19,10 @@ export class LoginComponent implements OnInit {
   isLoading$: Observable<boolean>;
   isAuth$: Observable<boolean>;
   isIEOrEdge: boolean;
+
+  titles = environment.titles;
+  keywords = environment.keywords;
+  logo = environment.logo;
 
   constructor(  private authService: AuthService,
   				      private store: Store<fromRoot.State> ) { }

@@ -1,6 +1,6 @@
 <mat-toolbar color="primary" class="mat-elevation-z3">
 	<mat-icon class="toolbar-icon">assignment_turned_in</mat-icon>
-	Beoordeling
+	{{titles.assessments}}
 </mat-toolbar>
 
 <app-existing-assessments *ngIf="!(currentAssessment$ | async) && !(currentCourse$ | async)"></app-existing-assessments>

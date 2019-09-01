@@ -1,14 +1,14 @@
 <mat-toolbar color="primary" class="mat-elevation-z3">
 	<mat-icon class="toolbar-icon">dashboard</mat-icon>
-	Overzicht
+	{{title}}
 </mat-toolbar>
 
 <section fxLayout="row wrap" fxLayoutAlign="space-around stretch">
 	<!-- per project -->
 	<mat-card>
 		<mat-card-header>
-		    <mat-card-title>Project</mat-card-title>
-		    <mat-card-subtitle>Overzicht per project</mat-card-subtitle>
+		    <mat-card-title>{{projectsTitle}}</mat-card-title>
+		    <mat-card-subtitle>Overzicht per {{projectTitle}}</mat-card-subtitle>
 		</mat-card-header>
 		<form (ngSubmit)="onSubmitProject()" [formGroup]="selectProjectForm">
 			<mat-card-content>
@@ -83,8 +83,8 @@
 	<!-- per formative -->
 	<mat-card>
 		<mat-card-header>
-		    <mat-card-title>Formatief</mat-card-title>
-		    <mat-card-subtitle>Overzicht per formatief</mat-card-subtitle>
+		    <mat-card-title>{{formativesTitle}}</mat-card-title>
+		    <mat-card-subtitle>Overzicht per {{formativeTitle}}</mat-card-subtitle>
 		</mat-card-header>
 		<form (ngSubmit)="onSubmitFormative()" [formGroup]="selectFormativeForm">
 			<mat-card-content>

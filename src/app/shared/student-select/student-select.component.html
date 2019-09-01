@@ -1,5 +1,5 @@
 <mat-form-field *ngIf="(screenType$ | async)!=='phone'" class="full-width">
-    <input type="text" placeholder="Leerling" matInput [formControl]="studentControl" [matAutocomplete]="auto">
+    <input type="text" [placeholder]="titles.selectStudent" matInput [formControl]="studentControl" [matAutocomplete]="auto">
     <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
       <mat-option 	*ngFor="let student of filteredStudents$ | async" 
       				[value]="student"
@@ -21,7 +21,7 @@
 </mat-form-field>
 <mat-form-field *ngIf="(screenType$ | async)==='phone'" class="full-width">  
   <select matNativeControl
-  		placeholder="Selecteer leerling" 
+  		[placeholder]="titles.selectStudent"
   		[(ngModel)]="student" (ngModelChange)="onSelectStudent($event)">
       <option value=""></option>
 	    <option *ngFor="let student of filteredStudents" [value]="student.uid">

@@ -1,6 +1,6 @@
 <mat-form-field class="full-width" *ngIf="(screenType$ | async)!=='phone'" class="full-width">  
 	<mat-select 
-		placeholder="Selecteer formatief" 
+		[placeholder]="titles.selectFormative" 
 		[(ngModel)]="selectedFormativeId"
 		(ngModelChange)="selectFormative($event)"
 		required>
@@ -13,7 +13,7 @@
 <mat-form-field class="full-width" *ngIf="(screenType$ | async)==='phone'" class="full-width">  
 	<select 
 		matNativeControl
-		placeholder="Selecteer formatief" 
+		[placeholder]="titles.selectFormative" 
 		[(ngModel)]="selectedFormativeId"
 		(ngModelChange)="selectFormative($event)"
 		required>

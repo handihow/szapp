@@ -7,6 +7,7 @@ import { CommentService } from '../comment.service';
 import * as fromRoot from '../../app.reducer'; 
 
 import { User } from '../../auth/user.model';
+import { environment } from '../../../environments/environment'; 
 
 @Component({
   selector: 'app-student-view',
@@ -18,6 +19,8 @@ export class StudentViewComponent implements OnInit {
   isLoading$: Observable<boolean>;
   user: User;
   comments$: Observable<Comment[]>;
+  titles = environment.titles;
+  keywords = environment.keywords;
 
   constructor(	private commentService: CommentService,
                 private store: Store<fromRoot.State> ) { }

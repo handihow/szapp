@@ -16,6 +16,8 @@ import * as ProjectAction from '../project.actions';
 
 import { Angular2CsvComponent } from 'angular2-csv';
 
+import { environment } from '../../../environments/environment';
+
 @Component({
   selector: 'app-existing-projects',
   templateUrl: './existing-projects.component.html',
@@ -42,6 +44,8 @@ export class ExistingProjectsComponent implements OnInit, AfterViewInit, OnDestr
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
 
   @ViewChild(Angular2CsvComponent, { static: true }) csvComponent: Angular2CsvComponent;
+
+  titles = environment.titles;
 
   constructor( private projectService: ProjectService,
                 private store: Store<fromProject.State> ) { }

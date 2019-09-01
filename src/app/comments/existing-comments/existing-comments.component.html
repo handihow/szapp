@@ -47,12 +47,12 @@
 	</ng-container>
 
 	<ng-container matColumnDef="studentName">
-		<mat-header-cell *matHeaderCellDef mat-sort-header>Leerling</mat-header-cell>
+		<mat-header-cell *matHeaderCellDef mat-sort-header>{{titles.student}}</mat-header-cell>
 		<mat-cell *matCellDef="let element">{{ element.studentName }}</mat-cell>
 	</ng-container>
 
 	<ng-container matColumnDef="className">
-		<mat-header-cell *matHeaderCellDef mat-sort-header>Klas</mat-header-cell>
+		<mat-header-cell *matHeaderCellDef mat-sort-header>{{titles.class}}</mat-header-cell>
 		<mat-cell *matCellDef="let element">{{ element.className }}</mat-cell>
 	</ng-container>
 
@@ -71,7 +71,7 @@
 	</ng-container>
 
 	<ng-container matColumnDef="teacherName">
-		<mat-header-cell *matHeaderCellDef mat-sort-header>Leraar</mat-header-cell>
+		<mat-header-cell *matHeaderCellDef mat-sort-header>{{titles.teacher}}</mat-header-cell>
 		<mat-cell *matCellDef="let element">{{ element.teacherName }}</mat-cell>
 	</ng-container>
 

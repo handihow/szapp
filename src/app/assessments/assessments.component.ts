@@ -3,6 +3,8 @@ import { Observable } from 'rxjs';
 import { Store } from '@ngrx/store';
 import * as fromAssessment from './assessment.reducer';
 
+import { environment } from '../../environments/environment';
+
 @Component({
   selector: 'app-assessments',
   templateUrl: './assessments.component.html',
@@ -12,6 +14,7 @@ export class AssessmentsComponent implements OnInit {
 
   currentAssessment$: Observable<boolean>;
   currentCourse$: Observable<boolean>;
+  titles: any = environment.titles;
   
   constructor( 	private store: Store<fromAssessment.State> ) { }
 

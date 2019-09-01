@@ -8,6 +8,7 @@ import { FormativeService } from '../../formatives/formative.service';
 import { Formative } from '../../formatives/formative.model';
 
 import { User } from '../../auth/user.model';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-formative-select',
@@ -22,7 +23,8 @@ export class FormativeSelectComponent implements OnInit {
   @Output() selectedFormative = new EventEmitter<Formative>();
   screenType$: Observable<string>;
   subs: Subscription[] = [];
-
+  titles = environment.titles;
+  
   constructor(	private store: Store<fromRoot.State>,
                 private formativeService: FormativeService) { }
 

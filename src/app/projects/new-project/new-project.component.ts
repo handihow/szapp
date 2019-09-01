@@ -13,6 +13,7 @@ import { Organisation } from '../../auth/organisation.model';
 
 import { Colors } from '../../shared/colors';
 import { UIService } from '../../shared/ui.service';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-new-project',
@@ -27,6 +28,7 @@ export class NewProjectComponent implements OnInit {
   projects: Project[];
   isLoading$: Observable<boolean>;
   colors = Colors.projectColors.sort((a,b) => a.colorLabel.localeCompare(b.colorLabel));
+  newTitle: string = environment.titles.project;
 
   colorStyle = {
     'background-color': 'none'

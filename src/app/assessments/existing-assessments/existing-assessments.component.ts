@@ -14,6 +14,7 @@ import * as fromAssessment from '../assessment.reducer';
 import * as fromRoot from '../../app.reducer'; 
 import * as AssessmentAction from '../assessment.actions';
 
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-existing-assessments',
@@ -30,6 +31,9 @@ export class ExistingAssessmentsComponent implements OnInit, AfterViewInit, OnDe
   user: User;
   subs: Subscription[] = [];
   filterValue: string;
+
+  titles: any = environment.titles;
+  // keywords: any = environment.keywords;
 
   //slide toggle that allows teachers to display only non-evaluated items in the list
   slideNotEvaluatedOnly: boolean;

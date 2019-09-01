@@ -1,6 +1,6 @@
 <mat-toolbar color="primary" class="mat-elevation-z3">
 	<mat-icon class="toolbar-icon">assignment</mat-icon>
-	Evaluatie
+	{{title}}
 </mat-toolbar>
 <app-select-project-student *ngIf="!(currentProject$ | async)"></app-select-project-student>
 <app-existing-evaluations 

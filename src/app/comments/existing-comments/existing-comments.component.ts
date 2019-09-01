@@ -17,6 +17,8 @@ import * as fromRoot from '../../app.reducer';
 import { RemoveCommentsComponent } from './remove-comments.component';
 import { EditCommentComponent } from './edit-comment.component';
 
+import { environment } from '../../../environments/environment';
+
 @Component({
   selector: 'app-existing-comments',
   templateUrl: './existing-comments.component.html',
@@ -30,6 +32,8 @@ export class ExistingCommentsComponent implements OnInit, AfterViewInit, OnDestr
   displayedColumns = ['select', 'created', 'comment', 'studentName', 'className', 'read', 'reported'];
   dataSource = new MatTableDataSource<Comment>();
   selection = new SelectionModel<Comment>(true, null);
+  titles= environment.titles;
+
 
   allOrganisation: boolean;
 
@@ -38,6 +42,7 @@ export class ExistingCommentsComponent implements OnInit, AfterViewInit, OnDestr
 
   comments: Comment[];
   subs: Subscription[] = [];
+
 
   hasPermission: boolean;
 

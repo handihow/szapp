@@ -11,6 +11,8 @@ import { Organisation } from '../../auth/organisation.model';
 
 import { AuthService } from '../../auth/auth.service';
 
+import { environment } from '../../../environments/environment';
+
 @Component({
   selector: 'app-student-select',
   templateUrl: './student-select.component.html',
@@ -29,6 +31,7 @@ export class StudentSelectComponent implements OnInit, OnDestroy {
   selectedClass: string;
   student: User;
   screenType$: Observable<string>;
+  titles = environment.titles;
 
   constructor(private authService: AuthService, private store: Store<fromRoot.State>) { }
 

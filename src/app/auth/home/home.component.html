@@ -12,30 +12,29 @@
 		fxLayoutAlign.lt-md="space-between center">
 
 	<div [className]="isIEOrEdge ? 'about-szapp-ie' : 'about-szapp'">
-		<h2>Sterkte Zwakte Analyse App</h2>
+		<h2>{{titles.appLongName}}</h2>
 		<!-- <mat-divider></mat-divider> -->
-		<p>Deze app brengt competentieniveaus van leerlingen in kaart. Deze competenties zijn onderdeel van de leerplannen op hun school.</p>
+		<p>Deze app brengt competentieniveaus van {{keywords.students}} in kaart. Deze competenties zijn onderdeel van de {{keywords.programs}} op hun {{keywords.organisationType}}.</p>
 		<p fxHide.lt-md>Het niveau wordt beoordeeld met een van de 4 kleuren en hun bijbehorend symbool.</p>
-		<p fxHide.lt-md>De leerling kan eerst zijn niveau beoordelen en een foto, opmerking of link naar bestand toevoegen. Dan volgt
-		de beoordeling van de leraar.</p>
+		<p fxHide.lt-md>De {{keywords.student}} kan eerst zijn niveau beoordelen en een foto, opmerking of link naar bestand toevoegen. Dan volgt de beoordeling van de {{keywords.teacher}}.</p>
 		<p fxHide.lt-md>De evaluatiecyclus kan worden herhaald tot het competentieniveau minimaal toereikend is.</p>
 
 	</div>
 
 	<div [className]="isIEOrEdge ? 'transparent-ie' : 'transparent'" fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="20px" *ngIf="!loginWithEmail">
-		<img src="/assets/SZAPP.png" [className]="isIEOrEdge ? 'logo-ie' : 'logo'">
+		<img [src]="logo" [className]="isIEOrEdge ? 'logo-ie' : 'logo'">
 		
 		<div *ngIf="!(isLoading$ | async) && !(isAuth$ | async)" fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="20px">
 			<button class="buttons" type="button" mat-raised-button (click)="onGoogleLogin()"
-					matTooltip="Log in met je Google for Education schoolaccount">
-				<fa name="google"></fa> Login schoolaccount
+					matTooltip="Log in met je Google for Education account">
+				<fa name="google"></fa> Login Google
 			</button>
 			<button class="buttons" type="button" mat-raised-button color="accent" (click)="toggleLoginWithEmail()"
 					matTooltip="Log in met email/wachtwoord combinatie">
 				<fa name="envelope"></fa> Inloggen met email
 			</button>
 			<button class="buttons" mat-raised-button color="primary" routerLink="/signup"
-					matTooltip="Registreer jezelf als nieuwe gebruiker. Niet nodig als je een Google schoolaccount hebt!">
+					matTooltip="Registreer jezelf als nieuwe gebruiker. Niet nodig als je een Google account hebt!">
 				<fa name="user-plus"></fa>  Registreren
 			</button>
 		</div>

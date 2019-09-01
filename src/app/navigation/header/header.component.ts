@@ -6,6 +6,8 @@ import * as fromRoot from '../../app.reducer';
 import { AuthService } from '../../auth/auth.service';
 import { User } from '../../auth/user.model';
 
+import { environment } from '../../../environments/environment';
+
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
@@ -17,6 +19,8 @@ export class HeaderComponent implements OnInit {
   isTeacher$ : Observable<boolean>;
   user$: Observable<User>;
   permissions: string[];
+  titles: any = environment.titles;
+  logo = environment.logo;
 
   @Output() sidenavToggle = new EventEmitter<void>();
 

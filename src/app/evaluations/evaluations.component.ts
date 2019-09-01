@@ -6,6 +6,7 @@ import * as fromProject from '../projects/project.reducer';
 import * as fromRoot from '../app.reducer';
 
 import { EvaluationService } from './evaluation.service';
+import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'app-evaluations',
@@ -17,7 +18,8 @@ export class EvaluationsComponent implements OnInit {
   currentEvaluation$: Observable<boolean>;
   currentSkill$: Observable<boolean>;
   currentProject$: Observable<boolean>;
-  
+  title : string = environment.titles.evaluations;
+
   constructor( private evaluationService: EvaluationService,
               private store: Store<fromRoot.State> ) { }
 

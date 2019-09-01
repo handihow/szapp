@@ -21,6 +21,7 @@ import { UIService } from '../../shared/ui.service';
 import { Observable, Subscription } from 'rxjs';
 
 import { Colors } from '../../shared/colors';
+import { environment } from '../../../environments/environment';
 
 import { EditCommentsComponent } from './edit-comments.component';
 
@@ -47,6 +48,7 @@ export class CurrentAssessmentComponent implements OnInit, OnDestroy {
   previousComments$: Observable<Comment[]>;
 
   colors = Colors.evaluationColors;
+  keywords = environment.keywords;
 
   selectedColor: string;
   subs: Subscription[] = [];

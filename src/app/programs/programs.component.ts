@@ -4,6 +4,7 @@ import { Store } from '@ngrx/store';
 import * as fromProgram from './program.reducer';
 
 import { ProgramService } from './program.service';
+import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'app-programs',
@@ -13,7 +14,9 @@ import { ProgramService } from './program.service';
 export class ProgramsComponent implements OnInit {
 
   currentProgram$: Observable<boolean>;
-  
+  title : string = environment.titles.programs;
+  newTitle: string = "Nieuw " + environment.titles.program;
+
   constructor( private programService: ProgramService,
               private store: Store<fromProgram.State> ) { }
 

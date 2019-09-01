@@ -20,7 +20,7 @@
 	</ng-container>
 
 	<ng-container matColumnDef="name">
-		<mat-header-cell *matHeaderCellDef mat-sort-header>Project</mat-header-cell>
+		<mat-header-cell *matHeaderCellDef mat-sort-header>{{titles.project}}</mat-header-cell>
 		<mat-cell *matCellDef="let element">{{ element.name }}</mat-cell>
 	</ng-container>
 
@@ -30,12 +30,12 @@
 	</ng-container>
 
 	<ng-container matColumnDef="subjects">
-		<mat-header-cell *matHeaderCellDef mat-sort-header>Vak</mat-header-cell>
+		<mat-header-cell *matHeaderCellDef mat-sort-header>{{titles.subject}}</mat-header-cell>
 		<mat-cell *matCellDef="let element">{{ element.subjects }}</mat-cell>
 	</ng-container>
 
 	<ng-container matColumnDef="classes">
-		<mat-header-cell *matHeaderCellDef mat-sort-header>Klas</mat-header-cell>
+		<mat-header-cell *matHeaderCellDef mat-sort-header>{{titles.class}}</mat-header-cell>
 		<mat-cell *matCellDef="let element">{{ element.classes }}</mat-cell>
 	</ng-container>
 

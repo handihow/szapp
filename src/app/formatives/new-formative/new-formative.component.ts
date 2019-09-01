@@ -10,6 +10,7 @@ import { Formative } from '../formative.model';
 
 import { User } from '../../auth/user.model';
 import { Organisation } from '../../auth/organisation.model';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-new-formative',
@@ -23,6 +24,7 @@ export class NewFormativeComponent implements OnInit {
   organisation: Organisation;
   isLoading$: Observable<boolean>;
   @Output() isDone = new EventEmitter<boolean>();
+  newTitle: string = environment.titles.formative;
 
   constructor(   private store: Store<fromRoot.State>,
                  private formativeService: FormativeService) { }

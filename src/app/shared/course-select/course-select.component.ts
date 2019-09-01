@@ -8,6 +8,7 @@ import { CourseService } from '../../courses/course.service';
 import { Course } from '../../courses/course.model';
 
 import { User } from '../../auth/user.model';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-course-select',
@@ -22,6 +23,7 @@ export class CourseSelectComponent implements OnInit {
   @Output() selectedCourse = new EventEmitter<Course>();
   screenType$: Observable<string>;
   subs: Subscription[] = [];
+  titles = environment.titles;
 
   constructor(	private store: Store<fromRoot.State>,
                 private courseService: CourseService) { }

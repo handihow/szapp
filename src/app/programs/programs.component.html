@@ -1,13 +1,13 @@
 <mat-toolbar color="primary" class="mat-elevation-z3">
 	<mat-icon class="toolbar-icon">list</mat-icon>
-	Leerplannen
+	{{title}}
 </mat-toolbar>
 
 <mat-tab-group *ngIf="!(currentProgram$ | async)" backgroundColor="primary">
-  <mat-tab label="Leerplannen">
+  <mat-tab [label]="title">
   	<app-existing-programs></app-existing-programs>
   </mat-tab>
-  <mat-tab label="Nieuw Leerplan">
+  <mat-tab [label]="newTitle">
   	<app-new-program></app-new-program>
   </mat-tab>
 </mat-tab-group>

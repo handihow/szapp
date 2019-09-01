@@ -21,61 +21,61 @@
 		(click)="onClose()"
 		*ngIf="hasPermission('manage:programs')">
 		<mat-icon>list</mat-icon>
-		<span class="nav-caption">Leerplannen</span>
+		<span class="nav-caption">{{titles.programs}}</span>
 	</a>
 	<a mat-list-item routerLink="/projects" 
 		(click)="onClose()"
 		*ngIf="hasPermission('manage:projects')">
 		<mat-icon>work_outline</mat-icon>
-		<span class="nav-caption">Projecten</span>
+		<span class="nav-caption">{{titles.projects}}</span>
 	</a>
 	<a mat-list-item routerLink="/courses" 
 		(click)="onClose()"
 		*ngIf="hasPermission('manage:courses')">
 		<mat-icon>school</mat-icon>
-		<span class="nav-caption">Lesgroepen</span>
+		<span class="nav-caption">{{titles.courses}}</span>
 	</a>
 	<a mat-list-item routerLink="/formatives" 
 		(click)="onClose()"
 		*ngIf="hasPermission('manage:formatives')">
 		<mat-icon>assignment_ind</mat-icon>
-		<span class="nav-caption">Formatieven</span>
+		<span class="nav-caption">{{titles.formatives}}</span>
 	</a>
 	<a mat-list-item routerLink="/overviews" 
 		(click)="onClose()"
 		*ngIf="hasPermission('read:overviews')">
 		<mat-icon>dashboard</mat-icon>
-		<span class="nav-caption">Overzicht</span>
+		<span class="nav-caption">{{titles.overviews}}</span>
 	</a>
 	<a mat-list-item routerLink="/evaluations" 
 		(click)="onClose()"
 		*ngIf="isAuth$ | async">
 		<mat-icon>assignment</mat-icon>
-		<span class="nav-caption">Evaluatie</span>
+		<span class="nav-caption">{{titles.evaluations}}</span>
 	</a>
 	<a mat-list-item routerLink="/comments" 
 		(click)="onClose()"
 		*ngIf="hasPermission('write:comments')">
 		<mat-icon>comment</mat-icon>
-		<span class="nav-caption">Commentaar</span>
+		<span class="nav-caption">{{titles.comments}}</span>
 	</a>
 	<a mat-list-item routerLink="/comments/student" 
 		(click)="onClose()"
 		*ngIf="hasPermission('read:comments')">
 		<mat-icon>comment</mat-icon>
-		<span class="nav-caption">Commentaar</span>
+		<span class="nav-caption">{{titles.comments}}</span>
 	</a>
 	<a mat-list-item routerLink="/assessments" 
 		(click)="onClose()"
 		*ngIf="hasPermission('read:assessments')">
 		<mat-icon>assignment_turned_in</mat-icon>
-		<span class="nav-caption">Beoordeling</span>
+		<span class="nav-caption">{{titles.assessments}}</span>
 	</a>
 	<a mat-list-item routerLink="/admin" 
 		(click)="onClose()"
 		*ngIf="hasPermission('manage:users')">
 		<mat-icon>people</mat-icon>
-		<span class="nav-caption">Gebruikers</span>
+		<span class="nav-caption">{{titles.users}}</span>
 	</a>
 	<a mat-list-item 
 		(click)="onLogout()"

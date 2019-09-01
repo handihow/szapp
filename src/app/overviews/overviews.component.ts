@@ -16,6 +16,7 @@ import { User } from '../auth/user.model';
 import { Organisation } from '../auth/organisation.model';
 
 import { Course } from '../courses/course.model';
+import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'app-overviews',
@@ -39,6 +40,11 @@ export class OverviewsComponent implements OnInit, OnDestroy  {
   selectFormativeForm: FormGroup;
   selectClassroomReportForm: FormGroup;
   subs: Subscription[] = [];
+  title : string = environment.titles.overviews;
+  projectsTitle: string = environment.titles.projects;
+  projectTitle: string = environment.titles.project;
+  formativesTitle: string = environment.titles.formatives;
+  formativeTitle: string = environment.titles.formative;
 
   constructor( private router: Router, private store: Store<fromOverview.State>  ) { }
 

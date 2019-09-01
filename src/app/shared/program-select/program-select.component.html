@@ -1,5 +1,5 @@
 <mat-form-field *ngIf="(screenType$ | async)!=='phone'" class="full-width">
-	<mat-select placeholder="Leerplan" [(ngModel)]="selectedProgramId" (ngModelChange)="selectProgram($event)">
+	<mat-select [placeholder]="titles.program" [(ngModel)]="selectedProgramId" (ngModelChange)="selectProgram($event)">
 		<mat-optgroup label="Met ster" *ngIf="!relevantProgramsOnly">
 		  	<mat-option *ngFor="let starredProgram of starredPrograms$ | async" 
 		  				[value]="starredProgram.id"
@@ -7,7 +7,7 @@
 		      {{ starredProgram.name }} - {{starredProgram.code}}
 		    </mat-option>
 		</mat-optgroup>
-		<mat-optgroup label="Alle leerplannen">
+		<mat-optgroup [label]="titles.allPrograms">
 		    <mat-option *ngFor="let program of programs" 
 		    			[value]="program.id"
 		    			matTooltip="{{ program.name }} - {{program.code}}">
@@ -17,7 +17,7 @@
 	</mat-select>
 </mat-form-field>
 <mat-form-field *ngIf="(screenType$ | async)==='phone'" class="full-width">
-	<select matNativeControl placeholder="Leerplan" [(ngModel)]="selectedProgramId" (ngModelChange)="selectProgram($event)">
+	<select matNativeControl [placeholder]="titles.program" [(ngModel)]="selectedProgramId" (ngModelChange)="selectProgram($event)">
 		<option value=""></option>
 		<optgroup label="Met ster" *ngIf="!relevantProgramsOnly">
 			<option *ngFor="let starredProgram of starredPrograms$ | async" 
@@ -25,7 +25,7 @@
 				{{ starredProgram.name }} - {{starredProgram.code}}
 			</option>
 		</optgroup>
-		<optgroup label="Alle leerplannen">
+		<optgroup [label]="titles.allPrograms">
 			<option *ngFor="let program of programs" 
 	    			[value]="program.id">
 				{{ program.name }} - {{program.code}}

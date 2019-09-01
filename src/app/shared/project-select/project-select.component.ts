@@ -9,6 +9,8 @@ import { Project } from '../../projects/project.model';
 import { User } from '../../auth/user.model';
 import { Organisation } from '../../auth/organisation.model';
 
+import { environment } from '../../../environments/environment';
+
 @Component({
   selector: 'app-project-select',
   templateUrl: './project-select.component.html',
@@ -25,6 +27,8 @@ export class ProjectSelectComponent implements OnInit, OnDestroy {
   @Input() organisation: Organisation;
   @Output() selectedProject = new EventEmitter<Project>();
   subs: Subscription[] = [];
+
+  titles = environment.titles;
 
   constructor(private projectService: ProjectService, private store: Store<fromRoot.State>) { }
 

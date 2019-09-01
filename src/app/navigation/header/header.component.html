@@ -8,40 +8,40 @@
 	</div>
 	<div fxFlex fxLayout="row" fxLayoutAlign="flex-start center">
 		<a mat-button routerLink="/" *ngIf="isAuth$ | async">
-			<img src="/assets/SZAPP.png" id="logo"> SZAPP
+			<img [src]="logo" id="logo"> {{titles.appShortName}}
 		</a>
 	</div>
 	<div fxFlex fxLayout fxLayoutAlign="flex-end" fxLayoutGap="10px">
 		<!-- Student links -->
 		<div fxLayout fxHide fxShow.gt-xs>
 			<button mat-button *ngIf="hasPermission('read:assessments')" routerLink="/assessments" routerLinkActive="active">
-				Beoordeling
+				{{titles.assessments}}
 			</button>
 			<button mat-button *ngIf="hasPermission('write:comments')" routerLink="/comments" routerLinkActive="active">
-				Commentaar
+				{{titles.comments}}
 			</button>
 			<button mat-button *ngIf="hasPermission('read:comments')" routerLink="/comments/student" routerLinkActive="active">
-				Commentaar
+				{{titles.comments}}
 			</button>
 			<button mat-button *ngIf="hasPermission('read:evaluations')" routerLink="/evaluations" routerLinkActive="active">
-				Evaluatie
+				{{titles.evaluations}}
 			</button>
 			<button mat-button *ngIf="hasPermission('read:overviews')" routerLink="/overviews" routerLinkActive="active">
-				Overzicht
+				{{titles.overviews}}
 			</button>
 			<!-- Administration part -->
 			<button mat-button [matMenuTriggerFor]="administration" *ngIf="hasPermission('manage:schoolcontents')">
-				Beheer
+				{{titles.contents}}
 			</button>
 			<mat-menu #administration="matMenu" fxHide.xs>
-			  <button mat-menu-item routerLink="/programs" *ngIf="hasPermission('manage:programs')">Leerplannen</button>
-			  <button mat-menu-item routerLink="/projects" *ngIf="hasPermission('manage:projects')">Projecten</button>
-			  <button mat-menu-item routerLink="/courses" *ngIf="hasPermission('manage:courses')">Lesgroepen</button>
-			  <button mat-menu-item routerLink="/formatives" *ngIf="hasPermission('manage:formatives')">Formatieven</button>
-			  <button mat-menu-item routerLink="/admin/downloads" *ngIf="hasPermission('download:data')">Downloads</button>
+			  <button mat-menu-item routerLink="/programs" *ngIf="hasPermission('manage:programs')">{{titles.programs}}</button>
+			  <button mat-menu-item routerLink="/projects" *ngIf="hasPermission('manage:projects')">{{titles.projects}}</button>
+			  <button mat-menu-item routerLink="/courses" *ngIf="hasPermission('manage:courses')">{{titles.courses}}</button>
+			  <button mat-menu-item routerLink="/formatives" *ngIf="hasPermission('manage:formatives')">{{titles.formatives}}</button>
+			  <button mat-menu-item routerLink="/admin/downloads" *ngIf="hasPermission('download:data')">{{titles.downloads}}</button>
 			</mat-menu>
 			<button mat-button routerLink="/admin" *ngIf="hasPermission('manage:users')">
-				Gebruikers
+				{{titles.users}}
 			</button>
 		</div>
 		<!-- Profile button -->

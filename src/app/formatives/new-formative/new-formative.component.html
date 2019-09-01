@@ -2,7 +2,7 @@
 	<form [formGroup]="formativeForm" (ngSubmit)="onSubmit()">
 		<mat-card fxFlex.xs="100%" fxFlex="400px">
 			<mat-card-title fxLayoutAlign="center">
-				Maak een nieuw formatief
+				Maak {{newTitle}}
 			</mat-card-title>
 			<mat-card-content fxLayout="column" fxLayoutAlign="center center" *ngIf="!(isLoading$ | async)">
 				<mat-form-field class="full-width">
