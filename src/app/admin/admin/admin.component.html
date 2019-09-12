@@ -20,20 +20,30 @@
 <div *ngIf="!users || users.length==0" fxLayout="column" fxLayoutAlign="center center" class="placeholder">
 	Geen gebruikers
 </div>
+
+
 <div [hidden]="!users || users.length==0">
 	<mat-table [dataSource]="dataSource" matSort>
+
+		<ng-container matColumnDef="avatar">
+			<mat-header-cell *matHeaderCellDef mat-sort-header>Avatar</mat-header-cell>
+			<mat-cell *matCellDef="let element">
+				<img mat-card-avatar 
+				[src]="element.photoURL?element.photoURL:'https://ui-avatars.com/api/?name='+element.displayName">
+			</mat-cell>
+		</ng-container>
+
+		<ng-container matColumnDef="displayName">
+			<mat-header-cell *matHeaderCellDef mat-sort-header>Naam</mat-header-cell>
+			<mat-cell *matCellDef="let element">
+		    	{{element?.displayName}}
+			</mat-cell>
+		</ng-container>
 
 		<ng-container matColumnDef="email">
 			<mat-header-cell *matHeaderCellDef mat-sort-header>Email</mat-header-cell>
 			<mat-cell *matCellDef="let element">
 				{{ element.email }}
-			</mat-cell>
-		</ng-container>
-
-		<ng-container matColumnDef="displayName">
-			<mat-header-cell *matHeaderCellDef>Naam</mat-header-cell>
-			<mat-cell *matCellDef="let element">
-		    	{{element?.displayName}}
 			</mat-cell>
 		</ng-container>
 
@@ -59,6 +69,7 @@
 				  <mat-icon>more_vert</mat-icon>
 				</button>
 				<mat-menu #userMenu="matMenu">
+				  <button mat-menu-item (click)="changeProfile(element)">Profiel aanpassen</button>
 				  <button mat-menu-item (click)="assignRoles(element)">Rechten toekennen</button>
 				  <button mat-menu-item (click)="requestPasswordReset(element)">Wachtwoord resetten</button>
 				  <button mat-menu-item (click)="deleteAccount(element)">Account verwijderen</button>
@@ -74,6 +85,8 @@
 	</mat-paginator>
 </div>
 
+<mat-card>
+</mat-card>
 
 <!-- <mat-card>
 	<mat-card-header>

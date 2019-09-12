@@ -48,7 +48,7 @@ export class CurrentCourseComponent implements OnInit, OnDestroy {
 
   subs: Subscription[] = [];
 
-  displayedColumns = ['select', 'role' ,'name', 'email'];
+  displayedColumns = ['select', 'avatar' ,'name', 'email', 'role'];
   dataSource = new MatTableDataSource<Skill>();
   isLoading$: Observable<boolean>;
 

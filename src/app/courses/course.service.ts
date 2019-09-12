@@ -71,7 +71,7 @@ export class CourseService {
 						const data = doc.payload.doc.data() as Course;
 						const id = doc.payload.doc.id;
 						return { id, ...data };
-					})
+					}).sort((a,b) => {return (a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0);})
 			}))	
 	}
 
@@ -87,7 +87,7 @@ export class CourseService {
 						const data = doc.payload.doc.data() as Course;
 						const id = doc.payload.doc.id;
 						return { id, ...data };
-					})
+					}).sort((a,b) => {return (a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0);})
 			}))	
 	}
 

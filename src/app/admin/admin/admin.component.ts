@@ -14,6 +14,7 @@ import { User } from '../../auth/user.model';
 import * as fromRoot from '../../app.reducer'; 
 
 import { EditRolesComponent } from './edit-roles.component';
+import { EditProfileComponent } from './edit-profile.component';
 import { AddUsersComponent } from './add-users.component';
 import { RemoveUserComponent } from './remove-user.component';
 
@@ -26,7 +27,7 @@ export class AdminComponent implements  OnInit, AfterViewInit, OnDestroy {
   // email : string = '';
 
   isLoading$: Observable<boolean>;
-  displayedColumns = ['email', 'displayName', 'organisation', 'role', 'manage'];
+  displayedColumns = ['avatar', 'displayName', 'email', 'organisation', 'role', 'manage'];
   dataSource = new MatTableDataSource<User>();
   selection = new SelectionModel<User>(false, null);
   users: User[];
@@ -78,6 +79,14 @@ export class AdminComponent implements  OnInit, AfterViewInit, OnDestroy {
     });
   }
 
+  changeProfile(user: User){
+    this.selectedUser = user;
+    const dialogRef = this.dialog.open(EditProfileComponent, {
+      data: user,
+      width: '350px'
+    });
+  }
+
   addUsers(){
     const dialogRef = this.dialog.open(AddUsersComponent, {
       width: '600px'
@@ -115,9 +124,9 @@ export class AdminComponent implements  OnInit, AfterViewInit, OnDestroy {
   //set the displayed columns of the table depending on the size of the display
   setDisplayedColumns(screenType){
     if(screenType == "desktop"){
-      this.displayedColumns = ['email', 'displayName', 'organisation', 'role', 'manage'];
+      this.displayedColumns = ['avatar', 'displayName', 'email',  'organisation', 'role', 'manage'];
     } else if(screenType == "tablet"){
-      this.displayedColumns = ['email', 'displayName', 'role', 'manage'];
+      this.displayedColumns = ['displayName', 'email', 'role', 'manage'];
     } else {
       this.displayedColumns = ['email', 'manage'];
     }

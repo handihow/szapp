@@ -8,6 +8,7 @@ import { DownloadsComponent } from './downloads/downloads.component';
 import { EditRolesComponent } from './admin/edit-roles.component';
 import { AddUsersComponent } from './admin/add-users.component';
 import { RemoveUserComponent } from './admin/remove-user.component';
+import { EditProfileComponent } from './admin/edit-profile.component';
 
 @NgModule({
   declarations: [
@@ -15,7 +16,8 @@ import { RemoveUserComponent } from './admin/remove-user.component';
     DownloadsComponent,
     EditRolesComponent,
     AddUsersComponent,
-    RemoveUserComponent
+    RemoveUserComponent,
+    EditProfileComponent
   ],
   imports: [
     CommonModule,
@@ -25,7 +27,8 @@ import { RemoveUserComponent } from './admin/remove-user.component';
   entryComponents: [
     EditRolesComponent,
     AddUsersComponent,
-    RemoveUserComponent
+    RemoveUserComponent,
+    EditProfileComponent
   ]
 })
 export class AdminModule { }

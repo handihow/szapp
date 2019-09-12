@@ -70,6 +70,42 @@ export const changeRoles = functions.https.onCall((data, context) => {
   });
 });
 
+export const changeProfile = functions.https.onCall((data, context) => {
+  if(context && context.auth && context.auth.token && !context.auth.token.admin){
+    return {
+      error: "Request not authorized. User must be an administrator to fulfill request."
+    };
+  }
+  const uid = data.uid;
+  const email = data.email;
+  const displayName = data.displayName;
+
+  return admin.auth().getUser(uid)
+  .then(user => {
+    return admin.auth().updateUser(uid, {
+      email: email,
+      displayName: displayName
+    })
+    .then(async () => {
+      await db.collection('users').doc(uid).update({email: email, displayName: displayName});
+      return {
+        result: "Request fulfilled!"
+      }
+    })
+    .catch(error => {
+      return {
+        error: "Something went wrong.. " + error
+      }
+    });
+    
+  })
+  .catch(error => {
+    return {
+      error: 'Error fetching user data.. ' + error
+    };
+  });
+});
+
 
 export const createUsers = functions.https.onCall(async (data, context) => {
   if(!context.auth || !context.auth.token || !context.auth.token.admin){

@@ -62,8 +62,14 @@
 </div>
 <div fxLayout="row wrap" fxLayoutAlign="space-between stretch" fxLayoutGap="10px" fxLayout.lt-sm="column" fxLayoutAlign.lt-sm="start stretch" fxLayoutGap.lt-sm="10px">
 	<mat-card *ngFor="let student of courseStudents; let i=index" class="student-card">
+		<mat-card-header>
+			<img mat-card-avatar 
+				[src]="student.photoURL?student.photoURL:'https://ui-avatars.com/api/?name='+student.displayName">
+			<mat-card-title class="card-title-sm">
+				{{student.displayName}}
+			</mat-card-title>
+		</mat-card-header>
 		<mat-card-content>
-			<h4>{{student.displayName}}</h4>
 			<mat-icon [ngStyle]="{'color': (student.evaluation && student.evaluation.colorStudent) ? student.evaluation.colorStudent: 'grey'}">
 	          {{(student.evaluation && student.evaluation.iconStudent) ? student.evaluation.iconStudent : "account_circle"}}
 	        </mat-icon>  

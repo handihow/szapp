@@ -6,6 +6,10 @@ mat-card {
 	margin: 10px;
 }
 
+.card-title-sm {
+  font-size: 16px;
+}
+
 .half-width {
 	width: 50%;
 }

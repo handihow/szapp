@@ -25,6 +25,7 @@ exports.onUpdateProgress = progress.onUpdateProgress;
 exports.jsonDownload = data.jsonDownload;
 exports.addAdmin = roles.addAdmin;
 exports.changeRoles = roles.changeRoles;
+exports.changeProfile = roles.changeProfile;
 exports.createUsers = roles.createUsers;
 exports.addStudent = roles.addStudent;
 exports.removeUser = roles.removeUser;

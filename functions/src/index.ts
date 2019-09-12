@@ -29,6 +29,7 @@ export const jsonDownload = data.jsonDownload;
 
 export const addAdmin = roles.addAdmin;
 export const changeRoles = roles.changeRoles;
+export const changeProfile = roles.changeProfile;
 export const createUsers = roles.createUsers;
 export const addStudent = roles.addStudent;
 export const removeUser = roles.removeUser;

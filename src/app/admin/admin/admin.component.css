@@ -16,6 +16,10 @@
 	height: 300px;
 }
 
+.mat-column-avatar {
+  flex: 1;
+}
+
 .mat-column-email {
   flex: 6;
   /*min-width: 55px;*/

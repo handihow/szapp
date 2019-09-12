@@ -1,3 +1,7 @@
+#current-course-section {
+  margin-top: 10px;
+}
+
 .current-course {
   margin-left: 10px;
   margin-right: 10px;
@@ -20,11 +24,23 @@
 }
 
 .mat-column-select {
-	flex: 0 0 40px;
+	flex: 1;
 }
 
-.mat-column-order {
-	flex: 0 0 90px;
+.mat-column-role {
+  flex: 2;
+}
+
+.mat-column-avatar {
+  flex: 1;
+}
+
+.mat-column-name {
+  flex: 4;
+}
+
+.mat-column-email {
+  flex: 4;
 }
 
 .email-info{

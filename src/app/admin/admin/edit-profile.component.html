@@ -1,0 +1,46 @@
+<h1 mat-dialog-title>Profiel aanpassen</h1>
+<form [formGroup]="profileForm" (submit)="onSubmit()" *ngIf="!isWaiting && !isDone">
+	<mat-dialog-content>
+		<mat-form-field class="full-width">
+			<input 
+				type="email" 
+				matInput 
+				placeholder="Nieuw email adres" 
+				formControlName="email" 
+				email
+				required>
+			<mat-error>
+				Geef een geldig email adres in
+			</mat-error>
+		</mat-form-field>
+		<mat-form-field class="full-width">
+			<input 
+				type="text" 
+				matInput 
+				placeholder="Nieuwe (volledige) naam" 
+				formControlName="displayName" 
+				required>
+			<mat-error>
+				Volledige naam is verplicht
+			</mat-error>
+		</mat-form-field>
+	</mat-dialog-content>
+	<mat-dialog-actions>
+		<button type="button" mat-raised-button color="warn" [mat-dialog-close]="false" >Annuleren</button>
+		<button type="submit" mat-raised-button color="primary" [disabled]="profileForm.invalid">Profiel aanpassen</button>
+	</mat-dialog-actions>
+</form>
+
+<mat-dialog-content *ngIf="isWaiting">
+	<div fxFlex fxLayout="column" fxLayoutAlign="center center">
+		<p><mat-spinner></mat-spinner></p>
+		<p>Even geduld aub...</p>
+	</div>
+</mat-dialog-content>
+<mat-dialog-content *ngIf="isDone">
+	<p>{{this.success}}</p>
+	<p>{{this.error}}</p>
+</mat-dialog-content>
+<mat-dialog-actions *ngIf="isDone">
+	<button type="button" mat-raised-button color="primary" [mat-dialog-close]="false" >Klaar</button>
+</mat-dialog-actions>

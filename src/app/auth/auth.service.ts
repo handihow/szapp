@@ -46,10 +46,10 @@ export class AuthService {
 		switchMap(user => {
 			if (user) {
 				this.setUserPermissions(user);
-				// if(user.providerData[0].providerId==="google.com"){
-				// 	//user is signing in with Google
-				// 	this.updateUserWithGoogleAuth(user);
-				// }
+				if(user.providerData[0].providerId==="google.com"){
+					//user is signing in with Google
+					this.updateUserWithGoogleAuth(user);
+				}
 				return this.afs.doc<User>(`users/${user.uid}`).valueChanges()
 			} else {
 				this.store.dispatch(new Auth.SetUnauthenticated());
@@ -300,40 +300,23 @@ export class AuthService {
 	    return userRef.set(data, { merge: true })
 	}
 
-	//creates custom user profile after signing in for first time with Google account
-	//updates the profile when logging in again with Google account
-	// private async updateUserWithGoogleAuth(user) {
-	// 	this.store.dispatch(new UI.StartLoading());
-	//     //retrieve the user's organisation
-	// 	let organisation: Organisation = await this.getOrganisation(user);
-	// 	if(!organisation){
-	// 		this.logout();
-	//     	return this.uiService.showSnackbar("Dit Google account is niet geautoriseerd om de app te gebruiken. Neem contact op met de beheerder", null, 3000);
-	//     }
-	//     // Sets user data to firestore
-	//     const userRef: AngularFirestoreDocument<any> = this.afs.doc(`users/${user.uid}`);
+	// updates the profile when logging in again with Google account
+	private async updateUserWithGoogleAuth(user) {
+		
+	    // Sets user data to firestore
+	    const userRef: AngularFirestoreDocument<any> = this.afs.doc(`users/${user.uid}`);
 
-	//     //creates the user object to be stored
-	//     const data: User = {
-	//     	uid: user.uid,
-	//     	email: user.email,
-	//     	displayName: user.displayName,
-	//     	photoURL: user.photoURL,
-	//     	organisation: organisation.name,
-	//     	organisationId: organisation.id,
-	//     	hasGoogleForEducation: true
-	//     }
-
-	//     //if the whitelisted organisation has a role detection rule then assign automatically the user role
-	//     //"Leraar" = "Teacher", "Leerling" = "Student"
-	//     if(organisation.roleDetectionRule != undefined) {
-	//     	var fn = Function("email", organisation.roleDetectionRule);
-	//     	data.role = fn(user.email);
-	//     }
-
-	//     //now save the users data in the database and resolve true when the database update is finished
-	//     userRef.set(data, { merge: true })
-	// }
+	    //creates the user object to be stored
+	    const data: User = {
+	    	uid: user.uid,
+	    	email: user.email,
+	    	displayName: user.displayName,
+	    	photoURL: user.photoURL,
+	    	hasGoogleForEducation: true
+	    }
+	    //now save the users data in the database and resolve true when the database update is finished
+	    userRef.set(data, { merge: true })
+	}
 
 	updateUserProfile(profileUpdate) {
 	    // Sets user data to firestore on login

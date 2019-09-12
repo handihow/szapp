@@ -1,4 +1,6 @@
 import { Component, OnInit, HostListener } from '@angular/core';
+import { Title }     from '@angular/platform-browser';
+
 import { SwUpdate } from '@angular/service-worker';
 import { environment } from '../environments/environment';
 
@@ -7,6 +9,7 @@ import * as UIAction from './shared/ui.actions';
 import * as fromUI from './shared/ui.reducer';
 
 import { AuthService } from './auth/auth.service';
+
 
 @Component({
   selector: 'app-root',
@@ -22,6 +25,7 @@ export class AppComponent implements OnInit {
    }
 
   constructor(
+              private titleService: Title,
               private updates: SwUpdate,
               private authService: AuthService,
                private store: Store<fromUI.State>) {
@@ -35,6 +39,7 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit(){
+    this.titleService.setTitle( environment.titles.appLongName )
   	this.authService.initAuthListener();
     this.setScreenSize(window.innerWidth);
   }

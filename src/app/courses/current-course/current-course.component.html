@@ -1,5 +1,5 @@
 <section fxLayout="row" fxLayoutAlign="space-evenly"
-			fxLayout.lt-md="column" fxLayoutAlign.lt-md="space-between" fxLayoutGap="20px">
+			fxLayout.lt-md="column" fxLayoutAlign.lt-md="space-between" fxLayoutGap="20px" id="current-course-section">
 	<mat-card fxFlex="30">
 		<mat-card-title>
 			{{course.name}}  
@@ -117,11 +117,14 @@
 		  </mat-cell>
 		</ng-container>
 
-		<ng-container matColumnDef="role">
-			<mat-header-cell *matHeaderCellDef mat-sort-header>Rol</mat-header-cell>
-			<mat-cell *matCellDef="let element">{{ element.role }}</mat-cell>
+		<ng-container matColumnDef="avatar">
+			<mat-header-cell *matHeaderCellDef mat-sort-header>Avatar</mat-header-cell>
+			<mat-cell *matCellDef="let element">
+				<img mat-card-avatar 
+				[src]="element.photoURL?element.photoURL:'https://ui-avatars.com/api/?name='+element.displayName">
+			</mat-cell>
 		</ng-container>
-
+		
 		<ng-container matColumnDef="name">
 			<mat-header-cell *matHeaderCellDef mat-sort-header>Naam</mat-header-cell>
 			<mat-cell *matCellDef="let element">{{ element.displayName }}</mat-cell>
@@ -130,6 +133,11 @@
 		<ng-container matColumnDef="email">
 			<mat-header-cell *matHeaderCellDef mat-sort-header>Email</mat-header-cell>
 			<mat-cell *matCellDef="let element">{{ element.email }}</mat-cell>
+		</ng-container>
+
+		<ng-container matColumnDef="role">
+			<mat-header-cell *matHeaderCellDef mat-sort-header>Rol</mat-header-cell>
+			<mat-cell *matCellDef="let element">{{ element.role }}</mat-cell>
 		</ng-container>
 
 		<mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
