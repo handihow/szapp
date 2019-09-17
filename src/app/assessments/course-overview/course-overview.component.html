@@ -63,8 +63,7 @@
 <div fxLayout="row wrap" fxLayoutAlign="space-between stretch" fxLayoutGap="10px" fxLayout.lt-sm="column" fxLayoutAlign.lt-sm="start stretch" fxLayoutGap.lt-sm="10px">
 	<mat-card *ngFor="let student of courseStudents; let i=index" class="student-card">
 		<mat-card-header>
-			<img mat-card-avatar 
-				[src]="student.photoURL?student.photoURL:'https://ui-avatars.com/api/?name='+student.displayName">
+			<app-user-avatar [user]="student"></app-user-avatar>
 			<mat-card-title class="card-title-sm">
 				{{student.displayName}}
 			</mat-card-title>

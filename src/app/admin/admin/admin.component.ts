@@ -18,6 +18,8 @@ import { EditProfileComponent } from './edit-profile.component';
 import { AddUsersComponent } from './add-users.component';
 import { RemoveUserComponent } from './remove-user.component';
 
+import { environment } from '../../../environments/environment';
+
 @Component({
   selector: 'app-admin',
   templateUrl: './admin.component.html',
@@ -27,9 +29,9 @@ export class AdminComponent implements  OnInit, AfterViewInit, OnDestroy {
   // email : string = '';
 
   isLoading$: Observable<boolean>;
-  displayedColumns = ['avatar', 'displayName', 'email', 'organisation', 'role', 'manage'];
+  displayedColumns = ['select', 'avatar', 'displayName', 'email', 'organisation', 'role', 'manage'];
   dataSource = new MatTableDataSource<User>();
-  selection = new SelectionModel<User>(false, null);
+  selection = new SelectionModel<User>(true, null);
   users: User[];
   selectedUser: User;
   subs: Subscription[] = [];
@@ -37,6 +39,8 @@ export class AdminComponent implements  OnInit, AfterViewInit, OnDestroy {
 
   @ViewChild(MatSort, { static: true }) sort: MatSort;
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
+
+  titles = environment.titles;
 
   constructor(private authService: AuthService,
               private adminService: AdminService,
@@ -55,21 +59,6 @@ export class AdminComponent implements  OnInit, AfterViewInit, OnDestroy {
       this.dataSource.data = this.users;
     })); 
   }
-
-  // setModerator(){
-  // 	const callable = this.fns.httpsCallable('addDownloader');
-  //   this.result$ = callable({ email: this.email });
-  // }
-
-  // removeModerator(){
-  //   const callable = this.fns.httpsCallable('removeDownloader');
-  //   this.result$ = callable({ email: this.email });
-  // }
-
-  // setClassNumbers(){
-  //   const callable = this.fns.httpsCallable('setClassNumbers');
-  //   this.result$ = callable({});
-  // }
 
   assignRoles(user: User){
     this.selectedUser = user;
@@ -124,11 +113,11 @@ export class AdminComponent implements  OnInit, AfterViewInit, OnDestroy {
   //set the displayed columns of the table depending on the size of the display
   setDisplayedColumns(screenType){
     if(screenType == "desktop"){
-      this.displayedColumns = ['avatar', 'displayName', 'email',  'organisation', 'role', 'manage'];
+      this.displayedColumns = ['select', 'avatar', 'displayName', 'email',  'organisation', 'role', 'manage'];
     } else if(screenType == "tablet"){
-      this.displayedColumns = ['displayName', 'email', 'role', 'manage'];
+      this.displayedColumns = ['select', 'displayName', 'email', 'role', 'manage'];
     } else {
-      this.displayedColumns = ['email', 'manage'];
+      this.displayedColumns = ['select', 'email', 'manage'];
     }
   }
 
@@ -143,13 +132,22 @@ export class AdminComponent implements  OnInit, AfterViewInit, OnDestroy {
     }));
   }
 
-  onFilter(){
-    console.log('data is filtered');
-    // if(this.slideNotEvaluatedOnly){
-    //   this.dataSource.data = this.evaluations.filter(evaluation => evaluation.status==="Niet beoordeeld");
-    // } else {
-    //   this.dataSource.data = this.evaluations;  
-    // }
+  /** Whether the number of selected elements matches the total number of rows. */
+  isAllSelected() {
+    const numSelected = this.selection.selected.length;
+    const numRows = this.dataSource.data.length;
+    return numSelected == numRows;
+  }
+
+  /** Selects all rows if they are not all selected; otherwise clear selection. */
+  masterToggle() {
+    this.isAllSelected() ?
+        this.selection.clear() :
+        this.dataSource.data.forEach(row => this.selection.select(row));
+  }
+
+  onAssign(){
+    console.log(this.selection.selected[0].organisationId);
   }
 
 }

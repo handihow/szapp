@@ -137,7 +137,10 @@
 
 		<ng-container matColumnDef="role">
 			<mat-header-cell *matHeaderCellDef mat-sort-header>Rol</mat-header-cell>
-			<mat-cell *matCellDef="let element">{{ element.role }}</mat-cell>
+			<mat-cell *matCellDef="let element">
+				<span *ngIf="element.roles && element.roles.student" class="access-rights">Leerling</span>
+				<span *ngIf="element.roles && element.roles.teacher" class="access-rights">Leraar</span>
+			</mat-cell>
 		</ng-container>
 
 		<mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>

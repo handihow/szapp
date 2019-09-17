@@ -10,6 +10,7 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { ShowFullImageComponent } from './show-full-image';
 
 import { NgxGalleryModule } from 'ngx-gallery';
+import { ImgFallbackModule } from 'ngx-img-fallback';
 
 import { DropZoneDirective } from './drop-zone.directive';
 import { FileSizePipe } from './file-size.pipe';
@@ -32,6 +33,7 @@ import { StudentSelectComponent } from './student-select/student-select.componen
 import { FormativeSelectComponent } from './formative-select/formative-select.component';
 import { PanelTileComponent } from './skills-expansion-panel/panel-tile/panel-tile.component';
 import { OrganisationSelectComponent } from './organisation-select/organisation-select.component';
+import { UserAvatarComponent } from './user-avatar/user-avatar.component';
 
 @NgModule({
 	declarations: [
@@ -52,7 +54,8 @@ import { OrganisationSelectComponent } from './organisation-select/organisation-
 		StudentSelectComponent,
 		FormativeSelectComponent,
 		PanelTileComponent,
-		OrganisationSelectComponent
+		OrganisationSelectComponent,
+		UserAvatarComponent
 	],
 	imports: [
 		CommonModule,
@@ -64,7 +67,8 @@ import { OrganisationSelectComponent } from './organisation-select/organisation-
 		RouterModule,
 		NgxGalleryModule,
     	AngularFontAwesomeModule,
-    	AngularFireFunctionsModule
+    	AngularFireFunctionsModule,
+    	ImgFallbackModule
 	],
 	exports: [
 		CommonModule,
@@ -74,6 +78,7 @@ import { OrganisationSelectComponent } from './organisation-select/organisation-
 		MaterialModule,
 		FlexLayoutModule,
 		AngularFireFunctionsModule,
+		ImgFallbackModule,
 		ShowFullImageComponent,
 		DropZoneDirective,
 		FileSizePipe,
@@ -89,7 +94,8 @@ import { OrganisationSelectComponent } from './organisation-select/organisation-
     	AngularFontAwesomeModule,
     	FormativeSelectComponent,
     	PanelTileComponent,
-    	OrganisationSelectComponent
+    	OrganisationSelectComponent,
+    	UserAvatarComponent
 	],
 	entryComponents: [ShowFullImageComponent, ShowHistoryComponent, ShowAttachmentsComponent, RemoveEvaluationComponent]
 })

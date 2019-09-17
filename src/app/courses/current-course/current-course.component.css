@@ -25,6 +25,7 @@
 
 .mat-column-select {
 	flex: 1;
+  min-width: 55px;
 }
 
 .mat-column-role {
