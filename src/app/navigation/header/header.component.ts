@@ -21,6 +21,7 @@ export class HeaderComponent implements OnInit {
   permissions: string[];
   titles: any = environment.titles;
   logo = environment.logo;
+  logoLong = environment.logoLong ? environment.logoLong : false;
 
   @Output() sidenavToggle = new EventEmitter<void>();
 

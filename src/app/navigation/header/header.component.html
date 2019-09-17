@@ -8,7 +8,8 @@
 	</div>
 	<div fxFlex fxLayout="row" fxLayoutAlign="flex-start center">
 		<a mat-button routerLink="/" *ngIf="isAuth$ | async">
-			<img [src]="logo" id="logo"> {{titles.appShortName}}
+			<img [src]="logo" id="logo" *ngIf="!logoLong"> <span *ngIf="!logoLong">{{titles.appShortName}}</span>
+			<img [src]="logoLong" id="logolong" *ngIf="logoLong">
 		</a>
 	</div>
 	<div fxFlex fxLayout fxLayoutAlign="flex-end" fxLayoutGap="10px">
