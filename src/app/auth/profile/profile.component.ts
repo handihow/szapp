@@ -25,7 +25,7 @@ export class UserProfileComponent implements OnInit, OnDestroy {
   organisation$: Observable<Organisation>;
 
   isEditing: boolean;
-  isTeacher: boolean;
+  // isTeacher: boolean;
 
   profileForm: FormGroup;
   userId: string;
@@ -52,7 +52,8 @@ export class UserProfileComponent implements OnInit, OnDestroy {
   ngOnInit() {
     //create the profile form
     this.profileForm = new FormGroup({
-      classes: new FormControl(null),
+      // classes: new FormControl(null),
+      officialClass: new FormControl(null),
       subjects: new FormControl(null),
       imageUrl: new FormControl(null),
       thumbnailUrl: new FormControl(null),
@@ -62,18 +63,20 @@ export class UserProfileComponent implements OnInit, OnDestroy {
     this.userSubs = this.store.select(fromRoot.getCurrentUser).subscribe(user => {
       if(user){
         this.user = user;
+        console.log(user);
         this.userId = user.uid;
         this.profileForm.get("subjects").setValue(user.subjects);
         if(user.thumbnailURL){
           const refTN = this.storage.ref(user.thumbnailURL);
           this.thumbnail$ = refTN.getDownloadURL();
         }
-        if(user.role === 'Leraar'){
-          this.isTeacher = true;
-          this.profileForm.get("classes").setValue(user.classes);
-        } else if(user.classes) {
-          this.profileForm.get('classes').setValue(user.classes[0]);
-        }
+        // if(user.role === 'Leraar'){
+        //   this.isTeacher = true;
+        //   this.profileForm.get("classes").setValue(user.classes);
+        // } else if(user.classes) {
+        //   this.profileForm.get('classes').setValue(user.classes[0]);
+        // }
+        this.profileForm.get('officialClass').setValue(user.officialClass);
         this.profileForm.get("classNumber").setValue(user.classNumber);
       }
     })
@@ -85,7 +88,8 @@ export class UserProfileComponent implements OnInit, OnDestroy {
     this.isEditing = false;
     this.authService.updateUserProfile({
       uid: this.userId,
-      classes: this.isTeacher ? this.profileForm.value.classes : [this.profileForm.value.classes],
+      // classes: this.isTeacher ? this.profileForm.value.classes : [this.profileForm.value.classes],
+      officialClass: this.profileForm.value.officialClass,
       subjects: this.profileForm.value.subjects,
       imageURL: this.profileForm.value.imageUrl,
       thumbnailURL: this.profileForm.value.thumbnailUrl,

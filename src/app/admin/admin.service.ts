@@ -58,6 +58,18 @@ export class AdminService {
 			}));
 	}
 
+	fetchOrganisation(organisationId: string) : Observable<Organisation>{
+		return this.afs.collection('organisations').doc(organisationId).valueChanges();
+	}
+
+	updateUsersOfficialClass(users: User[], officialClass: string){
+		let batch = this.afs.firestore.batch();
+		users.forEach(user => {
+			let userRef = this.afs.collection('users').doc(user.uid).ref;
+			batch.update(userRef, {officialClass: officialClass});
+		});
+		return batch.commit();
+	}
 
 }
 

@@ -30,4 +30,5 @@ exports.createUsers = roles.createUsers;
 exports.addStudent = roles.addStudent;
 exports.removeUser = roles.removeUser;
 exports.setClassNumbers = corrections.setClassNumbers;
+exports.setOfficialClass = corrections.setOfficialClass;
 //# sourceMappingURL=index.js.map

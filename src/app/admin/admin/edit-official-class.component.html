@@ -1,0 +1,21 @@
+<h1 mat-dialog-title>{{titles.class}} aanpassen</h1>
+<form [formGroup]="officialClassForm" (submit)="onSubmit()" *ngIf="!isWaiting && !isDone">
+	<mat-dialog-content>
+		<mat-form-field class="full-width">  
+		  <mat-select 
+		  		[placeholder]="'Selecteer ' + titles.class"
+		  		formControlName="officialClass">
+		    <mat-option *ngFor="let class of (organisation$ | async)?.classes" [value]="class">
+		      {{class}}
+		    </mat-option>
+		  </mat-select>
+		</mat-form-field>
+	</mat-dialog-content>
+	<mat-dialog-actions>
+		<button type="button" mat-raised-button color="warn" [mat-dialog-close]="false">Annuleren</button>
+		<button type="submit" mat-raised-button color="primary" [disabled]="officialClassForm.invalid">
+			{{titles.class}} aanpassen
+		</button>
+	</mat-dialog-actions>
+</form>
+

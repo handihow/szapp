@@ -78,6 +78,11 @@
 			</mat-cell>
 		</ng-container>
 
+		<ng-container matColumnDef="officialClass">
+			<mat-header-cell *matHeaderCellDef mat-sort-header>{{titles.class}}</mat-header-cell>
+			<mat-cell *matCellDef="let element">{{ element.officialClass }}</mat-cell>
+		</ng-container>
+
 		<ng-container matColumnDef="manage">
 			<mat-header-cell *matHeaderCellDef mat-sort-header>Beheer</mat-header-cell>
 			<mat-cell *matCellDef="let element">

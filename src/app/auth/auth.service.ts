@@ -323,7 +323,7 @@ export class AuthService {
 	    const userRef: AngularFirestoreDocument<any> = this.afs.doc(`users/${profileUpdate.uid}`);
 
 	    var data: User = {
-	      	classes: profileUpdate.classes ? profileUpdate.classes : null,
+	      	officialClass: profileUpdate.officialClass ? profileUpdate.officialClass : null,
 	      	subjects: profileUpdate.subjects ? profileUpdate.subjects : null,
 	      	classNumber: profileUpdate.classNumber ? profileUpdate.classNumber : 99
 	    }
@@ -365,6 +365,7 @@ export class AuthService {
 			queryStr = (ref => ref
 								.where('organisationId', '==', organisationId)
 								.where('roles.student', '==', true)
+								.orderBy('officialClass', 'asc')
 								.orderBy('classNumber', 'asc')
 								.orderBy('displayName', 'asc'));
 		}

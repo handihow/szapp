@@ -35,3 +35,4 @@ export const addStudent = roles.addStudent;
 export const removeUser = roles.removeUser;
 
 export const setClassNumbers = corrections.setClassNumbers;
+export const setOfficialClass = corrections.setOfficialClass;

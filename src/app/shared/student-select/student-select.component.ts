@@ -71,7 +71,7 @@ export class StudentSelectComponent implements OnInit, OnDestroy {
    }
 
    onSelectClass(selectedClass: string){
-   	this.filteredStudents = this.students.filter(student => (student.classes && student.classes.includes(selectedClass)));
+   	this.filteredStudents = this.students.filter(student => (student.officialClass && student.officialClass == selectedClass ));
    }
 
    onSelectStudent(studentId){

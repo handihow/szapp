@@ -9,6 +9,7 @@ import { EditRolesComponent } from './admin/edit-roles.component';
 import { AddUsersComponent } from './admin/add-users.component';
 import { RemoveUserComponent } from './admin/remove-user.component';
 import { EditProfileComponent } from './admin/edit-profile.component';
+import { EditOfficialClassComponent } from './admin/edit-official-class.component';
 
 @NgModule({
   declarations: [
@@ -17,7 +18,8 @@ import { EditProfileComponent } from './admin/edit-profile.component';
     EditRolesComponent,
     AddUsersComponent,
     RemoveUserComponent,
-    EditProfileComponent
+    EditProfileComponent,
+    EditOfficialClassComponent
   ],
   imports: [
     CommonModule,
@@ -28,7 +30,8 @@ import { EditProfileComponent } from './admin/edit-profile.component';
     EditRolesComponent,
     AddUsersComponent,
     RemoveUserComponent,
-    EditProfileComponent
+    EditProfileComponent,
+    EditOfficialClassComponent
   ]
 })
 export class AdminModule { }

@@ -11,6 +11,7 @@ role?: string;
 roles?: Roles;
 classes?: string[];
 classNumber?: number;
+officialClass?: string;
 subjects?: string[];
 imageURL?: string;
 thumbnailURL?: string;

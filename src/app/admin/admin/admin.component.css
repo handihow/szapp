@@ -37,6 +37,10 @@
   flex: 4;
 }
 
+.mat-column-officialClass {
+  flex: 2;
+}
+
 .mat-column-manage {
   flex: 1;
 }

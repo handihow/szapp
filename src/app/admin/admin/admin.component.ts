@@ -17,6 +17,7 @@ import { EditRolesComponent } from './edit-roles.component';
 import { EditProfileComponent } from './edit-profile.component';
 import { AddUsersComponent } from './add-users.component';
 import { RemoveUserComponent } from './remove-user.component';
+import { EditOfficialClassComponent } from './edit-official-class.component';
 
 import { environment } from '../../../environments/environment';
 
@@ -113,7 +114,7 @@ export class AdminComponent implements  OnInit, AfterViewInit, OnDestroy {
   //set the displayed columns of the table depending on the size of the display
   setDisplayedColumns(screenType){
     if(screenType == "desktop"){
-      this.displayedColumns = ['select', 'avatar', 'displayName', 'email',  'organisation', 'role', 'manage'];
+      this.displayedColumns = ['select', 'avatar', 'displayName', 'email',  'organisation', 'role', 'officialClass', 'manage'];
     } else if(screenType == "tablet"){
       this.displayedColumns = ['select', 'displayName', 'email', 'role', 'manage'];
     } else {
@@ -147,7 +148,13 @@ export class AdminComponent implements  OnInit, AfterViewInit, OnDestroy {
   }
 
   onAssign(){
-    console.log(this.selection.selected[0].organisationId);
+    const dialogRef = this.dialog.open(EditOfficialClassComponent, {
+      data: {
+        organisationId: this.selection.selected[0].organisationId,
+        students: this.selection.selected
+      },
+      width: '350px'
+    });
   }
 
 }
