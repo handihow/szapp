@@ -6,15 +6,21 @@ exports.jsonDownload = functions.runWith({
     timeoutSeconds: 300,
     memory: '1GB'
 }).https.onCall((data, context) => {
-    if (context && context.auth && context.auth.token && context.auth.token.downloader !== true) {
+    if (context && context.auth && context.auth.token && !(context.auth.token.schooladmin || context.auth.token.admin)) {
         return {
-            error: "Request not authorized. User must be a downloader to fulfill request."
+            error: "Request not authorized. User must be a school admin to fulfill request."
+        };
+    }
+    else if (!data.limit || !data.organisation) {
+        return {
+            error: "No data limit or organisation found in the data request."
         };
     }
     const db = admin.firestore();
-    const evaluationsRef = db.collection('evaluations');
+    let evaluationsRef = db.collection('evaluations');
+    const organisation = data.organisation;
     const limit = parseInt(data.limit);
-    return evaluationsRef.orderBy('created', 'desc').limit(limit).get()
+    return evaluationsRef.where("organisation", '==', organisation).orderBy('created', 'desc').limit(limit).get()
         .then((querySnapshot) => {
         const evaluations = [];
         querySnapshot.forEach(doc => {

@@ -189,7 +189,7 @@ export class CourseOverviewComponent implements OnInit, OnDestroy {
         studentName: student.displayName,
         organisation: this.organisation.id,
         status: 'Niet beoordeeld',
-        class: (student.classes && student.classes[0]) ? student.classes[0] : null,
+        class: student.officialClass,
         skill: this.selectedSkill.id,
         skillCompetency: this.selectedSkill.competency,
         skillTopic: this.selectedSkill.topic,

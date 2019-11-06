@@ -24,6 +24,28 @@
 				Volledige naam is verplicht
 			</mat-error>
 		</mat-form-field>
+		<mat-form-field class="full-width" *ngIf="usesClassNumber">
+			<input matInput type="number" placeholder="Klasnummer" formControlName="classNumber">
+		</mat-form-field>
+		<mat-form-field class="full-width">  
+		  <mat-select 
+		  		[placeholder]="'Selecteer ' + titles.class"
+		  		formControlName="officialClass">
+		    <mat-option *ngFor="let class of (organisation$ | async)?.classes" [value]="class">
+		      {{class}}
+		    </mat-option>
+		  </mat-select>
+		</mat-form-field>
+		<mat-form-field class="full-width">  
+		  <mat-select 
+		  		[placeholder]="'Selecteer ' + titles.subjects"
+		  		formControlName="subjects"
+		  		multiple>
+		    <mat-option *ngFor="let subject of (organisation$ | async)?.subjects" [value]="subject">
+		      {{subject}}
+		    </mat-option>
+		  </mat-select>
+		</mat-form-field>
 	</mat-dialog-content>
 	<mat-dialog-actions>
 		<button type="button" mat-raised-button color="warn" [mat-dialog-close]="false" >Annuleren</button>

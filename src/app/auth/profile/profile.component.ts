@@ -9,6 +9,8 @@ import { AngularFireStorage, AngularFireUploadTask } from '@angular/fire/storage
 import { UIService } from '../../shared/ui.service';
 import { take, map, startWith, finalize } from 'rxjs/operators';
 
+import { environment } from '../../../environments/environment';
+
 import { User } from '../user.model';
 import { Organisation } from '../organisation.model';
 
@@ -42,7 +44,9 @@ export class UserProfileComponent implements OnInit, OnDestroy {
   // Download URL
   downloadURL: Observable<string>;
   // State for dropzone CSS toggling
-  isHovering: boolean;  
+  isHovering: boolean; 
+  titles = environment.titles;
+  usesClassNumber = environment.usesClassNumbers;
 
   constructor(	private store: Store<fromRoot.State>,
                 private authService: AuthService,
@@ -63,7 +67,6 @@ export class UserProfileComponent implements OnInit, OnDestroy {
     this.userSubs = this.store.select(fromRoot.getCurrentUser).subscribe(user => {
       if(user){
         this.user = user;
-        console.log(user);
         this.userId = user.uid;
         this.profileForm.get("subjects").setValue(user.subjects);
         if(user.thumbnailURL){

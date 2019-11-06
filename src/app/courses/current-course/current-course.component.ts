@@ -28,6 +28,8 @@ import { Observable, Subscription } from 'rxjs';
 import { RemoveParticipantsComponent } from './remove-participants.component';
 import { EditCourseComponent } from './edit-course.component';
 
+import { environment } from '../../../environments/environment';
+
 @Component({
   selector: 'app-current-course',
   templateUrl: './current-course.component.html',
@@ -48,7 +50,7 @@ export class CurrentCourseComponent implements OnInit, OnDestroy {
 
   subs: Subscription[] = [];
 
-  displayedColumns = ['select', 'avatar' ,'name', 'email', 'role'];
+  displayedColumns = ['select', 'avatar' ,'name', 'email', 'role', 'officialClass'];
   dataSource = new MatTableDataSource<Skill>();
   isLoading$: Observable<boolean>;
 
@@ -56,6 +58,8 @@ export class CurrentCourseComponent implements OnInit, OnDestroy {
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
 
   selection = new SelectionModel<Skill>(true, null);
+
+  titles = environment.titles;
 
   constructor( private dialog: MatDialog, 
                 private courseService: CourseService,
@@ -152,8 +156,8 @@ export class CurrentCourseComponent implements OnInit, OnDestroy {
         }
       })
       this.students.forEach(student => {
-        if(student.classes && student.subjects 
-            && student.classes.filter(value => -1 !== classes.indexOf(value)).length > 0
+        if(student.officialClass && student.subjects 
+            && classes.includes(student.officialClass)
             && student.subjects.filter(value => -1 !== subjects.indexOf(value)).length > 0) {
           this.filteredStudents.push(student);
         }
@@ -167,8 +171,8 @@ export class CurrentCourseComponent implements OnInit, OnDestroy {
         }
       });
       this.students.forEach(student => {
-        if(student.classes 
-            && student.classes.filter(value => -1 !== classes.indexOf(value)).length > 0) {
+        if(student.officialClass 
+            && classes.includes(student.officialClass)) {
           this.filteredStudents.push(student);
         }
       })

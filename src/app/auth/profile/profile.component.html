@@ -54,9 +54,9 @@
 			<mat-card-content>
 				<!-- show fields if user is not editing the profile -->
 				<div *ngIf="!isEditing">
-					<div>Klasnummer: {{user?.classNumber}}</div>
-					<div>Klas: {{user?.officialClass}}</div>
-					<div>Vak(ken): </div>
+					<div *ngIf="usesClassNumber">Klasnummer: {{user?.classNumber}}</div>
+					<div *ngIf="user?.roles.student">{{titles.class}}: {{user?.officialClass}}</div>
+					<div>{{titles.subjects}}: </div>
 					<div *ngFor="let course of user?.subjects">
 						{{course}}
 					</div>
@@ -67,12 +67,12 @@
 				</div>
 				<!-- show the form if the user is editing the profile -->
 				<div *ngIf="isEditing" fxLayout="column" fxLayoutAlign="center center">
-					<mat-form-field class="full-width">
+					<mat-form-field class="full-width" *ngIf="usesClassNumber">
 						<input matInput type="number" placeholder="Klasnummer" formControlName="classNumber">
 					</mat-form-field>
-					<mat-form-field class="full-width">  
+					<mat-form-field class="full-width" *ngIf="user?.roles.student">  
 					  <mat-select 
-					  		placeholder="Selecteer klas" 
+					  		[placeholder]="'Selecteer ' + titles.class"
 					  		formControlName="officialClass">
 					    <mat-option *ngFor="let class of (organisation$ | async)?.classes" [value]="class">
 					      {{class}}
@@ -82,7 +82,7 @@
 					</mat-form-field>
 					<mat-form-field class="full-width">  
 					  <mat-select 
-					  		placeholder="Selecteer 1 of meer vakken" 
+					  		[placeholder]="'Selecteer ' + titles.subjects"
 					  		formControlName="subjects"
 					  		 multiple>
 					    <mat-option *ngFor="let subject of (organisation$ | async)?.subjects" [value]="subject">

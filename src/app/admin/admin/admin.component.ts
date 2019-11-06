@@ -18,6 +18,7 @@ import { EditProfileComponent } from './edit-profile.component';
 import { AddUsersComponent } from './add-users.component';
 import { RemoveUserComponent } from './remove-user.component';
 import { EditOfficialClassComponent } from './edit-official-class.component';
+import { EditSubjectsComponent } from './edit-subjects.component';
 
 import { environment } from '../../../environments/environment';
 
@@ -37,6 +38,7 @@ export class AdminComponent implements  OnInit, AfterViewInit, OnDestroy {
   selectedUser: User;
   subs: Subscription[] = [];
   filterValue: string;
+  hasSelectedOrganisation: boolean;
 
   @ViewChild(MatSort, { static: true }) sort: MatSort;
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
@@ -127,6 +129,7 @@ export class AdminComponent implements  OnInit, AfterViewInit, OnDestroy {
      sub.unsubscribe(); 
     });
     let filter = organisation ? organisation.id : null;
+    this.hasSelectedOrganisation = organisation ? true : false;
     this.subs.push(this.adminService.getUsers(filter).subscribe(users => {
       this.users = users;
       this.dataSource.data = this.users;
@@ -147,8 +150,18 @@ export class AdminComponent implements  OnInit, AfterViewInit, OnDestroy {
         this.dataSource.data.forEach(row => this.selection.select(row));
   }
 
-  onAssign(){
+  onAssignClass(){
     const dialogRef = this.dialog.open(EditOfficialClassComponent, {
+      data: {
+        organisationId: this.selection.selected[0].organisationId,
+        students: this.selection.selected
+      },
+      width: '350px'
+    });
+  }
+
+  onAssignSubjects(){
+    const dialogRef = this.dialog.open(EditSubjectsComponent, {
       data: {
         organisationId: this.selection.selected[0].organisationId,
         students: this.selection.selected

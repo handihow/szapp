@@ -32,6 +32,7 @@ export class StudentSelectComponent implements OnInit, OnDestroy {
   student: User;
   screenType$: Observable<string>;
   titles = environment.titles;
+  usesClassNumbers = environment.usesClassNumbers;
 
   constructor(private authService: AuthService, private store: Store<fromRoot.State>) { }
 
@@ -48,7 +49,7 @@ export class StudentSelectComponent implements OnInit, OnDestroy {
      }
      if(this.organisation){
        //fetch users
-        this.sub = this.authService.fetchStudents(this.organisation.id, true, true).subscribe(students => {
+        this.sub = this.authService.fetchStudents(this.organisation.id, true, true, this.usesClassNumbers).subscribe(students => {
             this.students = students; 
             //filter students in the autocomplete form
         this.filteredStudents$ = this.studentControl.valueChanges
@@ -84,7 +85,7 @@ export class StudentSelectComponent implements OnInit, OnDestroy {
    filter(userInput: string): User[] {
     return this.students.filter(option =>
       (option.displayName.toLowerCase().indexOf(userInput.toLowerCase()) === 0 
-          || (option.classes && option.classes.includes(userInput))));
+          || (option.officialClass.includes(userInput))));
    }
 
    displayFn(user?: User): string | undefined {

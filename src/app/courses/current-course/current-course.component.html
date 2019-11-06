@@ -66,7 +66,7 @@
 					</mat-optgroup>
 					<mat-optgroup label="Leerlingen">
 					    <mat-option *ngFor="let student of filteredStudents" [value]="student">
-					       {{student.displayName}} - {{student.classes}}
+					       {{student.displayName}} - {{student.officialClass}}
 					    </mat-option>
 					</mat-optgroup>
 				  </mat-select>
@@ -120,8 +120,7 @@
 		<ng-container matColumnDef="avatar">
 			<mat-header-cell *matHeaderCellDef mat-sort-header>Avatar</mat-header-cell>
 			<mat-cell *matCellDef="let element">
-				<img mat-card-avatar 
-				[src]="element.photoURL?element.photoURL:'https://ui-avatars.com/api/?name='+element.displayName">
+				<app-user-avatar [user]="element"></app-user-avatar>
 			</mat-cell>
 		</ng-container>
 		
@@ -141,6 +140,11 @@
 				<span *ngIf="element.roles && element.roles.student" class="access-rights">Leerling</span>
 				<span *ngIf="element.roles && element.roles.teacher" class="access-rights">Leraar</span>
 			</mat-cell>
+		</ng-container>
+
+		<ng-container matColumnDef="officialClass">
+			<mat-header-cell *matHeaderCellDef mat-sort-header>{{titles.class}}</mat-header-cell>
+			<mat-cell *matCellDef="let element">{{ element.officialClass }}</mat-cell>
 		</ng-container>
 
 		<mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>

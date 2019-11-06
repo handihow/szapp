@@ -60,7 +60,7 @@ export class NewCommentComponent implements OnInit {
       comment: this.commentForm.value.comment,
       student: student.uid,
       studentName: student.displayName,
-      className: student.classes && student.classes[0] ? student.classes[0] : "-",
+      className: student.officialClass ? student.officialClass : "-",
       organisation: this.organisation.id,
       teacher: this.user.uid,
       teacherName: this.user.displayName,

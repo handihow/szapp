@@ -151,7 +151,7 @@ export class NewEvaluationComponent implements OnInit, OnDestroy {
       projectCode: this.project.code,
       projectName: this.project.name,
       program: this.skill.program,
-      class: (this.user.classes && this.user.classes[0]) ? this.user.classes[0] : null
+      class: this.user.officialClass
     };
     //then set the properties of the evaluation variable
     this.evaluation.colorStudent = this.evaluationForm.value.color.color;

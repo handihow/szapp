@@ -1,6 +1,12 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { AngularFireFunctions } from '@angular/fire/functions';
 import { Observable } from 'rxjs';
+import { Store } from '@ngrx/store';
+
+import { User } from '../../auth/user.model';
+
+import * as fromRoot from '../../app.reducer'; 
+import { take, map, startWith } from 'rxjs/operators';
 
 import { Angular2CsvComponent } from 'angular2-csv';
 
@@ -11,6 +17,7 @@ import { Angular2CsvComponent } from 'angular2-csv';
 })
 export class DownloadsComponent implements OnInit {
   
+  user: User;
   result: any;
   data: any;
   options: any;
@@ -19,18 +26,24 @@ export class DownloadsComponent implements OnInit {
 
   @ViewChild(Angular2CsvComponent, { static: true }) csvComponent: Angular2CsvComponent;
 
-  constructor(private fns: AngularFireFunctions) { }
+  constructor(private fns: AngularFireFunctions, private store: Store<fromRoot.State>) { }
 
   ngOnInit() {
+    //get the current user
+    this.store.select(fromRoot.getCurrentUser).pipe(take(1)).subscribe(async user => {
+      if(user){
+        this.user = user;
+      }
+    })
   }
 
   downloadEvaluationsCsv(){
     this.isLoading = true;
   	const callable = this.fns.httpsCallable('jsonDownload');
     const limit = this.value.toString();
-    callable({ limit: limit }).subscribe(result => {
+    callable({ limit: limit, organisation: this.user.organisationId }).subscribe(result => {
       this.isLoading = false;
-    	console.log(result);
+      console.log(this.result);
     	this.result = result;
 	    if(this.result && this.result.evaluations){
 	    	this.downloadCsv(this.result.evaluations);

@@ -26,6 +26,7 @@ exports.addAdmin = functions.auth.user().onCreate(event => {
             // trajectorycounselor: false,
             // companyadmin: false,
             admin: true,
+            organisation: 'handihow'
         };
         // Set custom user claims on this newly created user.
         return admin.auth().setCustomUserClaims(user.uid, customClaims)
@@ -85,6 +86,9 @@ exports.changeProfile = functions.https.onCall((data, context) => {
     const uid = data.uid;
     const email = data.email;
     const displayName = data.displayName;
+    const officialClass = data.officialClass || null;
+    const subjects = data.subjects || [];
+    const classNumber = data.classNumber || null;
     return admin.auth().getUser(uid)
         .then(user => {
         return admin.auth().updateUser(uid, {
@@ -92,7 +96,13 @@ exports.changeProfile = functions.https.onCall((data, context) => {
             displayName: displayName
         })
             .then(() => __awaiter(this, void 0, void 0, function* () {
-            yield db.collection('users').doc(uid).update({ email: email, displayName: displayName });
+            yield db.collection('users').doc(uid).update({
+                email: email,
+                displayName: displayName,
+                officialClass: officialClass,
+                subjects: subjects,
+                classNumber: classNumber
+            });
             return {
                 result: "Request fulfilled!"
             };

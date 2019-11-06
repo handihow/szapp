@@ -234,7 +234,7 @@ export class CurrentProjectComponent implements OnInit, OnDestroy {
 
   onEditProject() {
     const dialogRef = this.dialog.open(EditProjectComponent, {
-      width: '300px'
+      width: '350px'
     });
   }
 

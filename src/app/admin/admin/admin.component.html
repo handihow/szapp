@@ -13,8 +13,16 @@
 	</mat-form-field>
 
 	<button mat-raised-button color="primary" (click)="addUsers()">Gebruikers toevoegen</button>
-	<button type="button" mat-button
-				(click)="onAssign()" [disabled]="selection.selected.length===0">{{titles.class}} aanpassen</button>
+	<mat-menu #appMenu="matMenu">
+	  <button type="button" mat-menu-item
+				(click)="onAssignClass()" [disabled]="selection.selected.length===0">{{titles.class}} aanpassen</button>
+	  <button type="button" mat-menu-item
+				(click)="onAssignSubjects()" [disabled]="selection.selected.length===0">{{titles.subjects}} aanpassen</button>
+	</mat-menu>
+
+	<button mat-raised-button color="accent" [matMenuTriggerFor]="appMenu" [disabled]="!hasSelectedOrganisation">
+	  Profiel aanpassen 
+	</button>
 
 	<mat-spinner *ngIf="isLoading$ | async"></mat-spinner>		
 </div>

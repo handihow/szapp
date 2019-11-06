@@ -62,13 +62,19 @@ export class AdminService {
 		return this.afs.collection('organisations').doc(organisationId).valueChanges();
 	}
 
-	updateUsersOfficialClass(users: User[], officialClass: string){
+	updateUsersProfile(users: User[], updateObject: any){
 		let batch = this.afs.firestore.batch();
 		users.forEach(user => {
 			let userRef = this.afs.collection('users').doc(user.uid).ref;
-			batch.update(userRef, {officialClass: officialClass});
+			batch.update(userRef, updateObject);
 		});
-		return batch.commit();
+		return batch.commit()
+					.then( _ => {
+						this.uiService.showSnackbar('Update succesvol', null, 3000);
+					})
+					.catch(err => {
+						this.uiService.showSnackbar('Er ging iets mis ! ' + err.message, null, 3000);
+					});
 	}
 
 }

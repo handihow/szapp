@@ -95,7 +95,7 @@ export class SelectProjectStudentComponent implements OnInit, OnDestroy {
             this.isFiltered = false;
             if(user){
               this.selectedStudent = user;
-              if((user.classes && user.classes.length>0) && (user.subjects && user.subjects.length>0)){
+              if(user.officialClass && (user.subjects && user.subjects.length>0)){
                 this.isFilterEnabled=true;
                 this.isFiltered = true;
               }
@@ -119,7 +119,7 @@ export class SelectProjectStudentComponent implements OnInit, OnDestroy {
         this.filteredProjects = [];
         //find projects where the classes or subjects are set in user's profile
         this.projects.forEach(project => {
-          if(project.classes.filter(value => -1 !== this.selectedStudent.classes.indexOf(value)).length > 0 &&
+          if(project.classes.includes(this.selectedStudent.officialClass) &&
               project.subjects.filter(value => -1 !== this.selectedStudent.subjects.indexOf(value)).length > 0){
             this.filteredProjects.push(project);
           }

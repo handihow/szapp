@@ -11,35 +11,35 @@ import { Organisation } from '../../auth/organisation.model';
 import { environment } from '../../../environments/environment';
 
 @Component({
-	selector: 'app-edit-official-class',
-	templateUrl: './edit-official-class.component.html',
+	selector: 'app-edit-subjects',
+	templateUrl: './edit-subjects.component.html',
 	styles: [`
 		.full-width {
 			width: 100%;
 		}
 	`]
 })
-export class EditOfficialClassComponent implements OnInit {
+export class EditSubjectsComponent implements OnInit {
 
 	organisation$ : Observable<Organisation>
-	officialClassForm: FormGroup;
+	subjectsForm: FormGroup;
 	titles = environment.titles;
 
 	constructor(private adminService: AdminService,
 				@Inject(MAT_DIALOG_DATA) public passedData: any,
-				private dialogRef:MatDialogRef<EditOfficialClassComponent>) {}
+				private dialogRef:MatDialogRef<EditSubjectsComponent>) {}
 
 	ngOnInit(){
 		//create the profile form
-	    this.officialClassForm = new FormGroup({
-	      officialClass: new FormControl(null, Validators.required),
+	    this.subjectsForm = new FormGroup({
+	      subjects: new FormControl(null, Validators.required),
 	    });
 	    this.organisation$ = this.adminService.fetchOrganisation(this.passedData.organisationId);
 
 	}
 
 	onSubmit(){
-    	this.adminService.updateUsersProfile(this.passedData.students, {officialClass: this.officialClassForm.value.officialClass})
+    	this.adminService.updateUsersProfile(this.passedData.students, {subjects: this.subjectsForm.value.subjects})
     		.then( _ => this.dialogRef.close());
 	}
 

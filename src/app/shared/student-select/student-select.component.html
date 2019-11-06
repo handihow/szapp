@@ -3,8 +3,10 @@
     <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
       <mat-option 	*ngFor="let student of filteredStudents$ | async" 
       				[value]="student"
-      				matTooltip="{{student.classNumber}} - {{ student.displayName }} - {{student.classes}}">
-        {{student.officialClass ? student.officialClass : 'Geen'}} - {{student.classNumber}} - {{ student.displayName }}
+      				matTooltip="{{student.classNumber}} - {{student.classes}} - {{ student.displayName }}">
+        {{student.officialClass ? student.officialClass : 'Geen'}} 
+        <span *ngIf="usesClassNumbers">- {{student.classNumber}} </span>
+        - {{ student.displayName }}
       </mat-option>
     </mat-autocomplete>
     <mat-hint>Selecteer een leerling door de naam of klas in te geven</mat-hint>
@@ -25,7 +27,9 @@
   		[(ngModel)]="student" (ngModelChange)="onSelectStudent($event)">
       <option value=""></option>
 	    <option *ngFor="let student of filteredStudents" [value]="student.uid">
-	       {{student.officialClass ? student.officialClass : 'Geen'}} - {{student.classNumber}} - {{ student.displayName }}
+	       {{student.officialClass ? student.officialClass : 'Geen'}} 
+         <span *ngIf="usesClassNumbers">- {{student.classNumber}}</span> 
+         - {{ student.displayName }}
 	    </option>
   </select>
 </mat-form-field>

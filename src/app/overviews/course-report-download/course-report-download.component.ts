@@ -85,7 +85,7 @@ export class CourseReportDownloadComponent implements OnInit {
     doc.setFontSize(20);
     doc.text(student.displayName, 40, 50);
     doc.setFontSize(14);
-    doc.text(student.classes ? student.classes[0] : '-', 40, 70);
+    doc.text(student.officialClass ? student.officialClass : '-', 40, 70);
     doc.setFontSize(10);
     doc.text(student.organisation, 40, 90);
     //add the date of the report

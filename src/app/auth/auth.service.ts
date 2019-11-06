@@ -353,7 +353,7 @@ export class AuthService {
 		});
 	}
 
-	fetchStudents(organisationId: string, disableLoading?: boolean, orderByClassNumber?: boolean) : Observable<User[]> {
+	fetchStudents(organisationId: string, disableLoading?: boolean, orderByClass?: boolean, usesClassNumbers?: boolean) : Observable<User[]> {
 		if(!disableLoading){
 			this.store.dispatch(new UI.StartLoading());	
 		}
@@ -361,12 +361,18 @@ export class AuthService {
 								.where('organisationId', '==', organisationId)
 								.where('roles.student', '==', true)
 								.orderBy('displayName', 'asc'));
-		if(orderByClassNumber){
+		if(orderByClass && usesClassNumbers){
 			queryStr = (ref => ref
 								.where('organisationId', '==', organisationId)
 								.where('roles.student', '==', true)
 								.orderBy('officialClass', 'asc')
 								.orderBy('classNumber', 'asc')
+								.orderBy('displayName', 'asc'));
+		} else if(orderByClass){
+			queryStr = (ref => ref
+								.where('organisationId', '==', organisationId)
+								.where('roles.student', '==', true)
+								.orderBy('officialClass', 'asc')
 								.orderBy('displayName', 'asc'));
 		}
 		return this.afs.collection('users', queryStr)

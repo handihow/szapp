@@ -136,7 +136,7 @@ export class ProgramReportComponent implements OnInit, OnDestroy {
     doc.setFontSize(14);
     doc.text(this.student.displayName, 40, 70);
     doc.setFontSize(10);
-    doc.text(this.student.classes ? this.student.classes : '-', 40, 90);
+    doc.text(this.student.officialClass ? this.student.officialClass : '-', 40, 90);
     doc.setFontSize(10);
     doc.text(this.student.organisation, 40, 110);
     

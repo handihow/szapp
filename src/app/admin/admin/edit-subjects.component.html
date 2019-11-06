@@ -1,0 +1,22 @@
+<h1 mat-dialog-title>{{titles.subjects}} aanpassen</h1>
+<form [formGroup]="subjectsForm" (submit)="onSubmit()">
+	<mat-dialog-content>
+		<mat-form-field class="full-width">  
+		  <mat-select 
+		  		[placeholder]="'Selecteer ' + titles.subjects"
+		  		formControlName="subjects"
+		  		multiple>
+		    <mat-option *ngFor="let subject of (organisation$ | async)?.subjects" [value]="subject">
+		      {{subject}}
+		    </mat-option>
+		  </mat-select>
+		</mat-form-field>
+	</mat-dialog-content>
+	<mat-dialog-actions>
+		<button type="button" mat-raised-button color="warn" [mat-dialog-close]="false">Annuleren</button>
+		<button type="submit" mat-raised-button color="primary" [disabled]="subjectsForm.invalid">
+			{{titles.subjects}} aanpassen
+		</button>
+	</mat-dialog-actions>
+</form>
+

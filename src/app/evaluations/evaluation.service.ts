@@ -245,7 +245,7 @@ export class EvaluationService {
 	        studentName: result.student.displayName,
 	        organisation: result.student.organisation,
 	        status: 'Beoordeeld',
-	        class: (result.student.classes && result.student.classes[0]) ? result.student.classes[0] : null,
+	        class: result.student.officialClass,
 	        skill: result.skill.id,
 	        skillCompetency: result.skill.competency,
 	        skillTopic: result.skill.topic,

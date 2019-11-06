@@ -9,7 +9,8 @@ import * as UIAction from './shared/ui.actions';
 import * as fromUI from './shared/ui.reducer';
 
 import { AuthService } from './auth/auth.service';
-
+import * as firebase from "firebase/app";
+import "firebase/analytics";
 
 @Component({
   selector: 'app-root',
@@ -42,6 +43,7 @@ export class AppComponent implements OnInit {
     this.titleService.setTitle( environment.titles.appLongName )
   	this.authService.initAuthListener();
     this.setScreenSize(window.innerWidth);
+    firebase.analytics();
   }
 
   setScreenSize(innerWidth){

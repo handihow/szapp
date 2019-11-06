@@ -1,5 +1,5 @@
 <h1 mat-dialog-title>{{titles.class}} aanpassen</h1>
-<form [formGroup]="officialClassForm" (submit)="onSubmit()" *ngIf="!isWaiting && !isDone">
+<form [formGroup]="officialClassForm" (submit)="onSubmit()">
 	<mat-dialog-content>
 		<mat-form-field class="full-width">  
 		  <mat-select 
