@@ -11,7 +11,7 @@ export class RBAC {
 				'read:overviews'
 			],
 			teacher: [
-				'read:evaluations',
+				// 'read:evaluations',
 				'write:evaluations',
 				'read:assessments',
 				'write:assessments',

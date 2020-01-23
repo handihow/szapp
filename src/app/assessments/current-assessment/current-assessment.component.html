@@ -5,10 +5,11 @@
 			[evaluation]="evaluation" 
 			[relatedEvaluations]="relatedEvaluations"
 			[isAssessment]="true"
-			[user]="user"></app-evaluation-card>
+			[user]="user"
+			fxFlex="30"></app-evaluation-card>
 
 	<!-- form for the teacher to fill -->
-	<mat-card *ngIf="!isEvaluated" fxFlex.gt-md="60" fxFlex.lt-md="50">
+	<mat-card *ngIf="!isEvaluated" fxFlex>
 	  <mat-card-header>
 	    <mat-card-title>Evaluatie {{keywords.teacher}}</mat-card-title>
 	    <mat-card-subtitle>Vul hier uw beoordeling in</mat-card-subtitle>

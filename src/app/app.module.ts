@@ -2,6 +2,7 @@ import { BrowserModule, Title } from '@angular/platform-browser';
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { HammerGestureConfig, HAMMER_GESTURE_CONFIG } from '@angular/platform-browser';
 
 import { FlexLayoutModule } from '@angular/flex-layout';
 import {MAT_MOMENT_DATE_FORMATS, MomentDateAdapter} from '@angular/material-moment-adapter';
@@ -34,6 +35,13 @@ import { UIService } from './shared/ui.service';
 import { AuthModule } from './auth/auth.module';
 import { reducers } from './app.reducer';
 import { ServiceWorkerModule } from '@angular/service-worker';
+
+export class CustomHammerConfig extends HammerGestureConfig  {
+   overrides = {
+       pinch: { enable: false },
+       rotate: { enable: false }
+   };
+}
 
 @NgModule({
   declarations: [
@@ -70,7 +78,8 @@ import { ServiceWorkerModule } from '@angular/service-worker';
     FormativeService,
     CommentService,
     AdminService,
-    UIService
+    UIService,
+    { provide: HAMMER_GESTURE_CONFIG, useClass: CustomHammerConfig }
   ],
   bootstrap: [AppComponent]
 })

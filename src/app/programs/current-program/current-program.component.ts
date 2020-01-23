@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, AfterViewInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, ViewChild, AfterViewInit, OnDestroy, Input, Output, EventEmitter } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { NgForm } from '@angular/forms';
 import { Store } from '@ngrx/store';
@@ -18,7 +18,6 @@ import * as fromProgram from '../program.reducer';
 import * as ProgramAction from '../program.actions';
 
 import { RemoveSkillsComponent } from './remove-skills.component';
-import { EditProgramComponent } from './edit-program.component';
 import { AddAttachmentsComponent } from './add-attachments.component';
 
 import { User } from '../../auth/user.model';
@@ -44,7 +43,6 @@ export class CurrentProgramComponent implements OnInit, OnDestroy {
   orders: string[] = [];
   skills: Skill[] = [];
   skill: Skill; 
-  canUploadCsv: boolean;
   sub: Subscription;
 
   options: any;
@@ -54,8 +52,9 @@ export class CurrentProgramComponent implements OnInit, OnDestroy {
   dataSource = new MatTableDataSource<Skill>();
   isLoading$: Observable<boolean>;
 
-  isFavorite: boolean;
-
+  @Input() isAddingSkill: boolean;
+  @Output() toggleAddSkill = new EventEmitter<boolean>();
+  @Output() skillCount = new EventEmitter<number>();
   @ViewChild(MatSort, { static: true }) sort: MatSort;
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
 
@@ -87,19 +86,11 @@ export class CurrentProgramComponent implements OnInit, OnDestroy {
               //define the starred property if it does not exist
               this.program.starred = {}
             }
-            if(this.program.starred[user.uid]){
-              this.isFavorite = true;
-            }
-            //make the csv upload button only available to the superusers of the application
-            this.store.select(fromRoot.getPermissions).pipe(take(1)).subscribe(value => {
-              if(value.includes('upload:skills')){
-                this.canUploadCsv = true;
-              }
-            });
           }
         }); 
         this.sub = this.skillService.fetchSkills(this.program.id).subscribe(skills => {
           this.skills = skills;
+          this.skillCount.emit(this.skills.length);
           //set the data source of the table
           this.dataSource.data = this.skills;
           //make a list of unique topics that will be used in the autocomplete 
@@ -126,6 +117,10 @@ export class CurrentProgramComponent implements OnInit, OnDestroy {
         startWith(''),
         map(val => this.filter(val))
       );
+  }
+
+  closeSkillModal(){
+    this.toggleAddSkill.emit(true);
   }
 
   ngOnDestroy() {
@@ -220,6 +215,7 @@ export class CurrentProgramComponent implements OnInit, OnDestroy {
     //reset all form
     formDirective.resetForm();
     skillsForm.reset();
+    this.isAddingSkill = false;
   }
 
   onRemove() {
@@ -238,18 +234,13 @@ export class CurrentProgramComponent implements OnInit, OnDestroy {
   }
 
   onEdit() {
+    this.isAddingSkill = true;
     this.skill = this.selection.selected[0];
     this.skillsForm.get('competency').setValue(this.skill.competency);
     this.skillsForm.get('order').setValue(this.skill.order);
     this.skillsForm.get('topic').setValue(this.skill.topic);
     this.skillsForm.get('link').setValue(this.skill.link);
     this.skillsForm.get('linkText').setValue(this.skill.linkText);
-  }
-
-  onEditProgram() {
-    const dialogRef = this.dialog.open(EditProgramComponent, {
-      width: '300px'
-    });
   }
 
   onAddAttachments() {
@@ -276,123 +267,33 @@ export class CurrentProgramComponent implements OnInit, OnDestroy {
 
   }
 
-  onSaveActive(){
-    //count the number of skills in the program for the database update
-    let countedSkills = this.skills.length;
-    this.programService.saveActiveProgram(countedSkills);
-  }
-
-  handleFileSelect(evt) {
-      var files = evt.target.files; // FileList object
-      var file = files[0];
-      var reader = new FileReader();
-      reader.readAsText(file);
-      reader.onload = (event: Event) => {
-       var csv = reader.result;
-       this.extractData(csv);
-    }
-  }
-
-  extractData(data) { // Input csv data to the function
-
-    let csvData = data;
-    let allTextLines = csvData.split(/\r\n|\n/);
-    let headers = allTextLines[0].split(',');
-
-    var competencyIndex = -1;
-    var topicIndex = -1;
-    var orderIndex = -1;
-
-    var skills: Skill[] = [];
-
-    //check the fields that are present
-    for ( let i = 0; i < headers.length; i++) {
-      if(headers[i]==="Competentie") {
-        competencyIndex = i;
-      } else if (headers[i]==="Onderwerp"){
-        topicIndex = i;
-      } else if (headers[i]==="Volgnummer"){
-        orderIndex = i;
-      }
-    }
-
-    if(competencyIndex==-1 || topicIndex==-1 || orderIndex==-1){
-      let message =
-          `
-          Je mist een header in de csv file.
-          Verplichte headers zijn "Volgnummer, "Competentie" en "Onderwerp" (hoofdletter gevoelig).
-          `
-      return this.uiService.showSnackbar(message, null, 3000);
-
-    } else {
-
-      var hasDuplicateOrderNumber = false;
-      
-      for ( let i = 1; i < allTextLines.length; i++) {
-        // split content based on comma
-        let data = allTextLines[i].split(',');
-        let competency = data[competencyIndex];
-        let topic = data[topicIndex];
-        let order = data[orderIndex];
-        //create the new skill
-        let skill: Skill = {
-          competency: competency,
-          order: this.program.code + ' - ' + order,
-          topic: topic,
-          program: this.program.id
-        };
-        //check if there are any duplicates in the order number
-        if(i>0 && skills.map(o=>o.order).includes(skill.order)){
-            hasDuplicateOrderNumber = true;
-        }
-        //save the skill to the skills variable
-        skills.push(skill);
-        
-      }
-      //show error message if duplicate order numbers have been detected in the file
-      if(hasDuplicateOrderNumber){
-          let duplicateErrorMessage =
-            `
-            Je csv file heeft competenties met dezelfde volgnummers.
-            Corrigeer de file en probeer het opnieuw.
-            `
-          return this.uiService.showSnackbar(duplicateErrorMessage, null, 3000);
-       
-       //if no errors then batch upload the skills to the database
-       } else {
-        this.skillService.batchSaveSkillsToDatabase(skills);
-       }
-    }
-
-  }
-
   downloadCsv() {
     //prepare the list of projects to be downloaded
-    var skillsInCsv = JSON.parse(JSON.stringify(this.skills));;
+    var skillsInCsv = JSON.parse(JSON.stringify(this.skills));
     skillsInCsv.forEach((skill) => {
-      //remove the id field
-      delete skill.id;
-      delete skill.program;
-      delete skill.hasAttachments;
-      delete skill.projects;
+      if(typeof skill.link === 'undefined' || !skill.link){
+        skill.link = ' ';
+      } 
+      if(typeof skill.linkText === 'undefined' || !skill.linkText){
+        skill.linkText = ' '
+      }
+      if(typeof skill.weight === 'undefined' || !skill.weight) {
+        skill.weight = 1;
+      }
     });
     this.data = skillsInCsv;
     //give options to the download file
     this.options = { 
-      fieldSeparator: ',',
+      fieldSeparator: ';',
       quoteStrings: '"',
-      decimalseparator: '.',
+      decimalseparator: ',',
       showLabels: true, 
       showTitle: false,
       useBom: false,
-      headers: Object.keys(skillsInCsv[0])
+      headers: ['Volgnummer', 'Gewicht', 'Competentie', 'Onderwerp', 'Link', 'Linktekst'],
+      keys: ['order', 'weight', 'competency', 'topic', 'link', 'linkText' ]
     };
     setTimeout(() => { this.csvComponent.onDownload(); }, 0);
-  }
-
-  onFavorite(){
-    this.isFavorite = !this.isFavorite;
-    this.program.starred[this.user.uid] = this.isFavorite;
   }
 
 

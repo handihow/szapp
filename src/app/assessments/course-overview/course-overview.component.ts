@@ -182,7 +182,7 @@ export class CourseOverviewComponent implements OnInit, OnDestroy {
   onNewAssessment(student: User): Evaluation{
     var newEvaluation : Evaluation;
     let timestamp = Timestamp.now();
-      newEvaluation = {
+    newEvaluation = {
         id: student.uid + '_' + this.selectedSkill.id,
         created: timestamp,
         user: student.uid,

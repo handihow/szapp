@@ -7,6 +7,7 @@ competency?: string; // the description of the skill/competency and the subject
 topic?: string;
 link?: string;
 linkText?: string;
+weight?: number;
 hasAttachments?: boolean;
 id?: string; // database references
 program?: string; // database references

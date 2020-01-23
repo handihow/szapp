@@ -1,9 +1,27 @@
 <mat-toolbar color="primary" class="mat-elevation-z3">
-	<mat-icon class="toolbar-icon">list</mat-icon>
-	{{title}}
+	<div fxFlex fxLayout="row" fxLayoutAlign="flex-start center">
+		<mat-icon class="toolbar-icon">list</mat-icon>
+		<span *ngIf="!(hasCurrentProgram$ | async)">{{title}}</span>
+		<span *ngIf="hasCurrentProgram$ | async">
+			<span [matBadge]="skillCount" matBadgeColor="accent" matBadgeOverlap="false">{{program.name}}</span>
+		</span>
+	</div>
+	<div fxFlex fxLayout fxLayoutAlign="flex-end" fxLayoutGap="10px" *ngIf="hasCurrentProgram$ | async">
+		<button mat-icon-button (click)="onEditProgram()" matTooltip="Leerplan bewerken"><mat-icon>edit</mat-icon></button>
+		<button mat-icon-button (click)="onFavorite()" matTooltip="Toevoegen aan favorieten">
+			<mat-icon color="accent" *ngIf="!isFavorite">star_border</mat-icon>
+			<mat-icon color="accent" *ngIf="isFavorite">star</mat-icon> 
+		</button>
+		<button mat-icon-button matTooltip="Competentie toevoegen" (click)="toggleAddSkill()"><mat-icon>add</mat-icon></button>
+		<button mat-icon-button matTooltip="Csv uploaden" (click)="csvFileInput.click()" *ngIf="canUploadCsv">
+			<mat-icon>cloud_upload</mat-icon></button>
+		<input hidden type="file" #csvFileInput (change)="handleFileSelect($event)">
+		<button mat-button (click)="onSaveActive()">Bewaren en terug</button>
+	</div>
+				
 </mat-toolbar>
 
-<mat-tab-group *ngIf="!(currentProgram$ | async)" backgroundColor="primary">
+<mat-tab-group *ngIf="!(hasCurrentProgram$ | async)" backgroundColor="primary">
   <mat-tab [label]="title">
   	<app-existing-programs></app-existing-programs>
   </mat-tab>
@@ -11,4 +29,7 @@
   	<app-new-program></app-new-program>
   </mat-tab>
 </mat-tab-group>
-<app-current-program *ngIf="currentProgram$ | async"></app-current-program>
+<app-current-program *ngIf="hasCurrentProgram$ | async" 
+			[isAddingSkill]="isAddingSkill"
+			(skillCount)="updateSkillCount($event)"
+			(toggleAddSkill)="toggleAddSkill()"></app-current-program>

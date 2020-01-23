@@ -1,10 +1,10 @@
 
 <section class="new-evaluation" fxLayout="column" fxLayoutAlign="center center">
 	<!-- show the student if the current user is a teacher -->
-	<div *ngIf="(currentUser$ | async).role==='Leraar'">{{user?.displayName}}</div>
+	<div *ngIf="currentUser.role==='Leraar'">{{student?.displayName}}</div>
 	<h5>{{skill.competency}} ({{skill.order}})</h5>
 </section>	
-<section class="stepper">
+<section class="evaluation-form">
 	<form [formGroup]="evaluationForm" (ngSubmit)="onSubmit()">
 		<mat-card>
 			<mat-card-content fxLayout="column" fxLayoutAlign="space-between start" fxLayoutGap="10px">
@@ -24,7 +24,7 @@
 					<textarea matInput placeholder="Opmerking" formControlName="comment"></textarea>
 				</mat-form-field>
 				
-		<mat-form-field class="full-width" *ngIf="(screenType$ | async)!=='phone'">  
+		<mat-form-field class="full-width" *ngIf="(screenType$ | async)!=='phone' && currentUser.uid===student.uid">  
 			<mat-select 
 						placeholder="Leraar" 
 						formControlName="teacher"
@@ -48,7 +48,7 @@
 			<mat-error>Selecteer de leraar die je gaat beoordelen</mat-error>
 		</mat-form-field>
 		<h4 *ngIf="(screenType$ | async)==='phone'">Selecteer docent</h4>
-		<mat-form-field class="full-width" *ngIf="(screenType$ | async)==='phone'">  
+		<mat-form-field class="full-width" *ngIf="(screenType$ | async)==='phone' && currentUser.uid===student.uid">  
 			<select matNativeControl
 			formControlName="teacher"
 			required>

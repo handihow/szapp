@@ -2,6 +2,7 @@
 import { NgModule } from '@angular/core';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatButtonModule } from '@angular/material/button';
+import { MatBadgeModule } from '@angular/material/badge';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatCardModule } from '@angular/material/card';
 import { MatCheckboxModule } from '@angular/material/checkbox';
@@ -34,7 +35,8 @@ import { MatMomentDateModule } from '@angular/material-moment-adapter';
 
 @NgModule({
 	imports: [
-		MatButtonModule, 
+		MatButtonModule,
+		MatBadgeModule,
 		MatIconModule, 
 		MatFormFieldModule, 
 		MatInputModule, 
@@ -66,7 +68,8 @@ import { MatMomentDateModule } from '@angular/material-moment-adapter';
 		MatTooltipModule,
 		MatSliderModule],
 	exports: [
-		MatButtonModule, 
+		MatButtonModule,
+		MatBadgeModule,
 		MatIconModule, 
 		MatFormFieldModule, 
 		MatInputModule, 

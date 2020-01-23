@@ -32,12 +32,11 @@ export class NewEvaluationComponent implements OnInit, OnDestroy {
   
   skillId: string;
   skill: Skill;
-  evaluation: Evaluation;
-  user: User;
+  student: User;
+  currentUser: User;
   organisation: Organisation;
   isLoading$: Observable<boolean>;
   project: Project;
-  currentUser$: Observable<User>;
 
   evaluationForm: FormGroup;
   //teachers of the organisation
@@ -63,7 +62,7 @@ export class NewEvaluationComponent implements OnInit, OnDestroy {
 
   selectedColor: string;
 
-  teacherSub: Subscription;
+  subs: Subscription[] = [];
 
   screenType$: Observable<string>;
 
@@ -77,17 +76,19 @@ export class NewEvaluationComponent implements OnInit, OnDestroy {
   ngOnInit() {
 
     //fetch the current user of the application (it may be a teacher who has selected student)
-    this.currentUser$ = this.store.select(fromRoot.getCurrentUser);
+    this.subs.push(this.store.select(fromRoot.getCurrentUser).subscribe(user => {
+      this.currentUser = user;
+    }));
     //fetch the screen size 
     this.screenType$ = this.store.select(fromRoot.getScreenType);
     //get the current project
-    this.store.select(fromEvaluation.getActiveProject).subscribe((project: Project) => {
+    this.subs.push(this.store.select(fromEvaluation.getActiveProject).subscribe((project: Project) => {
       this.project = project;
-    });
+    }));
   	//subscribe to the evaluation store to retrieve the skills belonging to the project
-    this.store.select(fromEvaluation.getActiveSkill).subscribe((skill: Skill) => {
+    this.subs.push(this.store.select(fromEvaluation.getActiveSkill).subscribe((skill: Skill) => {
     		this.skill = skill;
-    });
+    }));
     //get the loading state
     this.isLoading$ = this.store.select(fromRoot.getIsLoading);
     //check the screen size and detect if on mobile
@@ -95,14 +96,14 @@ export class NewEvaluationComponent implements OnInit, OnDestroy {
     //   this.isMobile = true;
     // }
     //get the user and organisation from the evaluation state
-    this.store.select(fromEvaluation.getStudent).subscribe(user => {
-        this.user = user;
-    });
-    this.store.select(fromRoot.getCurrentOrganisation).subscribe(organisation => {
+    this.subs.push(this.store.select(fromEvaluation.getStudent).subscribe(user => {
+        this.student = user;
+    }));
+    this.subs.push(this.store.select(fromRoot.getCurrentOrganisation).subscribe(organisation => {
         if(organisation){
           this.organisation = organisation;
           //get the list of teachers
-          this.teacherSub = this.authService.fetchTeachers(organisation.id).subscribe(teachers => {
+          this.subs.push(this.authService.fetchTeachers(organisation.id).subscribe(teachers => {
             if(teachers) {
               this.teachers = teachers;
               this.filteredTeachers = [];
@@ -113,34 +114,84 @@ export class NewEvaluationComponent implements OnInit, OnDestroy {
                 }
               })
             }
-          });
+          }));
         }
-    });
+    }));
     this.evaluationForm = new FormGroup({
        comment: new FormControl(null),
        color: new FormControl(null, Validators.required),
        url: new FormControl(null),
        imageUrl: new FormControl(null),
        thumbnailUrl: new FormControl(null),
-       teacher: new FormControl(null, Validators.required)
+       teacher: new FormControl(null)
     });
+    if(this.currentUser.uid === this.student.uid){
+      //the student is filling the form and the teacher input will be set to required
+      this.evaluationForm.get('teacher').setValidators(Validators.required);
+    }
     //listen for changes on the color and adjust the background color
-    this.evaluationForm.get('color').valueChanges.subscribe(
+    this.subs.push(this.evaluationForm.get('color').valueChanges.subscribe(
       (color) => {
         if(color){
           this.selectedColor = color.color;
         }
-    });
+    }));
   }
 
   onSubmit(){
     //create variable with actual timestamp
-    var timestamp = new Date();
+    const timestamp = new Date();
     //first create the local evaluation variable
-    this.evaluation = {
+    if(this.currentUser.uid === this.student.uid){
+      this.submitStudentEvaluation(timestamp);
+    } else {
+      this.submitTeacherEvaluation(timestamp);
+    }
+  }
+
+  submitTeacherEvaluation(timestamp){
+    let evaluation: Evaluation = {
+        id: this.student.uid + '_' + this.skill.id,
+        created: timestamp,
+        evaluated: timestamp,
+        user: this.student.uid,
+        studentName: this.student.displayName,
+        organisation: this.organisation.id,
+        status: 'Beoordeeld',
+        class: this.student.officialClass,
+        skill: this.skill.id,
+        skillCompetency: this.skill.competency,
+        skillTopic: this.skill.topic,
+        skillOrder: this.skill.order,
+        project: this.project.id,
+        projectCode: this.project.code,
+        projectName: this.project.name,
+        program: this.skill.program,
+        colorStudent: '#9E9E9E',
+        colorLabelStudent: 'Grijs',
+        iconStudent: 'supervised_user_circle',
+        commentStudent: 'Direct beoordeeld door de leraar',
+        teacher: this.currentUser.uid,
+        teacherName: this.currentUser.displayName,
+        colorTeacher: this.evaluationForm.value.color.color,
+        colorLabelTeacher: this.evaluationForm.value.color.colorLabel,
+        iconTeacher: this.evaluationForm.value.color.icon,
+        ratingTeacher: this.evaluationForm.value.color.rating,
+        commentTeacher: this.evaluationForm.value.comment 
+                                      ? this.evaluationForm.value.comment : null,
+        urlStudent: this.evaluationForm.value.url 
+                                      ? this.evaluationForm.value.url : null,
+        imageURL: this.evaluationForm.value.imageUrl ? this.evaluationForm.value.imageUrl : null,
+        thumbnailURL: this.evaluationForm.value.thumbnailUrl ?this.evaluationForm.value.thumbnailUrl : null
+    };
+    this.evaluationService.saveEvaluation(evaluation, this.student.uid, this.skill.id);
+  }
+
+  submitStudentEvaluation(timestamp){
+    let evaluation : Evaluation = {
       created: timestamp,
-      user: this.user.uid,
-      studentName: this.user.displayName,
+      user: this.student.uid,
+      studentName: this.student.displayName,
       organisation: this.organisation.id,
       status: 'Niet beoordeeld',
       skill: this.skill.id,
@@ -151,22 +202,21 @@ export class NewEvaluationComponent implements OnInit, OnDestroy {
       projectCode: this.project.code,
       projectName: this.project.name,
       program: this.skill.program,
-      class: this.user.officialClass
+      class: this.student.officialClass
     };
     //then set the properties of the evaluation variable
-    this.evaluation.colorStudent = this.evaluationForm.value.color.color;
-    this.evaluation.colorLabelStudent = this.evaluationForm.value.color.colorLabel;
-    this.evaluation.iconStudent = this.evaluationForm.value.color.icon;
-    this.evaluation.ratingStudent = this.evaluationForm.value.color.rating;
-    this.evaluation.commentStudent = this.evaluationForm.value.comment 
+    evaluation.colorStudent = this.evaluationForm.value.color.color;
+    evaluation.colorLabelStudent = this.evaluationForm.value.color.colorLabel;
+    evaluation.iconStudent = this.evaluationForm.value.color.icon;
+    evaluation.ratingStudent = this.evaluationForm.value.color.rating;
+    evaluation.commentStudent = this.evaluationForm.value.comment 
                                       ? this.evaluationForm.value.comment : null;
-    this.evaluation.urlStudent = this.evaluationForm.value.url 
+    evaluation.urlStudent = this.evaluationForm.value.url 
                                       ? this.evaluationForm.value.url : null;
-    this.evaluation.imageURL = this.evaluationForm.value.imageUrl;
-    this.evaluation.thumbnailURL = this.evaluationForm.value.thumbnailUrl;
-    this.evaluation.teacher = this.evaluationForm.value.teacher;
-    this.evaluationService.saveEvaluation(this.evaluation, this.user.uid, this.skill.id);
-    this.evaluation = null;
+    evaluation.imageURL = this.evaluationForm.value.imageUrl;
+    evaluation.thumbnailURL = this.evaluationForm.value.thumbnailUrl;
+    evaluation.teacher = this.evaluationForm.value.teacher;
+    this.evaluationService.saveEvaluation(evaluation, this.student.uid, this.skill.id);
   }
 
   startUpload(event: FileList) {
@@ -231,7 +281,7 @@ export class NewEvaluationComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.teacherSub.unsubscribe();
+    this.subs.forEach(sub => sub.unsubscribe());
   }
 
   setAdditionalValidators(){
