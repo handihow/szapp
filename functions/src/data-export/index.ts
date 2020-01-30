@@ -19,7 +19,7 @@ export const jsonDownload = functions.runWith({
 
   const db = admin.firestore();
   
-  let evaluationsRef = db.collection('evaluations');
+  const evaluationsRef = db.collection('evaluations');
 
   const organisation = data.organisation;
   const limit = parseInt(data.limit);

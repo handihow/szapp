@@ -10,6 +10,7 @@ id?: string;
 organisation?: string;
 user?: string;
 countSkills?: number;
+countSkillsWeighted?: number;
 starred?: any;
 // transform to local date for csv download
 localDate?: Date;

@@ -23,10 +23,14 @@
 				<div fxLayout="row" fxLayoutAlign="center" fxLayout.lt-md="column" 
 								fxLayoutAlign.lt-md="center center" fxLayoutGap="2px" class="full-width">
 					
-					<mat-form-field fxFlex="40" class="full-width">
+					<mat-form-field fxFlex="30" class="full-width">
 					   <input matInput placeholder="Onderwerp" formControlName="topic" required [matAutocomplete]="auto">
 					   <mat-hint>Het onderwerp waarbij de competentie hoort</mat-hint>
 					   <mat-error>Het onderwerp is verplicht</mat-error>
+					</mat-form-field>
+					<mat-form-field fxFlex="10" class="full-width">
+						   <input matInput placeholder="Gewicht" type="number" formControlName="weight">
+						   <mat-error>Gewicht is geheel nummer tussen 1 en 9</mat-error>
 					</mat-form-field>
 					<mat-autocomplete #auto="matAutocomplete">
 						  <mat-option *ngFor="let topic of filteredTopics | async" [value]="topic">
@@ -99,6 +103,21 @@
 		<ng-container matColumnDef="order">
 			<mat-header-cell *matHeaderCellDef mat-sort-header>Volgnummer</mat-header-cell>
 			<mat-cell *matCellDef="let element">{{ element.order }}</mat-cell>
+		</ng-container>
+
+		<ng-container matColumnDef="weight">
+			<mat-header-cell *matHeaderCellDef mat-sort-header>Gewicht</mat-header-cell>
+			<mat-cell *matCellDef="let element">
+				<button mat-icon-button (click)="onChangeWeight($event, element, false)"
+					[disabled]="!element.weight || element.weight <= 1">
+					<mat-icon>remove_circle_outline</mat-icon>
+				</button>
+				{{ element.weight ? element.weight : 1 }}
+				<button mat-icon-button (click)="onChangeWeight($event, element, true)"
+					[disabled]="element.weight && element.weight >= 9">
+					<mat-icon>add_circle_outline</mat-icon>
+				</button>
+			</mat-cell>
 		</ng-container>
 
 		<ng-container matColumnDef="competency">

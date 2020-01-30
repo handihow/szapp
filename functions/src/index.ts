@@ -11,19 +11,16 @@ import * as images from './images';
 import * as progress from './progress';
 import * as data from './data-export';
 import * as roles from './roles';
-import * as corrections from './corrections';
+// import * as corrections from './corrections';
 
 export const calculateClassroomAveragesForPrograms = analysis.calculateClassroomAveragesForPrograms;
-export const correctEvaluationRecords = analysis.correctEvaluationRecords;
+// export const correctEvaluationRecords = analysis.correctEvaluationRecords;
 
 export const onFileChange = images.onFileChange;
 
-export const onDeleteEvaluationUpdateProgramProgress = progress.onDeleteEvaluationUpdateProgramProgress;
-export const onDeleteEvaluationUpdateProgress = progress.onDeleteEvaluationUpdateProgress;
-export const onNewProgramProgress = progress.onNewProgramProgress;
-export const onNewProgress = progress.onNewProgress;
-export const onUpdateProgramProgress = progress.onUpdateProgramProgress;
-export const onUpdateProgress = progress.onUpdateProgress;
+export const onCreateEvaluation = progress.onCreateEvaluation;
+export const onUpdateEvaluation = progress.onUpdateEvaluation;
+export const onDeleteEvaluation = progress.onDeleteEvaluation;
 
 export const jsonDownload = data.jsonDownload;
 
@@ -34,5 +31,5 @@ export const createUsers = roles.createUsers;
 export const addStudent = roles.addStudent;
 export const removeUser = roles.removeUser;
 
-export const setClassNumbers = corrections.setClassNumbers;
-export const setOfficialClass = corrections.setOfficialClass;
+// export const setClassNumbers = corrections.setClassNumbers;
+// export const setOfficialClass = corrections.setOfficialClass;

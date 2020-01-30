@@ -1,7 +1,10 @@
 <div *ngIf="chart" class="chart">
   <canvas id="{{student.uid}}">{{ chart }}</canvas>
 </div>
-<div fxLayout="column" fxLayoutAlign="center center" *ngIf="chart.length===0">
+<div fxLayout="column" fxLayoutAlign="center center" *ngIf="chart.length===0 && !noResults">
 	<p>Grafiek wordt berekend of is niet beschikbaar.</p>
 	<mat-progress-bar mode="buffer"></mat-progress-bar>
+</div>
+<div fxLayout="column" fxLayoutAlign="center center" *ngIf="noResults">
+	<p>Geen resultaten beschikbaar</p>
 </div>

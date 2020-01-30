@@ -59,8 +59,18 @@ export class SkillService {
 			var skillsRef = this.db.firestore.collection('skills').doc();
 			batch.set(skillsRef, skill);
 		});
-		batch.commit();
-		this.store.dispatch(new UI.StopLoading());
+		batch.commit()
+		.then(_ => {
+			this.uiService.showSnackbar('Competenties succesvol toegevoegd', null, 3000);
+			this.store.dispatch(new UI.StopLoading());
+		}, (error) => {
+			this.uiService.showSnackbar('Probleem bij verwerken van competenties ' + error.message, null, 3000);
+			this.store.dispatch(new UI.StopLoading());
+		})
+		.catch(e => {
+			this.uiService.showSnackbar('Probleem bij verwerken van competenties ' + e.message, null, 3000);
+			this.store.dispatch(new UI.StopLoading());
+		});
 	}
 
 	updateSkillToDatabase(skill: Skill){
@@ -73,6 +83,17 @@ export class SkillService {
 			})
 			.catch(error => {
 				this.store.dispatch(new UI.StopLoading());
+				this.uiService.showSnackbar(error.message, null, 3000);
+			})
+	}
+
+	updateSkillWeight(skillId: string, weight: number){
+		this.db.collection('skills').doc(skillId)
+			.update({weight: weight})
+			.then(doc => {
+				this.uiService.showSnackbar('Competentie update succesvol', null, 3000);
+			})
+			.catch(error => {
 				this.uiService.showSnackbar(error.message, null, 3000);
 			})
 	}

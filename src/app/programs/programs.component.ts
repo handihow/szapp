@@ -28,6 +28,7 @@ export class ProgramsComponent implements OnInit, OnDestroy {
   isFavorite: boolean;
   user: User;
   skillCount: number;
+  weightedSkillCount: number;
   isAddingSkill: boolean;
   canUploadCsv: boolean;
 
@@ -78,7 +79,7 @@ export class ProgramsComponent implements OnInit, OnDestroy {
 
   onSaveActive(){
     //count the number of skills in the program for the database update
-    this.programService.saveActiveProgram(this.skillCount);
+    this.programService.saveActiveProgram(this.skillCount, this.weightedSkillCount);
   }
 
 
@@ -87,11 +88,12 @@ export class ProgramsComponent implements OnInit, OnDestroy {
     this.program.starred[this.user.uid] = this.isFavorite;
   }
 
-  updateSkillCount(skillCount: number){
-    this.skillCount = skillCount;
+  updateSkillCount(skillCounts: number[],){
+    this.skillCount = skillCounts[0];
+    this.weightedSkillCount = skillCounts[1];
   }
 
-    handleFileSelect(evt) {
+  handleFileSelect(evt) {
       var files = evt.target.files; // FileList object
       var file = files[0];
       var reader = new FileReader();
@@ -154,7 +156,7 @@ export class ProgramsComponent implements OnInit, OnDestroy {
         const topic = data[topicIndex];
         const link = linkIndex > -1 ? data[linkIndex] : null;
         const linkText = linkTextIndex > -1 ? data[linkTextIndex] : null;
-        const weight = weightIndex > -1 ? data[weightIndex] : 1;
+        const weight = weightIndex > -1 ? parseInt(data[weightIndex]) : 1;
         //create the new skill
         let skill: Skill = {
           competency: competency,

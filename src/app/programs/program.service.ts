@@ -33,10 +33,11 @@ export class ProgramService {
 		this.store.dispatch(new ProgramAction.StartProgram(program));
 	}
 
-	saveActiveProgram(countedSkills: number) {
+	saveActiveProgram(countedSkills: number, countWeightedSkills: number) {
 		this.store.select(fromProgram.getActiveProgram).pipe(take(1)).subscribe(program => {
 			var program = program;
 			program.countSkills = countedSkills;
+			program.countSkillsWeighted = countWeightedSkills;
 			this.saveProgramToDatabase(program);
 			this.store.dispatch(new ProgramAction.StopProgram());	
 		})

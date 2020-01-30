@@ -250,6 +250,7 @@ export class EvaluationService {
 	        skillCompetency: result.skill.competency,
 	        skillTopic: result.skill.topic,
 	        skillOrder: result.skill.order,
+	        skillWeight: result.skill.weight ? result.skill.weight : 1,
 	        project: result.project.id,
 	        projectCode: result.project.code,
 	        projectName: result.project.name,

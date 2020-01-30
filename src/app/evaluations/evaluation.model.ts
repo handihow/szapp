@@ -33,6 +33,7 @@ historyId?: string;
 skillOrder?: string;
 skillCompetency?: string;
 skillTopic?: string;
+skillWeight?: number;
 studentName?: string;
 teacherName?: string;
 project?: string;

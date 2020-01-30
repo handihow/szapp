@@ -194,6 +194,7 @@ export class CourseOverviewComponent implements OnInit, OnDestroy {
         skillCompetency: this.selectedSkill.competency,
         skillTopic: this.selectedSkill.topic,
         skillOrder: this.selectedSkill.order,
+        skillWeight: this.selectedSkill.weight ? this.selectedSkill.weight : 1,
         project: this.selectedProject.id,
         projectCode: this.selectedProject.code,
         projectName: this.selectedProject.name,

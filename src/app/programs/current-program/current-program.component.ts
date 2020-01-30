@@ -48,13 +48,13 @@ export class CurrentProgramComponent implements OnInit, OnDestroy {
   options: any;
   data: any;
 
-  displayedColumns = ['select', 'order' ,'competency', 'topic', 'link', 'attachments'];
+  displayedColumns = ['select', 'order', 'weight', 'competency', 'topic', 'link', 'attachments'];
   dataSource = new MatTableDataSource<Skill>();
   isLoading$: Observable<boolean>;
 
   @Input() isAddingSkill: boolean;
   @Output() toggleAddSkill = new EventEmitter<boolean>();
-  @Output() skillCount = new EventEmitter<number>();
+  @Output() skillCount = new EventEmitter<number[]>();
   @ViewChild(MatSort, { static: true }) sort: MatSort;
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
 
@@ -90,7 +90,7 @@ export class CurrentProgramComponent implements OnInit, OnDestroy {
         }); 
         this.sub = this.skillService.fetchSkills(this.program.id).subscribe(skills => {
           this.skills = skills;
-          this.skillCount.emit(this.skills.length);
+          this.skillCount.emit([this.skills.length, this.skills.map(s => s.weight ? s.weight : 1).reduce((p, n) => p + n)]);
           //set the data source of the table
           this.dataSource.data = this.skills;
           //make a list of unique topics that will be used in the autocomplete 
@@ -108,6 +108,7 @@ export class CurrentProgramComponent implements OnInit, OnDestroy {
       order: new FormControl(null, Validators.required),
       competency: new FormControl(null, Validators.required),
       topic: new FormControl(null, Validators.required),
+      weight: new FormControl(1, [Validators.min(1),Validators.max(9)]),
       link: new FormControl(null),
       linkText: new FormControl(null)
     });
@@ -130,9 +131,9 @@ export class CurrentProgramComponent implements OnInit, OnDestroy {
   //set the displayed columns of the table depending on the size of the display
   setDisplayedColumns(screenType){
     if(screenType==="desktop"){
-      this.displayedColumns = ['select', 'order' ,'competency', 'topic', 'link', 'attachments'];
+      this.displayedColumns = ['select', 'order', 'weight' ,'competency', 'topic', 'link', 'attachments'];
     } else if(screenType==="tablet"){
-      this.displayedColumns = ['select', 'order' ,'competency', 'topic', 'link'];
+      this.displayedColumns = ['select', 'order', 'weight' ,'competency', 'topic', 'link'];
     } else {
       this.displayedColumns = ['select', 'order' ,'competency'];
     }
@@ -185,6 +186,7 @@ export class CurrentProgramComponent implements OnInit, OnDestroy {
       this.skill.competency = skillsForm.value.competency;
       this.skill.order = skillsForm.value.order;
       this.skill.topic = skillsForm.value.topic;
+      this.skill.weight = skillsForm.value.weight ? skillsForm.value.weight: 1,
       this.skill.link = skillsForm.value.link ? skillsForm.value.link : null;
       this.skill.linkText = skillsForm.value.linkText ? skillsForm.value.linkText : null;
       this.skill.program = this.program.id;
@@ -205,6 +207,7 @@ export class CurrentProgramComponent implements OnInit, OnDestroy {
         competency: skillsForm.value.competency,
         order: orderNumber,
         topic: skillsForm.value.topic,
+        weight: skillsForm.value.weight ? skillsForm.value.weight : 1,
         link: skillsForm.value.link ? skillsForm.value.link : null,
         linkText: skillsForm.value.linkText ? skillsForm.value.linkText : null,
         program: this.program.id
@@ -239,6 +242,7 @@ export class CurrentProgramComponent implements OnInit, OnDestroy {
     this.skillsForm.get('competency').setValue(this.skill.competency);
     this.skillsForm.get('order').setValue(this.skill.order);
     this.skillsForm.get('topic').setValue(this.skill.topic);
+    this.skillsForm.get('weight').setValue(this.skill.weight ? this.skill.weight : 1);
     this.skillsForm.get('link').setValue(this.skill.link);
     this.skillsForm.get('linkText').setValue(this.skill.linkText);
   }
@@ -294,6 +298,16 @@ export class CurrentProgramComponent implements OnInit, OnDestroy {
       keys: ['order', 'weight', 'competency', 'topic', 'link', 'linkText' ]
     };
     setTimeout(() => { this.csvComponent.onDownload(); }, 0);
+  }
+
+
+  onChangeWeight(event, skill: Skill, increase: boolean){
+    event.stopPropagation();
+    const currentWeight = skill.weight && typeof skill.weight === 'string' ? 
+                              parseInt(skill.weight) : 
+                              skill.weight ? skill.weight : 1;
+    const changedWeight : number = currentWeight + (increase ? 1 : -1);
+    this.skillService.updateSkillWeight(skill.id, changedWeight);
   }
 
 

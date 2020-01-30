@@ -17,7 +17,7 @@ exports.jsonDownload = functions.runWith({
         };
     }
     const db = admin.firestore();
-    let evaluationsRef = db.collection('evaluations');
+    const evaluationsRef = db.collection('evaluations');
     const organisation = data.organisation;
     const limit = parseInt(data.limit);
     return evaluationsRef.where("organisation", '==', organisation).orderBy('created', 'desc').limit(limit).get()
