@@ -68,10 +68,9 @@ export class UserGraphComponent implements OnInit, OnDestroy {
         let indexOfWeightedProgramResults = results.findIndex(o => o.id ==="weightedprogram");
         let indexOfProgramResults = results.findIndex(o => o.id ==="program");
         if(indexOfWeightedProgramResults > -1) {
-          this.student.programs = results[indexOfWeightedProgramResults];
-          this.fetchPrograms();
+          this.fetchPrograms(results[indexOfWeightedProgramResults]);
         } else if(indexOfProgramResults > -1){
-          this.student.programs = results[indexOfProgramResults]
+          this.fetchPrograms(results[indexOfProgramResults]);
         } else {
           this.noResults = true;
         }
@@ -79,16 +78,16 @@ export class UserGraphComponent implements OnInit, OnDestroy {
     }
   }
 
-  fetchPrograms() {
+  fetchPrograms(studentResults) {
     this.subs.push(this.programService.fetchExistingPrograms(this.organisation, true).subscribe(programs => {
       var filteredPrograms = [];
       programs.forEach(program => {
-        if(Object.keys(this.student.programs).includes(program.id)){
+        if(Object.keys(studentResults).includes(program.id)){
           filteredPrograms.push(program);
         }
       })
       this.programs = filteredPrograms;
-      this.calculateProgramProgress();
+      this.calculateProgramProgress(studentResults);
     }));
   }
 
@@ -101,15 +100,16 @@ export class UserGraphComponent implements OnInit, OnDestroy {
     }
   }
 
-  calculateProgramProgress(){
-    if(!this.student.programs){
+  calculateProgramProgress(studentResults){
+    if(!studentResults){
       return
     }
     var programProgress = [];
-    let studentPrograms = Object.keys(this.student.programs);
+    let studentPrograms = Object.keys(studentResults);
     //loop through the student program progress results
     studentPrograms.forEach(async (program,index) => {
       if(program !=="id"){
+        console.log(program);
         let programToBeAdded = this.programs.find(o => o.id === program);
         if(programToBeAdded){
           let greenResult = 0; let lightGreenResult = 0; let yellowResult = 0; let redResult = 0; let remainingResult = 100;
@@ -117,33 +117,38 @@ export class UserGraphComponent implements OnInit, OnDestroy {
           const weightedSkillCount = programToBeAdded.countSkillsWeighted ? 
                                         programToBeAdded.countSkillsWeighted : programToBeAdded.countSkills ?
                                         programToBeAdded.countSkills : 0;
+          console.log(programToBeAdded.name)
           if(this.student.programs[program] && programToBeAdded && weightedSkillCount > 0){
-            let maximumWeightedCount = 0;
-            
+            let maximumWeightedScore = 0;
+            let totalWeightedScore = 0;
             //green
-            const greenWeightedCount = this.student.programs[program].Groen ? this.student.programs[program].Groen : 0;
-            maximumWeightedCount += greenWeightedCount;
+            const greenWeightedCount = studentResults[program].Groen ? studentResults[program].Groen : 0;
             greenResult = Math.round(greenWeightedCount / weightedSkillCount * 100);
+            maximumWeightedScore += greenWeightedCount * 3;
+            totalWeightedScore += greenWeightedCount * 3;
             
             //light green
-            const lightGreenWeightedCount = this.student.programs[program].Lichtgroen ? 
-                                                this.student.programs[program].Lichtgroen : 0;
-            maximumWeightedCount += lightGreenWeightedCount * 3 / 2;
+            const lightGreenWeightedCount = studentResults[program].Lichtgroen ? 
+                                                studentResults[program].Lichtgroen : 0;
             lightGreenResult = Math.round(lightGreenWeightedCount / weightedSkillCount * 100);
+            maximumWeightedScore += lightGreenWeightedCount * 3;
+            totalWeightedScore += lightGreenWeightedCount * 2;
             
             //yellow
-            const yellowWeightedCount = this.student.programs[program].Geel ? this.student.programs[program].Geel : 0;
-            maximumWeightedCount += yellowWeightedCount * 3;
+            const yellowWeightedCount = studentResults[program].Geel ? studentResults[program].Geel : 0;
             yellowResult = Math.round(yellowWeightedCount / weightedSkillCount * 100);
+            maximumWeightedScore += yellowWeightedCount * 3;
+            totalWeightedScore += yellowWeightedCount * 1;
             
             //red
-            const redWeightedCount = this.student.programs[program].Rood ? this.student.programs[program].Rood : 0;
-            maximumWeightedCount += redWeightedCount * 3;
+            const redWeightedCount = studentResults[program].Rood ? studentResults[program].Rood : 0;
             redResult = Math.round(redWeightedCount / weightedSkillCount * 100);
+            maximumWeightedScore += redWeightedCount * 3;
             
+            console.log(maximumWeightedScore);
+            console.log(totalWeightedScore);
             remainingResult = 100 - greenResult - lightGreenResult - yellowResult - redResult;
-            grade = Math.round((greenWeightedCount + lightGreenWeightedCount + yellowWeightedCount + redWeightedCount) 
-                      / maximumWeightedCount * 100);
+            grade = Math.round(totalWeightedScore / maximumWeightedScore * 100);
           }
           //get the score of the student in percentage
           
