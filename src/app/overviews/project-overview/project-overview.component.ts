@@ -10,7 +10,7 @@ import { Skill } from '../../skills/skill.model';
 import { SkillService } from '../../skills/skill.service';
 
 import { Project } from '../../projects/project.model';
-import { Chart } from 'chart.js';
+import * as Chart from 'chart.js';
 import { User} from '../../auth/user.model';
 
 import * as fromOverview from '../overview.reducer';
@@ -32,7 +32,8 @@ export class ProjectOverviewComponent implements OnInit, OnDestroy {
   isLoading$: Observable<boolean>;
   subs: Subscription[]=[];
 
-  chart = []; // This will hold our chart info
+  chart: any; // This will hold our chart info
+  doneLoadingChart: boolean;
 
   constructor(  private evaluationService: EvaluationService,
                 private skillService: SkillService,
@@ -126,32 +127,47 @@ export class ProjectOverviewComponent implements OnInit, OnDestroy {
               data: students.map(o => o.progress[0].green),
               backgroundColor: Colors.chartColors[0].background,
               borderColor: Colors.chartColors[0].border,
-              borderWidth: 2
+              borderWidth: 2,
+              datalabels: {
+                  display: false
+              }
             },
             {
               label: "Lichtgroen",
               data: students.map(o => o.progress[1].lightgreen),
               backgroundColor: Colors.chartColors[1].background,
               borderColor: Colors.chartColors[1].border,
-              borderWidth: 2
+              borderWidth: 2,
+              datalabels: {
+                  display: false
+              }
             },
             {
               label: "Geel",
               data: students.map(o => o.progress[2].yellow),
               backgroundColor: Colors.chartColors[2].background,
               borderColor: Colors.chartColors[2].border,
-              borderWidth: 2
+              borderWidth: 2,
+              datalabels: {
+                  display: false
+              }
             },
             {
               label: "Rood",
               data: students.map(o => o.progress[3].red),
               backgroundColor: Colors.chartColors[3].background,
               borderColor: Colors.chartColors[3].border,
-              borderWidth: 2
+              borderWidth: 2,
+              datalabels: {
+                  display: false
+              }
             },
             {
               label: "Niet beoordeeld",
-              data: students.map(o => o.progress[4].remaining)
+              data: students.map(o => o.progress[4].remaining),
+              datalabels: {
+                  display: false
+              }
             }
           ]
         },
@@ -171,6 +187,7 @@ export class ProjectOverviewComponent implements OnInit, OnDestroy {
           }
         }     
      });
+     this.doneLoadingChart = true;
   }
 
 }

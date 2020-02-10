@@ -9,7 +9,7 @@ import { CourseService } from '../../courses/course.service';
 
 import { Program } from '../../programs/program.model'; 
 
-import { Chart } from 'chart.js';
+import * as Chart from 'chart.js';
 import { User} from '../../auth/user.model';
 import { AuthService } from '../../auth/auth.service';
 
@@ -35,7 +35,7 @@ export class CourseOverviewComponent implements OnInit, OnDestroy  {
 
   subs: Subscription[] = [];
 
-  chart = []; // This will hold our chart info
+  chart: any; // This will hold our chart info
 
   constructor(  private courseService: CourseService,
                 private authService: AuthService,
@@ -128,32 +128,47 @@ export class CourseOverviewComponent implements OnInit, OnDestroy  {
               data: programProgress.map(o=>o.green),
               backgroundColor: Colors.chartColors[0].background,
               borderColor: Colors.chartColors[0].border,
-              borderWidth: 2
+              borderWidth: 2,
+              datalabels: {
+                  display: false
+              }
             },
             {
               label: "Lichtgroen",
               data: programProgress.map(o=>o.lightgreen),
               backgroundColor: Colors.chartColors[1].background,
               borderColor: Colors.chartColors[1].border,
-              borderWidth: 2
+              borderWidth: 2,
+              datalabels: {
+                  display: false
+              }
             },
             {
               label: "Geel",
               data: programProgress.map(o=>o.yellow),
               backgroundColor: Colors.chartColors[2].background,
               borderColor: Colors.chartColors[2].border,
-              borderWidth: 2
+              borderWidth: 2,
+              datalabels: {
+                  display: false
+              }
             },
             {
               label: "Rood",
               data: programProgress.map(o=>o.red),
               backgroundColor: Colors.chartColors[3].background,
               borderColor: Colors.chartColors[3].border,
-              borderWidth: 2
+              borderWidth: 2,
+              datalabels: {
+                  display: false
+              }
             },
             {
               label: "Niet beoordeeld",
-              data: programProgress.map(o=>o.remaining)
+              data: programProgress.map(o=>o.remaining),
+              datalabels: {
+                  display: false
+              }
             }
           ]
         },

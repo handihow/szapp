@@ -4,10 +4,10 @@
 	<button type="button" mat-raised-button color="accent" (click)="onReturnToOverview()">Terug</button>
 </section>
 
-<div *ngIf="chart" class="chart">
+<div class="chart">
   <canvas id="course-program-chart">{{ chart }}</canvas>
 </div>
-<div fxLayout="column" fxLayoutAlign="center center" *ngIf="chart.length===0">
+<div fxLayout="column" fxLayoutAlign="center center" *ngIf="!hasFinishedCalculating">
 	<p>Grafiek wordt berekend of is niet beschikbaar.</p>
 	<mat-progress-bar mode="buffer"></mat-progress-bar>
 </div>

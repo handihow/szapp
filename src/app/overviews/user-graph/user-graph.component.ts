@@ -7,7 +7,8 @@ import { Router } from '@angular/router';
 import { Program } from '../../programs/program.model';
 import { ProgramService } from '../../programs/program.service';
 
-import { Chart } from 'chart.js';
+import * as Chart from 'chart.js';
+import ChartDataLabels from 'chartjs-plugin-datalabels';
 
 import { User} from '../../auth/user.model';
 import { Organisation } from '../../auth/organisation.model';
@@ -34,7 +35,7 @@ export class UserGraphComponent implements OnInit, OnDestroy {
 
   subs: Subscription[] = [];
 
-  chart = []; // This will hold our chart info
+  chart: any; // This will hold our chart info
   chartType: string;
 
   constructor(	private programService: ProgramService,
@@ -109,7 +110,6 @@ export class UserGraphComponent implements OnInit, OnDestroy {
     //loop through the student program progress results
     studentPrograms.forEach(async (program,index) => {
       if(program !=="id"){
-        console.log(program);
         let programToBeAdded = this.programs.find(o => o.id === program);
         if(programToBeAdded){
           let greenResult = 0; let lightGreenResult = 0; let yellowResult = 0; let redResult = 0; let remainingResult = 100;
@@ -117,8 +117,7 @@ export class UserGraphComponent implements OnInit, OnDestroy {
           const weightedSkillCount = programToBeAdded.countSkillsWeighted ? 
                                         programToBeAdded.countSkillsWeighted : programToBeAdded.countSkills ?
                                         programToBeAdded.countSkills : 0;
-          console.log(programToBeAdded.name)
-          if(this.student.programs[program] && programToBeAdded && weightedSkillCount > 0){
+          if(studentResults[program] && weightedSkillCount > 0){
             let maximumWeightedScore = 0;
             let totalWeightedScore = 0;
             //green
@@ -144,9 +143,6 @@ export class UserGraphComponent implements OnInit, OnDestroy {
             const redWeightedCount = studentResults[program].Rood ? studentResults[program].Rood : 0;
             redResult = Math.round(redWeightedCount / weightedSkillCount * 100);
             maximumWeightedScore += redWeightedCount * 3;
-            
-            console.log(maximumWeightedScore);
-            console.log(totalWeightedScore);
             remainingResult = 100 - greenResult - lightGreenResult - yellowResult - redResult;
             grade = Math.round(totalWeightedScore / maximumWeightedScore * 100);
           }
@@ -282,31 +278,40 @@ export class UserGraphComponent implements OnInit, OnDestroy {
     var data = {
       labels: programProgress.map(o=>this.formatLabel(o.programName, 10)),
       labelString: [],
-      datasets: []
+      datasets: [],
     };
+
 
     if(this.chartType==="bar"){
       data.datasets.push({
         label: "Cijfer",
         data: programProgress.map(o=>o.grade),
         name: 'cijfer',
-        type: 'line',
-        mode: 'line+text',
-        text: programProgress.map(o=>o.grade +'%'),
+        type: 'scatter',
+        datalabels: {
+            display: true,
+            anchor: 'end',
+            align: 'top',
+            font: {
+              size: 16
+            },
+            formatter: function(value, context) {
+                return value + '%';
+            }
+        },
         borderColor: Colors.projectColors[4].color,
         backgroundColor: Colors.projectColors[4].color,
         fill: 'false',
-        borderWidth: 2,
-        textposition: 'top center',
-        textfont: {
-          family:  'Raleway, sans-serif'
-        },
+        borderWidth: 2
       })
     }
 
     data.datasets.push({
       label: "Groen",
       data: programProgress.map(o=>o.green),
+      datalabels: {
+          display: false
+      },
       backgroundColor: Colors.chartColors[0].background,
       borderColor: Colors.chartColors[0].border,
       borderWidth: 2
@@ -314,6 +319,9 @@ export class UserGraphComponent implements OnInit, OnDestroy {
     {
       label: "Lichtgroen",
       data: programProgress.map(o=>o.lightgreen),
+      datalabels: {
+          display: false
+      },
       backgroundColor: Colors.chartColors[1].background,
       borderColor: Colors.chartColors[1].border,
       borderWidth: 2
@@ -321,6 +329,9 @@ export class UserGraphComponent implements OnInit, OnDestroy {
     {
       label: "Geel",
       data: programProgress.map(o=>o.yellow),
+      datalabels: {
+          display: false
+      },
       backgroundColor: Colors.chartColors[2].background,
       borderColor: Colors.chartColors[2].border,
       borderWidth: 2
@@ -328,17 +339,25 @@ export class UserGraphComponent implements OnInit, OnDestroy {
     {
       label: "Rood",
       data: programProgress.map(o=>o.red),
+      datalabels: {
+          display: false
+      },
       backgroundColor: Colors.chartColors[3].background,
       borderColor: Colors.chartColors[3].border,
       borderWidth: 2
     },
     {
       label: "Niet beoordeeld",
-      data: programProgress.map(o=>o.remaining)
+      data: programProgress.map(o=>o.remaining),
+      datalabels: {
+          display: false
+      },
     })
+
 
     //now create the chart
     this.chart = new Chart(this.student.uid, {
+      plugins: [ChartDataLabels],
       type: this.chartType,
       data: data,
       options: options

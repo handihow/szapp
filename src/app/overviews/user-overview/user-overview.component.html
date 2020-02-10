@@ -20,7 +20,7 @@
 					Rapporteer
 				</button>
 				<button type="button" mat-button (click)="onReturnToOverview()" 
-						*ngIf="(currentUser$ | async).role === 'Leraar'">
+						*ngIf="(currentUser$ | async)?.role === 'Leraar'">
 					Terug
 				</button>
 			</mat-card-actions>
