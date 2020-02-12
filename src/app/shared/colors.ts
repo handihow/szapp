@@ -36,7 +36,8 @@ export class Colors {
 			{border: "rgba(76,175,80,1)", background: "rgba(76,175,80,0.7)", colorLabel: "Groen" },
 			{border: "rgba(139,195,74,1)", background: "rgba(139,195,74,0.7)", colorLabel: "Lichtgroen" },
 			{border: "rgba(255,235,59,1)", background: "rgba(255,235,59,0.7)", colorLabel: "Geel" },
-			{border: "rgba(244,67,54,1)", background: "rgba(244,67,54,0.7)", colorLabel: "Rood" }
+			{border: "rgba(244,67,54,1)", background: "rgba(244,67,54,0.7)", colorLabel: "Rood" },
+			{border: "rgba(103,58,183,1)", background: "rgba(103,58,183,0.1)", colorLabel: "Donkerpaars"},
 		]
 
 	

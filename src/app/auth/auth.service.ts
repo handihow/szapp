@@ -63,7 +63,7 @@ export class AuthService {
 	    	if(user){
 	    		//after accidental page reload, organisation may be lost in the app state
 	    		//make sure organisation is set in the app state
-	    		let organisation = await this.setOrganisation(user);
+	    		const organisation = await this.setOrganisation(user);
 	    		this.store.dispatch(new Auth.SetOrganisation(organisation));
 	    		//dispatch the current user to the app state
 	    		this.store.dispatch(new Auth.SetAuthenticated(user));

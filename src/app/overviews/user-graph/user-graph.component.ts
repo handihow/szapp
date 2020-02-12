@@ -120,29 +120,34 @@ export class UserGraphComponent implements OnInit, OnDestroy {
           if(studentResults[program] && weightedSkillCount > 0){
             let maximumWeightedScore = 0;
             let totalWeightedScore = 0;
+            const weightRed = this.organisation.weightRed ? this.organisation.weightRed : 0;
+            const weightYellow = this.organisation.weightYellow ? this.organisation.weightYellow : 1;
+            const weightLightGreen = this.organisation.weightLightGreen ? this.organisation.weightLightGreen : 2;
+            const weightGreen = this.organisation.weightGreen ? this.organisation.weightGreen : 3;
             //green
             const greenWeightedCount = studentResults[program].Groen ? studentResults[program].Groen : 0;
             greenResult = Math.round(greenWeightedCount / weightedSkillCount * 100);
-            maximumWeightedScore += greenWeightedCount * 3;
-            totalWeightedScore += greenWeightedCount * 3;
+            maximumWeightedScore += greenWeightedCount * weightGreen;
+            totalWeightedScore += greenWeightedCount * weightGreen;
             
             //light green
             const lightGreenWeightedCount = studentResults[program].Lichtgroen ? 
                                                 studentResults[program].Lichtgroen : 0;
             lightGreenResult = Math.round(lightGreenWeightedCount / weightedSkillCount * 100);
-            maximumWeightedScore += lightGreenWeightedCount * 3;
-            totalWeightedScore += lightGreenWeightedCount * 2;
+            maximumWeightedScore += lightGreenWeightedCount * weightGreen;
+            totalWeightedScore += lightGreenWeightedCount * weightLightGreen;
             
             //yellow
             const yellowWeightedCount = studentResults[program].Geel ? studentResults[program].Geel : 0;
             yellowResult = Math.round(yellowWeightedCount / weightedSkillCount * 100);
-            maximumWeightedScore += yellowWeightedCount * 3;
-            totalWeightedScore += yellowWeightedCount * 1;
+            maximumWeightedScore += yellowWeightedCount * weightGreen;
+            totalWeightedScore += yellowWeightedCount * weightYellow;
             
             //red
             const redWeightedCount = studentResults[program].Rood ? studentResults[program].Rood : 0;
             redResult = Math.round(redWeightedCount / weightedSkillCount * 100);
-            maximumWeightedScore += redWeightedCount * 3;
+            maximumWeightedScore += redWeightedCount * weightGreen;
+            totalWeightedScore += redWeightedCount * weightRed;
             remainingResult = 100 - greenResult - lightGreenResult - yellowResult - redResult;
             grade = Math.round(totalWeightedScore / maximumWeightedScore * 100);
           }

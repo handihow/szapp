@@ -6,6 +6,7 @@ import { Router } from '@angular/router';
 
 import { Course } from '../../courses/course.model';
 import { CourseService } from '../../courses/course.service';
+import { Organisation } from '../../auth/organisation.model';
 
 import { Program } from '../../programs/program.model'; 
 
@@ -26,6 +27,7 @@ import { Colors } from '../../shared/colors';
 })
 export class CourseOverviewComponent implements OnInit, OnDestroy  {
 
+  organisation: Organisation;
   students: User[];
   course: Course;
   program: Program;
@@ -45,6 +47,11 @@ export class CourseOverviewComponent implements OnInit, OnDestroy  {
   ngOnInit() {
     //get the current user
     this.currentUser$ = this.store.select(fromRoot.getCurrentUser);
+    this.subs.push(this.store.select(fromRoot.getCurrentOrganisation).subscribe(organisation => {
+      if(organisation){
+         this.organisation = organisation
+      }
+    }));
     //get the loading state of the app
     this.isLoading$ = this.store.select(fromRoot.getIsLoading);
     //fetch the currently selected program belonging to the overview
@@ -58,9 +65,12 @@ export class CourseOverviewComponent implements OnInit, OnDestroy  {
         this.subs.push(this.courseService.fetchCourseTeachersAndStudents(course, "Leerling").subscribe(students => {
           students.forEach((student, index) => {
             this.subs.push(this.authService.fetchUserResults(student).subscribe(results => {
+              let indexOfWeightedProgramResults = results.findIndex(o => o.id ==="weightedprogram");
               let indexOfProgramResults = results.findIndex(o => o.id ==="program");
-              if(indexOfProgramResults > -1) {
-                  student.programs = results[indexOfProgramResults];
+              if(indexOfWeightedProgramResults > -1) {
+                student.programs = results[indexOfWeightedProgramResults]
+              } else if(indexOfProgramResults > -1){
+                student.programs = results[indexOfProgramResults];
               }
               if(index===(students.length - 1)){
                 this.students = students;
@@ -90,27 +100,58 @@ export class CourseOverviewComponent implements OnInit, OnDestroy  {
      if(!this.students || !this.program){
        return 
      }
-     var programProgress = [];
+     const programProgress = [];
+     const weightRed = this.organisation.weightRed ? this.organisation.weightRed : 0;
+     const weightYellow = this.organisation.weightYellow ? this.organisation.weightYellow : 1;
+     const weightLightGreen = this.organisation.weightLightGreen ? this.organisation.weightLightGreen : 2;
+     const weightGreen = this.organisation.weightGreen ? this.organisation.weightGreen : 3;
      //loop through the student program progress results
      this.students.forEach(student => {
      	if(student.programs[this.program.id]){
-     		let greenResult = student.programs[this.program.id].Groen ? 
-	                             Math.round(student.programs[this.program.id].Groen / this.program.countSkills * 100) : 0;
-		     let lightgreenResult = student.programs[this.program.id].Lichtgroen ? 
-		                             Math.round(student.programs[this.program.id].Lichtgroen / this.program.countSkills * 100) : 0;
-		     let yellowResult = student.programs[this.program.id].Geel ? 
-		                             Math.round(student.programs[this.program.id].Geel / this.program.countSkills * 100) : 0;
-		     let redResult = student.programs[this.program.id].Rood ? 
-		                             Math.round(student.programs[this.program.id].Rood / this.program.countSkills * 100) : 0;
-		     let remainingResult = Math.round((this.program.countSkills - student.programs[this.program.id].total) / this.program.countSkills * 100);
-		     var newProgressResult = {
+        const programResult = student.programs[this.program.id];
+        let greenResult = 0; let lightGreenResult = 0; let yellowResult = 0; let redResult = 0; let remainingResult = 100;
+     		let grade = 0;
+        const weightedSkillCount = this.program.countSkillsWeighted ? 
+                                        this.program.countSkillsWeighted : this.program.countSkills ?
+                                        this.program.countSkills : 0;
+        let maximumWeightedScore = 0;
+        let totalWeightedScore = 0;
+
+        const greenWeightedCount = programResult.Groen ? programResult.Groen : 0;
+        greenResult = Math.round(greenWeightedCount / weightedSkillCount * 100);
+        maximumWeightedScore += greenWeightedCount * weightGreen;
+        totalWeightedScore += greenWeightedCount * weightGreen;
+        
+        //light green
+        const lightGreenWeightedCount = programResult.Lichtgroen ? 
+                                            programResult.Lichtgroen : 0;
+        lightGreenResult = Math.round(lightGreenWeightedCount / weightedSkillCount * 100);
+        maximumWeightedScore += lightGreenWeightedCount * weightGreen;
+        totalWeightedScore += lightGreenWeightedCount * weightLightGreen;
+        
+        //yellow
+        const yellowWeightedCount = programResult.Geel ? programResult.Geel : 0;
+        yellowResult = Math.round(yellowWeightedCount / weightedSkillCount * 100);
+        maximumWeightedScore += yellowWeightedCount * weightGreen;
+        totalWeightedScore += yellowWeightedCount * weightYellow;
+        
+        //red
+        const redWeightedCount = programResult.Rood ? programResult.Rood : 0;
+        redResult = Math.round(redWeightedCount / weightedSkillCount * 100);
+        maximumWeightedScore += redWeightedCount * weightGreen;
+        totalWeightedScore += redWeightedCount * weightRed;
+        remainingResult = 100 - greenResult - lightGreenResult - yellowResult - redResult;
+        grade = Math.round(totalWeightedScore / maximumWeightedScore * 100);
+        console.log(grade);
+        const newProgressResult = {
 		         student: student.uid,
 		         studentName: student.displayName,
 		         green: greenResult,
-		         lightgreen: lightgreenResult,
+		         lightgreen: lightGreenResult,
 		         yellow: yellowResult,
 		         red: redResult,
 		         remaining: remainingResult,
+             grade: grade
 		       } 
 		     programProgress.push(newProgressResult);
      	}
@@ -167,13 +208,20 @@ export class CourseOverviewComponent implements OnInit, OnDestroy  {
               label: "Niet beoordeeld",
               data: programProgress.map(o=>o.remaining),
               datalabels: {
-                  display: false
+                  display: true,
+                  anchor: 'end',
+                  font: {
+                    size: 16
+                  },
+                  formatter: function(value, context) {
+                      return programProgress[context.dataIndex].grade + '%';
+                  }
               }
             }
           ]
         },
         options: {
-          legend: { display: false },
+          legend: { display: true },
           title: {
             display: true,
             text: 'Lesgroep resultaten voor leerplan ' + this.program.name

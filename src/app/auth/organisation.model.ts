@@ -6,5 +6,9 @@ export interface Organisation {
 	registrationCode?: string,
 	classes?: string[],
 	subjects?: string[],
-	tags?: string[]
+	tags?: string[],
+	weightRed?: number,
+	weightYellow?: number,
+	weightLightGreen?: number,
+	weightGreen?: number
 }
