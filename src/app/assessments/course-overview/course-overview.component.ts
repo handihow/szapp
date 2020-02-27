@@ -202,7 +202,7 @@ export class CourseOverviewComponent implements OnInit, OnDestroy {
         colorStudent: '#9E9E9E',
         colorLabelStudent: 'Grijs',
         iconStudent: 'supervised_user_circle',
-        commentStudent: 'Direct beoordeeld door de leraar',
+        commentStudent: 'Direct beoordeeld door ' + this.user.displayName,
         teacher: this.user.uid,
         teacherName: this.user.displayName,
         toBeAdded: !student.evaluation ? true : false

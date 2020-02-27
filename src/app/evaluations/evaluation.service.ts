@@ -69,9 +69,9 @@ export class EvaluationService {
 		} else if(latestOnly){
 			queryStr = (ref => ref.where('user', '==', user.uid).where('isLatest', '==', true));
 		} else if(assessment && notEvaluatedOnly) {
-			var queryStr = (ref => ref.where('teacher', '==', user.uid).where('status', '==', 'Niet beoordeeld'));
+			queryStr = (ref => ref.where('teacher', '==', user.uid).where('status', '==', 'Niet beoordeeld'));
 		} else if(assessment) {
-			var queryStr = (ref => ref.where('teacher', '==', user.uid));
+			queryStr = (ref => ref.where('teacher', '==', user.uid));
 		}
 		return this.db.collection('evaluations', queryStr)
 			.snapshotChanges().pipe(
@@ -84,6 +84,25 @@ export class EvaluationService {
 						return { id, ...data };
 					})
 			}))	
+	}
+
+	async fetchEvaluationsOfSkillArray(skills: Skill[]): Promise<Evaluation[]>{
+		const skillsEvaluations : Evaluation[] = [];
+		for (let i = 0; i < skills.length; ++i) {
+			const skillsSnap = await this.db.collection('evaluations', (ref => ref.where('skill', '==', skills[i].id)))
+										.get().toPromise();
+			if(!skillsSnap.empty){
+				skillsSnap.docs.forEach(doc => {
+					const data = doc.data() as Evaluation;
+					const id = doc.id;
+					const evaluation : Evaluation = {
+						id, ...data
+					}
+					skillsEvaluations.push(evaluation);
+				})
+			}
+		}
+		return skillsEvaluations;
 	}
 
 	//method retrieves an actual evaluation of a certain user and skill (database ids not included)

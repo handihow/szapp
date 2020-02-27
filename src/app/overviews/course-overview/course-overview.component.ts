@@ -141,8 +141,10 @@ export class CourseOverviewComponent implements OnInit, OnDestroy  {
         maximumWeightedScore += redWeightedCount * weightGreen;
         totalWeightedScore += redWeightedCount * weightRed;
         remainingResult = 100 - greenResult - lightGreenResult - yellowResult - redResult;
-        grade = Math.round(totalWeightedScore / maximumWeightedScore * 100);
-        console.log(grade);
+        if(maximumWeightedScore>0){
+          grade = Math.round(totalWeightedScore / maximumWeightedScore * 100);
+        }
+        
         const newProgressResult = {
 		         student: student.uid,
 		         studentName: student.displayName,

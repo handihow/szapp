@@ -6,6 +6,7 @@
         <span>{{skill.order}} - {{skill.competency}}</span>
       </mat-panel-title>
       <mat-panel-description>
+        <span>{{skill.weight ? skill.weight : 1}}</span>
         <span fxHide.lt-md>{{skill.topic}}</span>
         <span fxHide.lt-md id="icon-block">
           <mat-icon 

@@ -29,7 +29,7 @@ export class ExistingCommentsComponent implements OnInit, AfterViewInit, OnDestr
   isLoading$: Observable<boolean>;
   user: User;
   organisation: Organisation;
-  displayedColumns = ['select', 'created', 'comment', 'studentName', 'className', 'read', 'reported'];
+  displayedColumns = ['select', 'created', 'comment', 'studentName', 'className', 'read'];
   dataSource = new MatTableDataSource<Comment>();
   selection = new SelectionModel<Comment>(true, null);
   titles= environment.titles;
@@ -104,7 +104,7 @@ export class ExistingCommentsComponent implements OnInit, AfterViewInit, OnDestr
   //set the displayed columns of the table depending on the size of the display
   setDisplayedColumns(screenType){
     if(screenType==="desktop"){
-      this.displayedColumns = ['select', 'created', 'comment', 'studentName', 'className', 'read', 'reported'];
+      this.displayedColumns = ['select', 'created', 'comment', 'studentName', 'className', 'read'];
     } else if(screenType==="tablet"){
       this.displayedColumns = ['select', 'created', 'comment', 'studentName', 'className'];
     } else {

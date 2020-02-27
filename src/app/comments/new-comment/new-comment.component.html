@@ -6,7 +6,7 @@
 			</mat-card-title>
 			<mat-card-content fxLayout="column" fxLayoutAlign="center stretch" *ngIf="!(isLoading$ | async)">
 				<mat-form-field class="full-width">
-				   <input matInput placeholder="Commentaar" formControlName="comment" required>
+				   <textarea matInput placeholder="Commentaar" formControlName="comment" required></textarea>
 				   <mat-error>Geef commentaar</mat-error>
 				</mat-form-field>
 				<input type="hidden" formControlName="student">

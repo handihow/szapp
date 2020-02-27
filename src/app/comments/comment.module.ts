@@ -8,6 +8,7 @@ import { ExistingCommentsComponent } from './existing-comments/existing-comments
 import { RemoveCommentsComponent } from './existing-comments/remove-comments.component';
 import { EditCommentComponent } from './existing-comments/edit-comment.component';
 import { StudentViewComponent } from './student-view/student-view.component';
+import { ReadCommentComponent } from './student-view/read-comment-component';
 
 @NgModule({
 	declarations: [
@@ -16,12 +17,13 @@ import { StudentViewComponent } from './student-view/student-view.component';
 	    ExistingCommentsComponent,
 	    RemoveCommentsComponent,
 	    EditCommentComponent,
-	    StudentViewComponent
+	    StudentViewComponent,
+	    ReadCommentComponent
 	],
 	imports: [
 		SharedModule,
 		CommentRoutingModule
 	],
-	entryComponents: [RemoveCommentsComponent, EditCommentComponent]
+	entryComponents: [RemoveCommentsComponent, EditCommentComponent, ReadCommentComponent]
 })
 export class CommentModule {}

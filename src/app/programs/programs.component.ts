@@ -108,7 +108,7 @@ export class ProgramsComponent implements OnInit, OnDestroy {
 
     let csvData = data;
     let allTextLines = csvData.split(/\r\n|\n/);
-    let headers = allTextLines[0].split(';');
+    let headers = allTextLines[0].split(',');
 
     var competencyIndex = -1;
     var topicIndex = -1;
@@ -140,7 +140,7 @@ export class ProgramsComponent implements OnInit, OnDestroy {
       let message =
           `
           Je mist een header in de csv file.
-          Verplichte headers zijn "Volgnummer, "Competentie" en "Onderwerp" (hoofdletter gevoelig).
+          Verplichte headers zijn "Volgnummer", "Competentie" en "Onderwerp" (hoofdletter gevoelig).
           `
       return this.uiService.showSnackbar(message, null, 3000);
 

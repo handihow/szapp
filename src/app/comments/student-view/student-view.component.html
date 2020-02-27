@@ -14,7 +14,7 @@
 				<mat-icon matListIcon *ngIf="comment.isReadByStudent">drafts</mat-icon>
 				<h3 matLine>{{comment?.teacherName}}</h3>
 				<p matLine>{{comment?.created.toDate() | date:"dd-MM-yyyy"}} -- {{comment?.comment}}</p>
-				<button mat-button *ngIf="!comment.isReadByStudent" (click)="onRead(comment)">Gelezen</button>
+				<button mat-button (click)="onRead(comment)">Lees</button>
 			</mat-list-item>
 		</mat-list>
 	</mat-card-content>

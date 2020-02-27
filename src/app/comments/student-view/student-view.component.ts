@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable, Subscription } from 'rxjs';
+import { MatDialog } from '@angular/material/dialog';
 
 import { Comment } from '../comment.model';
 import { CommentService } from '../comment.service';
@@ -8,6 +9,8 @@ import * as fromRoot from '../../app.reducer';
 
 import { User } from '../../auth/user.model';
 import { environment } from '../../../environments/environment'; 
+
+import { ReadCommentComponent} from './read-comment-component';
 
 @Component({
   selector: 'app-student-view',
@@ -23,6 +26,7 @@ export class StudentViewComponent implements OnInit {
   keywords = environment.keywords;
 
   constructor(	private commentService: CommentService,
+                private dialog: MatDialog,
                 private store: Store<fromRoot.State> ) { }
 
   ngOnInit() {
@@ -38,8 +42,17 @@ export class StudentViewComponent implements OnInit {
   }
 
   onRead(comment: Comment){
-  	comment.isReadByStudent = true;
-  	this.commentService.updateCommentToDatabase(comment);
+    const dialogRef = this.dialog.open(ReadCommentComponent, {
+      data: comment
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+       if(!comment.isReadByStudent){
+         comment.isReadByStudent = true;
+         this.commentService.updateCommentToDatabase(comment);
+       }
+    });
+  	
   }
   
 }

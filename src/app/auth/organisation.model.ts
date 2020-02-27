@@ -10,5 +10,6 @@ export interface Organisation {
 	weightRed?: number,
 	weightYellow?: number,
 	weightLightGreen?: number,
-	weightGreen?: number
+	weightGreen?: number,
+	youTubeChannel?: string;
 }

@@ -5,6 +5,7 @@ import { Store } from '@ngrx/store';
 import * as fromRoot from '../../app.reducer'; 
 import { AuthService } from '../../auth/auth.service';
 import { User } from '../../auth/user.model';
+import { Organisation } from '../../auth/organisation.model';
 
 import { environment } from '../../../environments/environment';
 
@@ -18,6 +19,7 @@ export class HeaderComponent implements OnInit {
   isAuth$: Observable<boolean>;
   isTeacher$ : Observable<boolean>;
   user$: Observable<User>;
+  organisation$: Observable<Organisation>;
   permissions: string[];
   titles: any = environment.titles;
   logo = environment.logo;
@@ -31,6 +33,7 @@ export class HeaderComponent implements OnInit {
     this.isAuth$ = this.store.select(fromRoot.getIsAuth);
     this.isTeacher$ = this.store.select(fromRoot.getIsTeacher);
     this.user$ = this.store.select(fromRoot.getCurrentUser);
+    this.organisation$ = this.store.select(fromRoot.getCurrentOrganisation);
     this.store.select(fromRoot.getPermissions).subscribe(value => this.permissions = value);
   }
 

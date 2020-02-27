@@ -123,6 +123,24 @@ export class SkillService {
 			}))
 	}
 
+	async getProjectSkills(projectId) : Promise<Skill[]>{
+		const skills : Skill[] = [];
+		let str = 'projects.' + projectId;
+		let queryStr = (ref => ref.where(str, '==', true));
+		const skillsSnap = await this.db.collection('skills', queryStr).get().toPromise();
+		if(!skillsSnap.empty){
+			skillsSnap.docs.forEach(doc => {
+				const data = doc.data() as Skill;
+				const id = doc.id;
+				const evaluation : Skill = {
+					id, ...data
+				}
+				skills.push(evaluation);
+			})
+		}
+		return skills;
+	}
+
 	private sortSkills(a,b) {
 	    if (a.order < b.order)
 	      return -1;
@@ -137,7 +155,7 @@ export class SkillService {
 		  .snapshotChanges().pipe(
 		  map(attachments => {
 				  return attachments.map(doc => {
-					  const data = doc.payload.doc.data();
+					  const data = doc.payload.doc.data() as Object;
 					  const id = doc.payload.doc.id;
 					  return { id, ...data};
 				  })

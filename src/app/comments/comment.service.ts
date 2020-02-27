@@ -68,7 +68,7 @@ export class CommentService {
 
 	fetchStudentComments(user: User): Observable<Comment[]> {
 		this.store.dispatch(new UI.StartLoading());
-		let queryStr = (ref => ref.where('student', '==', user.uid));
+		let queryStr = (ref => ref.where('student', '==', user.uid).orderBy('created', 'desc'));
 		return this.db.collection('comments', queryStr)
 			.snapshotChanges().pipe(
 			map(docArray => {

@@ -44,6 +44,7 @@
 			<button mat-button routerLink="/admin" *ngIf="hasPermission('manage:users')">
 				{{titles.users}}
 			</button>
+			
 		</div>
 		<!-- Profile button -->
 		<button mat-mini-fab [matMenuTriggerFor]="profile" *ngIf="isAuth$ | async">
@@ -55,6 +56,8 @@
 		  <button routerLink="/profile" mat-menu-item>Profiel</button>
 		  <button style="cursor: pointer" (click)="onLogout()" mat-menu-item>Log uit</button>
 		</mat-menu>
+		<a mat-icon-button href="{{(organisation$ | async)?.youTubeChannel}}" 
+				target="_blank" [disabled]="!(organisation$ | async)?.youTubeChannel" ><mat-icon aria-hidden="false" aria-label="Example home icon">help_outline</mat-icon></a>
 	</div>
 	
 </mat-toolbar>

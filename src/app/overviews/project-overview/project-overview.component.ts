@@ -2,6 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Observable, Subscription } from 'rxjs';
 import { Router } from '@angular/router';
+import { Organisation } from '../../auth/organisation.model';
 
 import { Evaluation } from '../../evaluations/evaluation.model';
 import { EvaluationService } from '../../evaluations/evaluation.service';
@@ -31,9 +32,12 @@ export class ProjectOverviewComponent implements OnInit, OnDestroy {
   evaluations: Evaluation[];
   isLoading$: Observable<boolean>;
   subs: Subscription[]=[];
+  organisation: Organisation;
+
 
   chart: any; // This will hold our chart info
   doneLoadingChart: boolean;
+  noChart: boolean;
 
   constructor(  private evaluationService: EvaluationService,
                 private skillService: SkillService,
@@ -43,21 +47,33 @@ export class ProjectOverviewComponent implements OnInit, OnDestroy {
   ngOnInit() {
     //get the loading state of the app
     this.isLoading$ = this.store.select(fromRoot.getIsLoading);
+    this.subs.push(this.store.select(fromRoot.getCurrentOrganisation).subscribe(organisation => {
+      if(organisation){
+         this.organisation = organisation
+      }
+    }));
     //fetch the evaluations belonging to the project
-    this.store.select(fromOverview.getSelectedProject).subscribe(project => {
+    this.store.select(fromOverview.getSelectedProject).subscribe(async project => {
       if(project){
         this.project = project
-        this.subs.push(this.skillService.fetchSkills(null, project.id).subscribe(skills => {
-          this.skills = skills;
-        }))
-        this.subs.push(this.evaluationService.fetchExistingEvaluations(null, null, project).subscribe(evaluations => {
-          this.evaluations = evaluations;
-          if(evaluations && evaluations.length>0) {
-            this.drawChart(evaluations);
+        this.skills = await this.skillService.getProjectSkills(project.id)
+        if(this.skills.length>0){
+          this.evaluations = await this.evaluationService.fetchEvaluationsOfSkillArray(this.skills)
+          if(this.evaluations.length>0) {
+            this.drawChart(this.evaluations);
+          } else {
+            this.hasNoChart();
           }
-        }));
+        } else {
+          this.hasNoChart();
+        }
       };
     });
+   }
+
+   hasNoChart(){
+     this.doneLoadingChart = true;
+     this.noChart = true;
    }
 
    ngOnDestroy(){
@@ -81,41 +97,60 @@ export class ProjectOverviewComponent implements OnInit, OnDestroy {
        let student : User = { displayName: studentName, uid: id };
        students.push(student);
      })
+
+     const weightedSkillCount = this.skills.map(s => s.weight ? s.weight : 1).reduce((p, n) => p + n);
+     const weightRed = this.organisation.weightRed ? this.organisation.weightRed : 0;
+     const weightYellow = this.organisation.weightYellow ? this.organisation.weightYellow : 1;
+     const weightLightGreen = this.organisation.weightLightGreen ? this.organisation.weightLightGreen : 2;
+     const weightGreen = this.organisation.weightGreen ? this.organisation.weightGreen : 3;
      //then count the progress per student
      students.forEach((student) => {
+
+       let greenWeight = 0; let lightGreenWeight = 0; let yellowWeight = 0; let redWeight = 0;
+
+       let maximumWeightedScore = 0;
+       let totalWeightedScore = 0;
 
        //make an empty array for the student progress
        student.progress = [];
        //start counting the assessments
-       let countGreenAssessmentsByTeacher = this.evaluations.findIndex(evaluation => 
-        (evaluation.ratingTeacher===0 && evaluation.user === student.uid)) > -1 ?
-           this.evaluations.filter(evaluation => 
-        (evaluation.ratingTeacher===0 && evaluation.user === student.uid)).length : 0 ;
-
-       let countLightGreenAssessmentsByTeacher = this.evaluations.findIndex(evaluation => 
-        (evaluation.ratingTeacher===1 && evaluation.user === student.uid)) > -1 ?
-           this.evaluations.filter(evaluation => 
-        (evaluation.ratingTeacher===1 && evaluation.user === student.uid)).length : 0 ;
-
-       let countYellowAssessmentsByTeacher = this.evaluations.findIndex(evaluation => 
-        (evaluation.ratingTeacher===2 && evaluation.user === student.uid)) > -1 ?
-           this.evaluations.filter(evaluation => 
-        (evaluation.ratingTeacher===2 && evaluation.user === student.uid)).length : 0 ;
-
-       let countRedAssessmentsByTeacher = this.evaluations.findIndex(evaluation => 
-        (evaluation.ratingTeacher===3 && evaluation.user === student.uid)) > -1 ?
-           this.evaluations.filter(evaluation => 
-        (evaluation.ratingTeacher===3 && evaluation.user === student.uid)).length : 0 ;
-
-       let countRemainingAssessments = this.project.countSkills - countGreenAssessmentsByTeacher 
-         - countLightGreenAssessmentsByTeacher - countYellowAssessmentsByTeacher  - countRedAssessmentsByTeacher;
-
+       this.skills.forEach(skill => {
+         const evaluationIndex = this.evaluations.findIndex(e => e.skill === skill.id && e.user === student.uid && e.status === 'Beoordeeld');
+         if(evaluationIndex > -1){
+           //there is an evaluation on this skill
+           const evaluation = this.evaluations[evaluationIndex];
+           const skillWeight = skill.weight ? skill.weight : 1;
+           maximumWeightedScore += skillWeight * weightGreen;
+           if(evaluation.ratingTeacher === 0){
+             greenWeight += skillWeight;
+             totalWeightedScore += skillWeight * weightGreen;
+           } else if(evaluation.ratingTeacher === 1){
+             lightGreenWeight += skillWeight;
+             totalWeightedScore += skillWeight * weightLightGreen;
+           } else if(evaluation.ratingTeacher === 2) {
+             yellowWeight += skillWeight;
+             totalWeightedScore += skillWeight * weightYellow;
+           } else if(evaluation.ratingTeacher === 3){
+             redWeight += skillWeight;
+             totalWeightedScore += skillWeight * weightRed;
+           } 
+         }
+       })
+       let greenResult = Math.round((greenWeight / weightedSkillCount) * 100);
+       let lightGreenResult = Math.round((lightGreenWeight / weightedSkillCount) * 100);
+       let yellowResult = Math.round((yellowWeight / weightedSkillCount) * 100);
+       let redResult = Math.round((redWeight / weightedSkillCount) * 100);
+       let remainingResult = 100 - greenResult - lightGreenResult - yellowResult - redResult;
+       let grade = 0;
+       if(maximumWeightedScore>0){
+          grade = Math.round(totalWeightedScore / maximumWeightedScore * 100);
+       }
        //add the progress of the student in the array of student progress
-       student.progress.push({projectId: this.project.id, green: countGreenAssessmentsByTeacher});
-       student.progress.push({projectId: this.project.id, lightgreen: countLightGreenAssessmentsByTeacher});
-       student.progress.push({projectId: this.project.id, yellow: countYellowAssessmentsByTeacher});
-       student.progress.push({projectId: this.project.id, red: countRedAssessmentsByTeacher});
-       student.progress.push({projectId: this.project.id, remaining: countRemainingAssessments});
+       student.progress.push({projectId: this.project.id, green: greenResult});
+       student.progress.push({projectId: this.project.id, lightgreen: lightGreenResult});
+       student.progress.push({projectId: this.project.id, yellow: yellowResult});
+       student.progress.push({projectId: this.project.id, red: redResult});
+       student.progress.push({projectId: this.project.id, remaining: remainingResult, grade: grade});
      });
      this.chart = new Chart('project-chart', {
         type: 'horizontalBar',
@@ -166,7 +201,14 @@ export class ProjectOverviewComponent implements OnInit, OnDestroy {
               label: "Niet beoordeeld",
               data: students.map(o => o.progress[4].remaining),
               datalabels: {
-                  display: false
+                  display: true,
+                  anchor: 'end',
+                  font: {
+                    size: 16
+                  },
+                  formatter: function(value, context) {
+                      return students[context.dataIndex].progress[4].grade + '%';
+                  }
               }
             }
           ]

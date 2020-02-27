@@ -2,6 +2,7 @@ import { Component, OnInit, EventEmitter, Output } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Store } from '@ngrx/store';
 import * as fromRoot from '../../app.reducer';
+import { Organisation } from '../../auth/organisation.model';
 
 import { AuthService } from '../../auth/auth.service';
 
@@ -20,13 +21,15 @@ export class SidenavListComponent implements OnInit {
   isTeacher$ : Observable<boolean>;
   permissions: string[];
   titles: any = environment.titles;
-  
+  organisation$: Observable<Organisation>;
+
   constructor( private authService: AuthService,
               private store: Store<fromRoot.State> ) { }
 
   ngOnInit() {
     this.isAuth$ = this.store.select(fromRoot.getIsAuth);
     this.isTeacher$ = this.store.select(fromRoot.getIsTeacher);
+    this.organisation$ = this.store.select(fromRoot.getCurrentOrganisation);
     this.store.select(fromRoot.getPermissions).subscribe(value => this.permissions = value);
   }
 
