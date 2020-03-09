@@ -203,6 +203,7 @@ export class ProjectOverviewComponent implements OnInit, OnDestroy {
               datalabels: {
                   display: true,
                   anchor: 'end',
+                  align: 'start',
                   font: {
                     size: 16
                   },

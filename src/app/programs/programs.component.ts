@@ -150,7 +150,7 @@ export class ProgramsComponent implements OnInit, OnDestroy {
       
       for ( let i = 1; i < allTextLines.length; i++) {
         // split content based on comma
-        let data = allTextLines[i].split(';');
+        let data = allTextLines[i].split(',');
         const competency = data[competencyIndex];
         const order = data[orderIndex];
         const topic = data[topicIndex];
