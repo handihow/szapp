@@ -1,11 +1,12 @@
 import * as functions from 'firebase-functions';
 import * as admin from 'firebase-admin';
 import { Evaluation } from '../../../src/app/evaluations/evaluation.model';
+var striptags = require('striptags');
 
 export const jsonDownload = functions.runWith({
   timeoutSeconds: 300,
   memory: '1GB'
-}).https.onCall((data, context) => {
+}).https.onCall(async (data, context) => {
   
   if(context && context.auth && context.auth.token && !(context.auth.token.schooladmin || context.auth.token.admin)){
     return {
@@ -23,6 +24,18 @@ export const jsonDownload = functions.runWith({
 
   const organisation = data.organisation;
   const limit = parseInt(data.limit);
+
+  let programs = [];
+  const programSnap = await db.collection('programs').get();
+  if(!programSnap.empty){
+    programSnap.docs.forEach(d => {
+      const program = {
+        id: d.id,
+        ...d.data()
+      }
+      programs.push(program);
+    })
+  }
   
   return evaluationsRef.where("organisation", '==', organisation).orderBy('created', 'desc').limit(limit).get()
     .then((querySnapshot) => {
@@ -30,23 +43,31 @@ export const jsonDownload = functions.runWith({
 
       querySnapshot.forEach(doc => {
         const evaluationData = doc.data() as Evaluation;
-
+        let programCode = ''; let programName = '';
+        const programIndex = programs.findIndex(p => p.id===evaluationData.program);
+        if(programIndex > -1){
+          programCode = programs[programIndex].code;
+          programName = programs[programIndex].name;
+        }
         const evaluation : Evaluation = {
           created: evaluationData.created ? evaluationData.created.toDate().toLocaleDateString() : '-',
           evaluated: evaluationData.evaluated ? evaluationData.evaluated.toDate().toLocaleDateString() : '-',
-          class: evaluationData.class ? evaluationData.class[0] : '-',
-          colorLabelStudent: sanitizeString(evaluationData.colorLabelStudent),
-          colorLabelTeacher: sanitizeString(evaluationData.colorLabelTeacher),
-          commentStudent: sanitizeString(evaluationData.commentStudent),
-          commentTeacher: sanitizeString(evaluationData.commentTeacher),
-          projectCode: sanitizeString(evaluationData.projectCode),
-          projectName: sanitizeString(evaluationData.projectName),
-          skillCompetency: sanitizeString(evaluationData.skillCompetency),
-          skillOrder: sanitizeString(evaluationData.skillOrder),
-          skillTopic: sanitizeString(evaluationData.skillTopic),
-          status: sanitizeString(evaluationData.status),
-          studentName: sanitizeString(evaluationData.studentName),
-          teacherName: sanitizeString(evaluationData.teacherName)
+          class: typeof evaluationData.class === 'string' ? evaluationData.class : '-',
+          colorLabelStudent: returnSafe(evaluationData.colorLabelStudent),
+          colorLabelTeacher: returnSafe(evaluationData.colorLabelTeacher),
+          commentStudent: striptags(returnSafe(evaluationData.commentStudent)),
+          commentTeacher: striptags(returnSafe(evaluationData.commentTeacher)),
+          programCode: returnSafe(programCode),
+          programName: returnSafe(programName),
+          projectCode: returnSafe(evaluationData.projectCode),
+          projectName: returnSafe(evaluationData.projectName),
+          skillCompetency: striptags(returnSafe(evaluationData.skillCompetency)),
+          skillWeight: evaluationData.skillWeight ? evaluationData.skillWeight : 1,
+          skillOrder: returnSafe(evaluationData.skillOrder),
+          skillTopic: striptags(returnSafe(evaluationData.skillTopic)),
+          status: returnSafe(evaluationData.status),
+          studentName: returnSafe(evaluationData.studentName),
+          teacherName: returnSafe(evaluationData.teacherName)
         }
         evaluations.push(evaluation);
       });
@@ -63,17 +84,25 @@ export const jsonDownload = functions.runWith({
 
 });
 
-function sanitizeString (desc) {
-    let itemDesc;
-    if (desc) {
-        itemDesc = desc.replace(/(\r\n|\n|\r|\s+|\t|&nbsp;)/gm,' ');
-        itemDesc = itemDesc.replace(/,/g, ' ');
-        itemDesc = itemDesc.replace(/;/g, ' ');
-        itemDesc = itemDesc.replace(/"/g, ' ');
-        itemDesc = itemDesc.replace(/'/g, ' ');
-        itemDesc = itemDesc.replace(/ +(?= )/g,' ');
-    } else {
-        itemDesc = '-';
-    }
-    return itemDesc;
+function returnSafe(inputString: string) : string {
+  if(typeof inputString === 'undefined' || inputString === null || inputString === ""){
+    return '-';
+  } else {
+    return inputString;
+  }
 }
+
+// function sanitizeString (desc) {
+//     let itemDesc;
+//     if (desc) {
+//         itemDesc = desc.replace(/(\r\n|\n|\r|\s+|\t|&nbsp;)/gm,' ');
+//         itemDesc = itemDesc.replace(/,/g, ' ');
+//         itemDesc = itemDesc.replace(/;/g, ' ');
+//         itemDesc = itemDesc.replace(/"/g, ' ');
+//         itemDesc = itemDesc.replace(/'/g, ' ');
+//         itemDesc = itemDesc.replace(/ +(?= )/g,' ');
+//     } else {
+//         itemDesc = '-';
+//     }
+//     return itemDesc;
+// }

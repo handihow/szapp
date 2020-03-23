@@ -53,6 +53,7 @@ export class DownloadsComponent implements OnInit {
 
   downloadCsv(evaluations) {
     this.data = evaluations;
+    console.log(evaluations);
     //give options to the download file
     this.options = { 
       fieldSeparator: ',',
@@ -61,7 +62,7 @@ export class DownloadsComponent implements OnInit {
       showLabels: true, 
       showTitle: false,
       useBom: false,
-      headers: ['Gemaakt', 'Geevalueerd', 'Klas', 'Kleur leerling', 'Kleur leraar', 'Commentaar leerling', 'Commentaar leraar', 'Project code', 'Project', 'Competentie', 'Code', 'Onderwerp', 'Status', 'Naam leerling', 'Naam leraar']
+      headers: ['Gemaakt', 'Geevalueerd', 'Klas', 'Kleur leerling', 'Kleur leraar', 'Commentaar leerling', 'Commentaar leraar', 'Leerplan code', 'Leerplan', 'Project code', 'Project', 'Competentie', 'Gewicht', 'Code', 'Onderwerp', 'Status', 'Naam leerling', 'Naam leraar']
     };
     setTimeout(() => { this.csvComponent.onDownload(); }, 0);
   }

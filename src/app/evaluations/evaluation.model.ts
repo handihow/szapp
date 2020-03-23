@@ -40,6 +40,8 @@ project?: string;
 projectName?: string;
 projectCode?: string;
 program?: string;
+programName?: string;
+programCode?: string;
 formative?: string;
 formativeName?: string;
 formativeDate?: any;
