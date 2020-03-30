@@ -36,9 +36,11 @@ export class ProjectService {
 
 	saveActiveProject(countedSkills: number) {
 		this.store.select(fromProject.getActiveProject).pipe(take(1)).subscribe(project => {
-			var project = project;
-			project.countSkills = countedSkills;
-			this.saveProjectToDatabase(project);
+			const projectToBeSaved = {
+				...project,
+				countSkills: countedSkills
+			}
+			this.saveProjectToDatabase(projectToBeSaved);
 			this.store.dispatch(new ProjectAction.StopProject());	
 		})
 	}

@@ -140,6 +140,7 @@ export class SelectProjectStudentComponent implements OnInit, OnDestroy {
 
   updateProgressBarsAndStickers(user: User){
     this.projects.forEach(project => {
+      console.log(project.progress);
       project.progress = 0;
       if(user.progress && user.progress[project.id]){
         project.progress = Math.round(user.progress[project.id] / project.countSkills * 100);

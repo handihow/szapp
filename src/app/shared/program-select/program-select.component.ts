@@ -46,11 +46,11 @@ export class ProgramSelectComponent implements OnInit {
           this.subs.push(this.authService.fetchUserResults(this.user).subscribe(results => {
           let indexOfProgramResults = results.findIndex(o => o.id ==="program");
             if(indexOfProgramResults > -1) {
-              this.user.programs = results[indexOfProgramResults];
+              const userPrograms = results[indexOfProgramResults];
               var filteredPrograms = [];
               programs.forEach(program => {
                 // console.log(Object.keys(this.user.programs));
-                if(this.user.programs && Object.keys(this.user.programs).includes(program.id)){
+                if(userPrograms && Object.keys(userPrograms).includes(program.id)){
                   filteredPrograms.push(program);
                 }
               })

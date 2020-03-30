@@ -9,7 +9,7 @@ import { MaterialModule } from '../material.module';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { ShowFullImageComponent } from './show-full-image';
 
-import { NgxGalleryModule } from 'ngx-gallery';
+import { NgxGalleryModule } from '@kolkov/ngx-gallery';
 import { ImgFallbackModule } from 'ngx-img-fallback';
 
 import { DropZoneDirective } from './drop-zone.directive';
@@ -24,7 +24,7 @@ import { RemoveEvaluationComponent } from './evaluation-card/remove-evaluation.c
 import { FilesListComponent } from './files-list/files-list.component';
 import { ShowAttachmentsComponent } from './skills-expansion-panel/show-attachments.component';
 
-import { AngularFontAwesomeModule } from 'angular-font-awesome';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { ProjectSelectComponent } from './project-select/project-select.component';
 import { SkillSelectComponent } from './skill-select/skill-select.component';
 import { CourseSelectComponent } from './course-select/course-select.component';
@@ -66,7 +66,7 @@ import { UserAvatarComponent } from './user-avatar/user-avatar.component';
 		Angular2CsvModule,
 		RouterModule,
 		NgxGalleryModule,
-    	AngularFontAwesomeModule,
+    	FontAwesomeModule,
     	AngularFireFunctionsModule,
     	ImgFallbackModule
 	],
@@ -91,7 +91,7 @@ import { UserAvatarComponent } from './user-avatar/user-avatar.component';
 		CourseSelectComponent,
 		ProgramSelectComponent,
 		StudentSelectComponent,
-    	AngularFontAwesomeModule,
+    	FontAwesomeModule,
     	FormativeSelectComponent,
     	PanelTileComponent,
     	OrganisationSelectComponent,
