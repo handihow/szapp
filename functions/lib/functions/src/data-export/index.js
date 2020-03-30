@@ -28,7 +28,7 @@ exports.jsonDownload = functions.runWith({
     const db = admin.firestore();
     const evaluationsRef = db.collection('evaluations');
     const organisation = data.organisation;
-    const limit = parseInt(data.limit);
+    // const limit = parseInt(data.limit);
     let programs = [];
     const programSnap = yield db.collection('programs').get();
     if (!programSnap.empty) {
@@ -37,7 +37,7 @@ exports.jsonDownload = functions.runWith({
             programs.push(program);
         });
     }
-    return evaluationsRef.where("organisation", '==', organisation).orderBy('created', 'desc').limit(limit).get()
+    return evaluationsRef.where("organisation", '==', organisation).orderBy('created', 'desc').get()
         .then((querySnapshot) => {
         const evaluations = [];
         querySnapshot.forEach(doc => {
