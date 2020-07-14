@@ -108,7 +108,7 @@ export class CurrentProgramComponent implements OnInit, OnDestroy {
       order: new FormControl(null, Validators.required),
       competency: new FormControl(null, Validators.required),
       topic: new FormControl(null, Validators.required),
-      weight: new FormControl(1, [Validators.min(1),Validators.max(9)]),
+      weight: new FormControl(2, [Validators.min(1),Validators.max(4)]),
       link: new FormControl(null),
       linkText: new FormControl(null)
     });

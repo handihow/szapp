@@ -1,0 +1,153 @@
+
+{
+  "fields": [
+    {
+      "name": "urlStudent",
+      "type": "string"
+    },
+    {
+      "name": "commentStudent",
+      "type": "string"
+    },
+    {
+      "name": "colorStudent",
+      "type": "string"
+    },
+    {
+      "name": "colorLabelStudent",
+      "type": "string"
+    },
+    {
+      "name": "iconStudent",
+      "type": "string"
+    },
+    {
+      "name": "ratingStudent",
+      "type": "number"
+    },
+    {
+      "name": "imageURL",
+      "type": "string"
+    },
+    {
+      "name": "thumbnailURL",
+      "type": "string"
+    },
+    {
+      "name": "class",
+      "type": "string"
+    },
+    {
+      "name": "teacher",
+      "type": "string"
+    },
+    {
+      "name": "commentTeacher",
+      "type": "string"
+    },
+    {
+      "name": "colorTeacher",
+      "type": "string"
+    },
+    {
+      "name": "colorLabelTeacher",
+      "type": "string"
+    },
+    {
+      "name": "iconTeacher",
+      "type": "string"
+    },
+    {
+      "name": "ratingTeacher",
+      "type": "number"
+    },
+    {
+      "name": "created",
+      "type": "timestamp"
+    },
+    {
+      "name": "evaluated",
+      "type": "timestamp"
+    },
+    {
+      "name": "status",
+      "type": "string"
+    },
+    {
+      "name": "id",
+      "type": "string"
+    },
+    {
+      "name": "skill",
+      "type": "string"
+    },
+    {
+      "name": "organisation",
+      "type": "string"
+    },
+    {
+      "name": "user",
+      "type": "string"
+    },
+    {
+      "name": "skillOrder",
+      "type": "string"
+    },
+    {
+      "name": "skillCompetency",
+      "type": "string"
+    },
+    {
+      "name": "skillTopic",
+      "type": "string"
+    },
+    {
+      "name": "skillWeight",
+      "type": "number"
+    },
+    {
+      "name": "studentName",
+      "type": "string"
+    },
+    {
+      "name": "teacherName",
+      "type": "string"
+    },
+    {
+      "name": "project",
+      "type": "string"
+    },
+    {
+      "name": "projectName",
+      "type": "string"
+    },
+    {
+      "name": "projectCode",
+      "type": "string"
+    },
+    {
+      "name": "program",
+      "type": "string"
+    },
+    {
+      "name": "programName",
+      "type": "string"
+    },
+    {
+      "name": "programCode",
+      "type": "string"
+    },
+    {
+      "name": "formative",
+      "type": "string"
+    },
+    {
+      "name": "formativeName",
+      "type": "string"
+    },
+    {
+      "name": "formativeDate",
+      "type": "timestamp"
+    }
+  ]
+}

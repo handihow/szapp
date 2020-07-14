@@ -30,7 +30,7 @@
 					</mat-form-field>
 					<mat-form-field fxFlex="10" class="full-width">
 						   <input matInput placeholder="Gewicht" type="number" formControlName="weight">
-						   <mat-error>Gewicht is geheel nummer tussen 1 en 9</mat-error>
+						   <mat-error>Gewicht is geheel nummer tussen 1 en 4</mat-error>
 					</mat-form-field>
 					<mat-autocomplete #auto="matAutocomplete">
 						  <mat-option *ngFor="let topic of filteredTopics | async" [value]="topic">
@@ -114,7 +114,7 @@
 				</button>
 				{{ element.weight ? element.weight : 1 }}
 				<button mat-icon-button (click)="onChangeWeight($event, element, true)"
-					[disabled]="element.weight && element.weight >= 9">
+					[disabled]="element.weight && element.weight >= 4">
 					<mat-icon>add_circle_outline</mat-icon>
 				</button>
 			</mat-cell>
