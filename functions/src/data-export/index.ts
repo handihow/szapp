@@ -1,7 +1,7 @@
 import * as functions from 'firebase-functions';
 import * as admin from 'firebase-admin';
 import { Evaluation } from '../../../src/app/evaluations/evaluation.model';
-var striptags = require('striptags');
+const striptags = require('striptags');
 
 export const jsonDownload = functions.runWith({
   timeoutSeconds: 300,
@@ -25,7 +25,7 @@ export const jsonDownload = functions.runWith({
   const organisation = data.organisation;
   // const limit = parseInt(data.limit);
 
-  let programs = [];
+  const programs = [];
   const programSnap = await db.collection('programs').get();
   if(!programSnap.empty){
     programSnap.docs.forEach(d => {

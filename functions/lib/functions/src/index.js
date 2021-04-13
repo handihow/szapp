@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.removeUser = exports.addStudent = exports.createUsers = exports.changeProfile = exports.changeRoles = exports.addAdmin = exports.jsonDownload = exports.onDeleteEvaluation = exports.onUpdateEvaluation = exports.onCreateEvaluation = exports.onFileChange = exports.calculateClassroomAveragesForPrograms = void 0;
 const admin = require("firebase-admin");
 const functions = require("firebase-functions");
 const cors = require("cors");

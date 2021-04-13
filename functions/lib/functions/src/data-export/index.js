@@ -1,20 +1,22 @@
 "use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
         function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
         function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.jsonDownload = void 0;
 const functions = require("firebase-functions");
 const admin = require("firebase-admin");
-var striptags = require('striptags');
+const striptags = require('striptags');
 exports.jsonDownload = functions.runWith({
     timeoutSeconds: 300,
     memory: '1GB'
-}).https.onCall((data, context) => __awaiter(this, void 0, void 0, function* () {
+}).https.onCall((data, context) => __awaiter(void 0, void 0, void 0, function* () {
     if (context && context.auth && context.auth.token && !(context.auth.token.schooladmin || context.auth.token.admin)) {
         return {
             error: "Request not authorized. User must be a school admin to fulfill request."
@@ -29,7 +31,7 @@ exports.jsonDownload = functions.runWith({
     const evaluationsRef = db.collection('evaluations');
     const organisation = data.organisation;
     // const limit = parseInt(data.limit);
-    let programs = [];
+    const programs = [];
     const programSnap = yield db.collection('programs').get();
     if (!programSnap.empty) {
         programSnap.docs.forEach(d => {

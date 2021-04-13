@@ -1,6 +1,6 @@
 import * as functions from 'firebase-functions';
 import * as admin from 'firebase-admin';
-const UUID = require("uuid/v4");
+import { v4 as uuidv4 } from 'uuid';
 
 const db = admin.firestore();
 
@@ -135,7 +135,7 @@ export const createUsers = functions.https.onCall(async (data, context) => {
   const importedUsers = data.users;
 
   importedUsers.forEach((importedUser) => {
-    importedUser.uid = UUID();
+    importedUser.uid = uuidv4();
     const customClaims = {
       // parent: false,
       student: importedUser.student,
@@ -202,7 +202,7 @@ export const addStudent = functions.https.onCall((data, context) => {
   };
 
   const newStudent = {
-    uid: UUID(),
+    uid: uuidv4(),
     email: data.email,
     displayName: data.displayName,
     photoURL: data.photoURL

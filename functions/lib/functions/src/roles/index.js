@@ -1,16 +1,18 @@
 "use strict";
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
         function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
         function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.removeUser = exports.addStudent = exports.createUsers = exports.changeProfile = exports.changeRoles = exports.addAdmin = void 0;
 const functions = require("firebase-functions");
 const admin = require("firebase-admin");
-const UUID = require("uuid/v4");
+const uuid_1 = require("uuid");
 const db = admin.firestore();
 exports.addAdmin = functions.auth.user().onCreate(event => {
     const user = event; // The Firebase user.
@@ -59,7 +61,7 @@ exports.changeRoles = functions.https.onCall((data, context) => {
     return admin.auth().getUserByEmail(email)
         .then(user => {
         return admin.auth().setCustomUserClaims(user.uid, roles)
-            .then(() => __awaiter(this, void 0, void 0, function* () {
+            .then(() => __awaiter(void 0, void 0, void 0, function* () {
             yield db.collection('users').doc(user.uid).update({ roles: roles });
             return {
                 result: "Request fulfilled!"
@@ -95,7 +97,7 @@ exports.changeProfile = functions.https.onCall((data, context) => {
             email: email,
             displayName: displayName
         })
-            .then(() => __awaiter(this, void 0, void 0, function* () {
+            .then(() => __awaiter(void 0, void 0, void 0, function* () {
             yield db.collection('users').doc(uid).update({
                 email: email,
                 displayName: displayName,
@@ -119,7 +121,7 @@ exports.changeProfile = functions.https.onCall((data, context) => {
         };
     });
 });
-exports.createUsers = functions.https.onCall((data, context) => __awaiter(this, void 0, void 0, function* () {
+exports.createUsers = functions.https.onCall((data, context) => __awaiter(void 0, void 0, void 0, function* () {
     if (!context.auth || !context.auth.token || !context.auth.token.admin) {
         return {
             error: "Verzoek afgewezen. Je hebt onvoldoende toegangsrechten."
@@ -136,7 +138,7 @@ exports.createUsers = functions.https.onCall((data, context) => __awaiter(this, 
     const batch = db.batch();
     const importedUsers = data.users;
     importedUsers.forEach((importedUser) => {
-        importedUser.uid = UUID();
+        importedUser.uid = uuid_1.v4();
         const customClaims = {
             // parent: false,
             student: importedUser.student,
@@ -199,7 +201,7 @@ exports.addStudent = functions.https.onCall((data, context) => {
         organisation: organisation
     };
     const newStudent = {
-        uid: UUID(),
+        uid: uuid_1.v4(),
         email: data.email,
         displayName: data.displayName,
         photoURL: data.photoURL
@@ -208,7 +210,7 @@ exports.addStudent = functions.https.onCall((data, context) => {
         .then(userRecord => {
         return admin.auth().setCustomUserClaims(newStudent.uid, customClaims)
             .then(() => {
-            return db.collection('users').doc(newStudent.uid).create(Object.assign({}, newStudent, { organisationId: organisation, organisation: data.organisation.name, role: 'Leerling', roles: customClaims, hasGoogleForEducation: true }))
+            return db.collection('users').doc(newStudent.uid).create(Object.assign(Object.assign({}, newStudent), { organisationId: organisation, organisation: data.organisation.name, role: 'Leerling', roles: customClaims, hasGoogleForEducation: true }))
                 .then(writeResult => {
                 return {
                     result: newStudent
@@ -242,7 +244,7 @@ exports.removeUser = functions.https.onCall((data, context) => {
     return admin.auth().getUserByEmail(email)
         .then(user => {
         return admin.auth().deleteUser(user.uid)
-            .then(() => __awaiter(this, void 0, void 0, function* () {
+            .then(() => __awaiter(void 0, void 0, void 0, function* () {
             yield db.collection('users').doc(user.uid).delete();
             return {
                 result: "Gebruiker " + email + " is succesvol verwijderd."
