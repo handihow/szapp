@@ -37,7 +37,7 @@
     "@types/gapi": "0.0.39",
     "angular-6-clipboard": "^1.0.1",
     "angular2-csv": "^0.2.9",
-    "chart.js": "^2.9.3",
+    "chart.js": "^2.9.4",
     "chartjs-plugin-annotation": "^0.5.7",
     "chartjs-plugin-datalabels": "^0.7.0",
     "classlist.js": "^1.1.20150312",
